@@ -1,0 +1,3 @@
+include ':ToolLib'
+include ':app'
+rootProject.name = "YCAndroidTool"
