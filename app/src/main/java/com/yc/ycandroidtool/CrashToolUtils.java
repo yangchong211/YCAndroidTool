@@ -22,7 +22,7 @@ public final class CrashToolUtils {
      * 退出app操作
      */
     private static void exitApp(){
-        //finishActivity();
+        finishActivity();
         //需要杀掉原进程，否则崩溃的app处于黑屏,卡死状态
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);

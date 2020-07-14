@@ -13,8 +13,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //CrashHandler.getInstance().init(this);
+        CrashHandler.getInstance().init(this);
 
+//        init();
+    }
+
+    private void init() {
         Recovery.getInstance()
                 .debug(true)
                 .recoverInBackground(false)

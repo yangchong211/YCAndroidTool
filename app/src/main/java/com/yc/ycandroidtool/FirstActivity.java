@@ -1,5 +1,6 @@
 package com.yc.ycandroidtool;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,13 +23,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_1:
-                CrashToolUtils.reStartApp1(this,1000);
+                //CrashToolUtils.reStartApp1(this,0);
                 break;
             case R.id.tv_2:
-                CrashToolUtils.reStartApp2(this,1000);
+                //CrashToolUtils.reStartApp2(this,0);
                 break;
             case R.id.tv_3:
-                Integer.parseInt("12.3.7");
+                Activity activity = null;
+                activity.finish();
                 break;
         }
     }

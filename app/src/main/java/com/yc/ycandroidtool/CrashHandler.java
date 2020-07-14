@@ -77,7 +77,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         } else {
             if (mContext instanceof Application){
                 LogUtils.w(TAG, "handleException--- ex----重启activity-");
-                CrashToolUtils.reStartApp2((Application) mContext,2000);
+                CrashToolUtils.reStartApp2((Application) mContext,200);
             }
         }
     }
