@@ -2,11 +2,10 @@ package com.yc.toollib.crash.tools;
 
 import android.util.Log;
 
-import com.zxy.recovery.core.Recovery;
+import com.yc.toollib.crash.core.Recovery;
 
-/**
- * Created by zhengxiaoyong on 16/8/26.
- */
+
+
 public class RecoveryLog {
 
     private static final String TAG = "Recovery";

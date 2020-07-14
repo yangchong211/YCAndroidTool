@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.tv_1).setOnClickListener(this);
+        findViewById(R.id.tv_2).setOnClickListener(this);
     }
 
     @Override
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.tv_1:
                 startActivity(new Intent(this,FirstActivity.class));
+                break;
+            case R.id.tv_2:
+                startActivity(new Intent(this,TestActivity.class));
                 break;
         }
     }

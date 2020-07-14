@@ -1,9 +1,8 @@
 package com.yc.toollib.crash.exception;
 
-/**
- * Created by zhengxiaoyong on 16/8/28.
- */
+
 public class ReflectException extends RuntimeException {
+
     public ReflectException() {
         super();
     }

@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".FirstActivity"/>
+        <activity android:name=".TestActivity"/>
+        <activity android:name=".TestActivity2"/>
         <service android:name=".KillSelfService"/>
+
     </application>
 
 </manifest>

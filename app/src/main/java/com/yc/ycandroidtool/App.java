@@ -3,50 +3,54 @@ package com.yc.ycandroidtool;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.yc.toollib.crash.callback.RecoveryCallback;
+import com.yc.toollib.crash.core.Recovery;
 
 public class App extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashHandler.getInstance().init(this);
+        //CrashHandler.getInstance().init(this);
 
-
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                AppManager.getAppManager().addActivity(activity);
-            }
-
-            @Override
-            public void onActivityStarted(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-                AppManager.getAppManager().removeActivity(activity);
-            }
-        });
+        Recovery.getInstance()
+                .debug(true)
+                .recoverInBackground(false)
+                .recoverStack(true)
+                .mainPage(MainActivity.class)
+                .recoverEnabled(true)
+                .callback(new MyCrashCallback())
+                .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)
+                .skip(TestActivity.class)
+                .init(this);
     }
+
+    private class MyCrashCallback implements RecoveryCallback{
+
+        @Override
+        public void stackTrace(String exceptionMessage) {
+            Log.e("yangchong---", "exceptionMessage:" + exceptionMessage);
+        }
+
+        @Override
+        public void cause(String cause) {
+            Log.e("yangchong---", "cause:" + cause);
+        }
+
+        @Override
+        public void exception(String exceptionType, String throwClassName, String throwMethodName, int throwLineNumber) {
+            Log.e("yangchong---", "exceptionClassName:" + exceptionType);
+            Log.e("yangchong---", "throwClassName:" + throwClassName);
+            Log.e("yangchong---", "throwMethodName:" + throwMethodName);
+            Log.e("yangchong---", "throwLineNumber:" + throwLineNumber);
+        }
+
+        @Override
+        public void throwable(Throwable throwable) {
+
+        }
+    }
+
 }
