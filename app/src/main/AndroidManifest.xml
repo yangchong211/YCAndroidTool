@@ -23,7 +23,7 @@
         <activity android:name=".FirstActivity"/>
         <activity android:name=".TestActivity"/>
         <activity android:name=".TestActivity2"/>
-        <service android:name=".KillSelfService"/>
+        <service android:name=".lib.KillSelfService"/>
 
     </application>
 

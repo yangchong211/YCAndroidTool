@@ -1,12 +1,11 @@
 package com.yc.ycandroidtool;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.yc.toollib.crash.callback.RecoveryCallback;
 import com.yc.toollib.crash.core.Recovery;
+import com.yc.ycandroidtool.lib.CrashHandler;
 
 public class App extends Application {
 

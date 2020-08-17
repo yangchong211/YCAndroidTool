@@ -1,9 +1,11 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.lib;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+
+import com.yc.ycandroidtool.LogUtils;
 
 /**
  * <pre>

@@ -1,9 +1,13 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.lib;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
+
+import com.yc.ycandroidtool.BuildConfig;
+import com.yc.ycandroidtool.LogUtils;
+import com.yc.ycandroidtool.R;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -86,6 +90,7 @@ public final class CrashFileUtils {
         String crashFilePath = getCrashFilePath(context);
         if (crashFilePath!=null && crashFilePath.length()>0){
             try {
+                LogUtils.w(CrashHandler.TAG, "handleException---输出路径-----"+crashFilePath);
                 FileWriter writer = new FileWriter( crashFilePath+ now + CRASH_REPORTER_EXTENSION);
                 writer.write(sb.toString());
                 writer.flush();

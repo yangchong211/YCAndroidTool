@@ -1,7 +1,9 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.lib;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.yc.ycandroidtool.LogUtils;
 
 
 /**
@@ -71,15 +73,25 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         boolean isHandle = handleException(ex);
+        initCustomBug(ex);
         if (mDefaultHandler != null && !isHandle) {
             //收集完信息后，交给系统自己处理崩溃
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
             if (mContext instanceof Application){
                 LogUtils.w(TAG, "handleException--- ex----重启activity-");
-                CrashToolUtils.reStartApp2((Application) mContext,200);
+                CrashToolUtils.reStartApp2((Application) mContext,500);
             }
         }
+    }
+
+    /**
+     * 初始化百度
+     * @param ex
+     */
+    private void initCustomBug(Throwable ex) {
+        //自定义上传crash，支持开发者上传自己捕获的crash数据
+        //StatService.recordException(mContext, ex);
     }
 
     /**
@@ -89,7 +101,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private boolean handleException(Throwable ex) {
         if (ex == null) {
-//            LogUtils.w(TAG, "handleException--- ex==null");
+            LogUtils.w(TAG, "handleException--- ex==null");
             return false;
         }
         //收集crash信息
@@ -97,11 +109,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (msg == null) {
             return false;
         }
-//        LogUtils.w(TAG, "handleException--- ex-----"+msg);
-//        ToastUtils.t(msg);
+        LogUtils.w(TAG, "handleException--- ex-----"+msg);
+        ex.printStackTrace();
         //收集设备信息
         //保存错误报告文件
-//        CrashFileUtils.saveCrashInfoToFile(mContext,ex);
+        CrashFileUtils.saveCrashInfoToFile(mContext,ex);
         return true;
     }
 

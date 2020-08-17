@@ -1,11 +1,14 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.lib;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
+import com.yc.ycandroidtool.AppManager;
+import com.yc.ycandroidtool.LogUtils;
+import com.yc.ycandroidtool.MainActivity;
 
 /**
  * <pre>
@@ -55,7 +58,7 @@ public final class CrashToolUtils {
      * @param Delayed                       延迟多少毫秒
      */
     public static void reStartApp1(Context context, long Delayed){
-        Intent intent = new Intent(context,KillSelfService.class);
+        Intent intent = new Intent(context, KillSelfService.class);
         intent.putExtra("PackageName",context.getPackageName());
         intent.putExtra("Delayed",Delayed);
         context.startService(intent);
