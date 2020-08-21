@@ -1,13 +1,12 @@
-package com.yc.ycandroidtool.lib;
+package com.yc.toollib.crash;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 
-import com.yc.ycandroidtool.BuildConfig;
-import com.yc.ycandroidtool.LogUtils;
-import com.yc.ycandroidtool.R;
+import com.yc.toollib.BuildConfig;
+import com.yc.toollib.R;
 
 import java.io.File;
 import java.io.FileWriter;

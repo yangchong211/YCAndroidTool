@@ -1,10 +1,7 @@
-package com.yc.ycandroidtool.lib;
+package com.yc.toollib.crash;
 
 import android.app.Application;
 import android.content.Context;
-
-import com.yc.ycandroidtool.LogUtils;
-
 
 /**
  * <pre>
@@ -59,7 +56,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      *
      * @param ctx
      */
-    public void init(Context ctx) {
+    public void init(Application ctx) {
+        CrashToolUtils.init(ctx);
         mContext = ctx;
         //获取系统默认的UncaughtExceptionHandler
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();

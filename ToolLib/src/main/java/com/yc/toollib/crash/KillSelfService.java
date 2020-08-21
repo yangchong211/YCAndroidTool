@@ -1,11 +1,10 @@
-package com.yc.ycandroidtool.lib;
+package com.yc.toollib.crash;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
-import com.yc.ycandroidtool.LogUtils;
 
 /**
  * <pre>

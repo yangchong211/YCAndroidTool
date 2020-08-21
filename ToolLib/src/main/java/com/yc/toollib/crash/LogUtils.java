@@ -1,4 +1,4 @@
-package com.yc.ycandroidtool;
+package com.yc.toollib.crash;
 
 
 import android.os.Environment;

@@ -1,14 +1,12 @@
-package com.yc.ycandroidtool.lib;
+package com.yc.toollib.crash;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
-import com.yc.ycandroidtool.AppManager;
-import com.yc.ycandroidtool.LogUtils;
-import com.yc.ycandroidtool.MainActivity;
+import android.os.Bundle;
 
 /**
  * <pre>
@@ -20,6 +18,50 @@ import com.yc.ycandroidtool.MainActivity;
  * </pre>
  */
 public final class CrashToolUtils {
+
+    private static Activity firstActivity;
+
+    protected static void init(Application application){
+        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                if (firstActivity==null){
+                    firstActivity = activity;
+                }
+                AppManager.getAppManager().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                AppManager.getAppManager().removeActivity(activity);
+            }
+        });
+    }
 
     /**
      * 退出app操作
@@ -33,7 +75,7 @@ public final class CrashToolUtils {
 
     private static void finishActivity() {
         Activity activity = AppManager.getAppManager().currentActivity();
-        if (activity!=null && !activity.isFinishing() && activity instanceof MainActivity){
+        if (activity!=null && !activity.isFinishing()){
             //可将activity 退到后台，注意不是finish()退出。
             //判断Activity是否是task根
             if (activity.isTaskRoot()){
@@ -73,17 +115,14 @@ public final class CrashToolUtils {
      * @param Delayed                       延迟多少毫秒
      */
     public static void reStartApp2(Context context , long Delayed){
-        //暂时先跳转到启动页页面
-        //todo 后期看能不能恢复任务栈，恢复到栈顶activity
         //Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
-        //intent.putExtra("REBOOT","reboot");
+        Intent intent = new Intent(context.getApplicationContext(), firstActivity.getClass());
         PendingIntent restartIntent = PendingIntent.getActivity(
                 context.getApplicationContext(), 0, intent,PendingIntent.FLAG_ONE_SHOT);
         //退出程序
         AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + Delayed,restartIntent);
-        LogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---");
+        LogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+firstActivity);
         exitApp();
     }
 

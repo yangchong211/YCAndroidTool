@@ -1,4 +1,4 @@
-package com.yc.ycandroidtool;
+package com.yc.toollib.crash;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -12,7 +12,7 @@ import java.util.Stack;
 
 /**
  * <pre>
- *     @author
+ *     @author: yangchong
  *     blog  : https://github.com/yangchong211
  *     time  : 2016/06/4
  *     desc  : activity栈管理器
