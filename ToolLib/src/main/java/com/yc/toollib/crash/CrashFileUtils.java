@@ -7,6 +7,7 @@ import android.os.Environment;
 
 import com.yc.toollib.BuildConfig;
 import com.yc.toollib.R;
+import com.yc.toollib.tool.ToolLogUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -89,7 +90,7 @@ public final class CrashFileUtils {
         String crashFilePath = getCrashFilePath(context);
         if (crashFilePath!=null && crashFilePath.length()>0){
             try {
-                LogUtils.w(CrashHandler.TAG, "handleException---输出路径-----"+crashFilePath);
+                ToolLogUtils.w(CrashHandler.TAG, "handleException---输出路径-----"+crashFilePath);
                 FileWriter writer = new FileWriter( crashFilePath+ now + CRASH_REPORTER_EXTENSION);
                 writer.write(sb.toString());
                 writer.flush();

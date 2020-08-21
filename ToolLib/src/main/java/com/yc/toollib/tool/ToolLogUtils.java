@@ -1,4 +1,4 @@
-package com.yc.toollib.crash;
+package com.yc.toollib.tool;
 
 
 import android.os.Environment;
@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Log 工具
  */
-public final class LogUtils {
+public final class ToolLogUtils {
     private static final int VERBOSE = 1;
     private static final int DEBUG = 2;
     private static final int INFO = 3;

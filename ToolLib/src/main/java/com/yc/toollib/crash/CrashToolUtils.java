@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.yc.toollib.tool.ToolLogUtils;
+
 /**
  * <pre>
  *     @author yangchong
@@ -104,7 +106,7 @@ public final class CrashToolUtils {
         intent.putExtra("PackageName",context.getPackageName());
         intent.putExtra("Delayed",Delayed);
         context.startService(intent);
-        LogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--1---");
+        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--1---");
         exitApp();
     }
 
@@ -122,7 +124,7 @@ public final class CrashToolUtils {
         //退出程序
         AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + Delayed,restartIntent);
-        LogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+firstActivity);
+        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+firstActivity);
         exitApp();
     }
 

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
+import com.yc.toollib.tool.ToolLogUtils;
+
 
 /**
  * <pre>
@@ -32,7 +34,7 @@ public class KillSelfService extends Service {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                LogUtils.w(CrashHandler.TAG, "KillSelfService---打开app---"+packageName);
+                ToolLogUtils.w(CrashHandler.TAG, "KillSelfService---打开app---"+packageName);
                 Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
                 startActivity(LaunchIntent);
                 KillSelfService.this.stopSelf();

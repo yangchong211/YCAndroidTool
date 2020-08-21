@@ -3,6 +3,8 @@ package com.yc.toollib.crash;
 import android.app.Application;
 import android.content.Context;
 
+import com.yc.toollib.tool.ToolLogUtils;
+
 /**
  * <pre>
  *     @author yangchong
@@ -77,8 +79,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
             if (mContext instanceof Application){
-                LogUtils.w(TAG, "handleException--- ex----重启activity-");
-                CrashToolUtils.reStartApp2((Application) mContext,500);
+                ToolLogUtils.w(TAG, "handleException--- ex----重启activity-");
+                CrashToolUtils.reStartApp1(mContext,500);
             }
         }
     }
@@ -99,7 +101,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private boolean handleException(Throwable ex) {
         if (ex == null) {
-            LogUtils.w(TAG, "handleException--- ex==null");
+            ToolLogUtils.w(TAG, "handleException--- ex==null");
             return false;
         }
         //收集crash信息
@@ -107,7 +109,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (msg == null) {
             return false;
         }
-        LogUtils.w(TAG, "handleException--- ex-----"+msg);
+        ToolLogUtils.w(TAG, "handleException--- ex-----"+msg);
         ex.printStackTrace();
         //收集设备信息
         //保存错误报告文件

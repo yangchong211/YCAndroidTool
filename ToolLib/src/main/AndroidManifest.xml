@@ -2,7 +2,7 @@
     package="com.yc.toollib">
 
     <application>
-
+        <service android:name=".crash.KillSelfService"/>
     </application>
 
 </manifest>

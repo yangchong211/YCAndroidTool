@@ -68,7 +68,9 @@ public class AppManager {
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public Activity currentActivity() throws NoSuchElementException {
-        if (activityStack == null || (activityStack!=null && activityStack.size()<=0) ) return null;
+        if (activityStack == null || (activityStack!=null && activityStack.size()<=0) ){
+            return null;
+        }
         return activityStack.lastElement();
     }
 
