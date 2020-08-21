@@ -1,4 +1,4 @@
-package com.yc.toollib.crash;
+package com.yc.toollib.tool;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -19,12 +19,12 @@ import java.util.Stack;
  *     revise:
  * </pre>
  */
-public class AppManager {
+public class ToolAppManager {
 
     private static Stack<Activity> activityStack;
-    private static AppManager instance;
+    private static ToolAppManager instance;
 
-    private AppManager() {
+    private ToolAppManager() {
         if (activityStack == null) {
             activityStack = new Stack<>();
         }
@@ -33,9 +33,9 @@ public class AppManager {
     /**
      * 单一实例
      */
-    public static AppManager getAppManager() {
+    public static ToolAppManager getAppManager() {
         if (instance == null) {
-            instance = new AppManager();
+            instance = new ToolAppManager();
         }
         return instance;
     }

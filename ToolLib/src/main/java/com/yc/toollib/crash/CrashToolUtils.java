@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.yc.toollib.tool.ToolAppManager;
 import com.yc.toollib.tool.ToolLogUtils;
 
 /**
@@ -21,16 +22,12 @@ import com.yc.toollib.tool.ToolLogUtils;
  */
 public final class CrashToolUtils {
 
-    private static Activity firstActivity;
 
     protected static void init(Application application){
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                if (firstActivity==null){
-                    firstActivity = activity;
-                }
-                AppManager.getAppManager().addActivity(activity);
+                ToolAppManager.getAppManager().addActivity(activity);
             }
 
             @Override
@@ -60,7 +57,7 @@ public final class CrashToolUtils {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                AppManager.getAppManager().removeActivity(activity);
+                ToolAppManager.getAppManager().removeActivity(activity);
             }
         });
     }
@@ -76,7 +73,7 @@ public final class CrashToolUtils {
     }
 
     private static void finishActivity() {
-        Activity activity = AppManager.getAppManager().currentActivity();
+        Activity activity = ToolAppManager.getAppManager().currentActivity();
         if (activity!=null && !activity.isFinishing()){
             //可将activity 退到后台，注意不是finish()退出。
             //判断Activity是否是task根
@@ -91,7 +88,7 @@ public final class CrashToolUtils {
             //使用moveTaskToBack是为了让app退出时，不闪屏，退出柔和一些
         }
         //注意这里是finish所有activity，然后杀死进程
-        AppManager.getAppManager().finishAllActivity();
+        ToolAppManager.getAppManager().finishAllActivity();
     }
 
     /**
@@ -116,15 +113,15 @@ public final class CrashToolUtils {
      * @param context                       上下文
      * @param Delayed                       延迟多少毫秒
      */
-    public static void reStartApp2(Context context , long Delayed){
+    public static void reStartApp2(Context context , long Delayed , Class clazz){
         //Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        Intent intent = new Intent(context.getApplicationContext(), firstActivity.getClass());
+        Intent intent = new Intent(context.getApplicationContext(), clazz);
         PendingIntent restartIntent = PendingIntent.getActivity(
                 context.getApplicationContext(), 0, intent,PendingIntent.FLAG_ONE_SHOT);
         //退出程序
         AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + Delayed,restartIntent);
-        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+firstActivity);
+        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+clazz);
         exitApp();
     }
 

@@ -29,6 +29,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * CrashHandler实例
      */
     private static CrashHandler INSTANCE;
+    /**
+     * 监听
+     */
+    private CrashListener listener;
+
 
     /**
      * 保证只有一个CrashHandler实例
@@ -58,9 +63,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      *
      * @param ctx
      */
-    public void init(Application ctx) {
+    public void init(Application ctx , CrashListener listener) {
         CrashToolUtils.init(ctx);
         mContext = ctx;
+        this.listener = listener;
         //获取系统默认的UncaughtExceptionHandler
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
@@ -80,7 +86,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         } else {
             if (mContext instanceof Application){
                 ToolLogUtils.w(TAG, "handleException--- ex----重启activity-");
-                CrashToolUtils.reStartApp1(mContext,500);
+                if (listener!=null){
+                    listener.againStartApp();
+                }
             }
         }
     }
@@ -92,6 +100,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void initCustomBug(Throwable ex) {
         //自定义上传crash，支持开发者上传自己捕获的crash数据
         //StatService.recordException(mContext, ex);
+        if (listener!=null){
+            listener.recordException(ex);
+        }
     }
 
     /**
