@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -23,10 +25,11 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_1:
-                //CrashToolUtils.reStartApp1(this,0);
+                Integer.parseInt("12.3");
                 break;
             case R.id.tv_2:
-                //CrashToolUtils.reStartApp2(this,0);
+                ArrayList<String> list = new ArrayList<>();
+                list.get(5);
                 break;
             case R.id.tv_3:
                 Activity activity = null;

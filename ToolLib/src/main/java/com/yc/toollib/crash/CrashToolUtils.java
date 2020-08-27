@@ -17,7 +17,7 @@ import com.yc.toollib.tool.ToolLogUtils;
  *     email  : yangchong211@163.com
  *     time  : 2020/7/10
  *     desc  : 工具类
- *     revise:
+ *     revise: demo
  * </pre>
  */
 public final class CrashToolUtils {
@@ -116,7 +116,8 @@ public final class CrashToolUtils {
     public static void reStartApp2(Context context , long Delayed , Class clazz){
         //Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         Intent intent = new Intent(context.getApplicationContext(), clazz);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent restartIntent = PendingIntent.getActivity(
                 context.getApplicationContext(), 0, intent,PendingIntent.FLAG_ONE_SHOT);
         //退出程序
@@ -124,6 +125,18 @@ public final class CrashToolUtils {
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + Delayed,restartIntent);
         ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+clazz);
         exitApp();
+    }
+
+
+    /**
+     * 日志列表页面
+     *
+     * @param context                       上下文
+     */
+    public static void startCrashListActivity(Context context) {
+        Intent intent = new Intent(context.getApplicationContext(), CrashListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.getApplicationContext().startActivity(intent);
     }
 
 

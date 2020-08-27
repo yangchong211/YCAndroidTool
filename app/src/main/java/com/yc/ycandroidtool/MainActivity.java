@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yc.toollib.crash.CrashListActivity;
+import com.yc.toollib.crash.CrashToolUtils;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     String a = "aa";
@@ -18,6 +21,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         findViewById(R.id.tv_1).setOnClickListener(this);
         findViewById(R.id.tv_2).setOnClickListener(this);
+        findViewById(R.id.tv_3).setOnClickListener(this);
     }
 
     @Override
@@ -28,6 +32,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_2:
                 startActivity(new Intent(this,TestActivity.class));
+                break;
+            case R.id.tv_3:
+                CrashToolUtils.startCrashListActivity(this);
                 break;
         }
     }

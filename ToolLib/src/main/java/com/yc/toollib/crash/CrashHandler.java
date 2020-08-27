@@ -69,6 +69,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         this.listener = listener;
         //获取系统默认的UncaughtExceptionHandler
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        //将当前实例设为系统默认的异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
@@ -124,7 +125,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         ex.printStackTrace();
         //收集设备信息
         //保存错误报告文件
-        CrashFileUtils.saveCrashInfoToFile(mContext,ex);
+        CrashFileUtils.saveCrashInfoInFile(mContext,ex);
         return true;
     }
 

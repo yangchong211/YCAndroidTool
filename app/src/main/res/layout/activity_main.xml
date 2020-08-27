@@ -25,4 +25,13 @@
         android:padding="10dp"
         android:text="2.测试项目崩溃重启"/>
 
+    <TextView
+        android:id="@+id/tv_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="3.点击去崩溃页面"/>
+
 </LinearLayout>
