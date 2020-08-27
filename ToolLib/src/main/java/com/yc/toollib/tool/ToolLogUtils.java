@@ -12,9 +12,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Log 工具
+ * <pre>
+ *     @author yangchong
+ *     email  : yangchong211@163.com
+ *     time  : 2020/7/10
+ *     desc  : Log 工具
+ *     revise:
+ * </pre>
  */
 public final class ToolLogUtils {
+
     private static final int VERBOSE = 1;
     private static final int DEBUG = 2;
     private static final int INFO = 3;

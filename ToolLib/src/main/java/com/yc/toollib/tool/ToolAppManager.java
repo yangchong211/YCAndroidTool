@@ -189,7 +189,7 @@ public class ToolAppManager {
 
     /**
      *
-     * 判断mainactivity是否处于栈顶
+     * 判断activity是否处于栈顶
      * @return  true在栈顶false不在栈顶
      */
     public boolean isActivityTop(Context mContext,String activityName){

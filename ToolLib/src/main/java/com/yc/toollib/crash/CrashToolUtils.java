@@ -116,6 +116,7 @@ public final class CrashToolUtils {
     public static void reStartApp2(Context context , long Delayed , Class clazz){
         //Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         Intent intent = new Intent(context.getApplicationContext(), clazz);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent restartIntent = PendingIntent.getActivity(
                 context.getApplicationContext(), 0, intent,PendingIntent.FLAG_ONE_SHOT);
         //退出程序

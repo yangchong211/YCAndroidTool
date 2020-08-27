@@ -36,6 +36,7 @@ public class KillSelfService extends Service {
             public void run() {
                 ToolLogUtils.w(CrashHandler.TAG, "KillSelfService---打开app---"+packageName);
                 Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(LaunchIntent);
                 KillSelfService.this.stopSelf();
             }
