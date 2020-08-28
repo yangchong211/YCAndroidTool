@@ -139,5 +139,14 @@ public final class CrashToolUtils {
         context.getApplicationContext().startActivity(intent);
     }
 
+    /**
+     * 测试异常类
+     *
+     * @param context                       上下文
+     */
+    public static void startCrashTestActivity(Context context) {
+        Intent intent = new Intent(context, CrashTestActivity.class);
+        context.startActivity(intent);
+    }
 
 }

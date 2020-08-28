@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="1.重启app的普通方式"/>
+        android:text="1.NumberFormatException异常崩溃"/>
+
 
     <TextView
         android:id="@+id/tv_2"
@@ -23,7 +24,8 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="2.测试项目崩溃重启"/>
+        android:text="2.IndexOutOfBoundsException异常崩溃"/>
+
 
     <TextView
         android:id="@+id/tv_3"
@@ -32,7 +34,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="3.点击去崩溃页面"/>
+        android:text="3.NullPointerException空指针异常崩溃"/>
 
 
     <TextView
@@ -42,6 +44,6 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="4.点击去测试崩溃页面"/>
+        android:text="4.子线程吐司异常崩溃"/>
 
 </LinearLayout>
