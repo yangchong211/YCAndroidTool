@@ -15,7 +15,9 @@ public class App extends Application {
         CrashHandler.getInstance().init(this, new CrashListener() {
             @Override
             public void againStartApp() {
-                CrashToolUtils.reStartApp2(App.this,500, MainActivity.class);
+                CrashToolUtils.reStartApp1(App.this,1000);
+                //CrashToolUtils.reStartApp2(App.this,1000, MainActivity.class);
+                //CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
             }
 
             @Override
