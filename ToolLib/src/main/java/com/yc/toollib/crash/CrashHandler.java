@@ -2,6 +2,7 @@ package com.yc.toollib.crash;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Looper;
 
 import com.yc.toollib.tool.ToolLogUtils;
 
@@ -65,6 +66,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     public void init(Application ctx , CrashListener listener) {
         CrashToolUtils.init(ctx);
+        CrashHelper.getInstance().install(ctx);
         mContext = ctx;
         this.listener = listener;
         //获取系统默认的UncaughtExceptionHandler
@@ -92,6 +94,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 }
             }
         }
+        CrashHelper.getInstance().setSafe(thread,ex);
     }
 
     /**
@@ -102,7 +105,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //自定义上传crash，支持开发者上传自己捕获的crash数据
         //StatService.recordException(mContext, ex);
         if (listener!=null){
-            listener.recordException(ex);
+            //捕获监听中异常，防止外部开发者使用方代码抛出异常时导致的反复调用
+            try {
+                listener.recordException(ex);
+            } catch (Throwable e){
+                e.printStackTrace();
+            }
         }
     }
 

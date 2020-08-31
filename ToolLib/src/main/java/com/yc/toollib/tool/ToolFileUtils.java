@@ -46,6 +46,7 @@ public class ToolFileUtils {
         return path;
     }
 
+
     public static String getCrashSharePath() {
         String path = Environment.getExternalStorageDirectory() + "";
         File file = new File(path);
@@ -80,8 +81,13 @@ public class ToolFileUtils {
         return cachePath;
     }
 
-
-    public static List<File> getFileList(File file) {
+    /**
+     * 获取崩溃crash的list集合
+     * @param context                               上下文
+     * @return
+     */
+    public static List<File> getCrashFileList(Context context) {
+        File file = new File(ToolFileUtils.getCrashLogPath(context));
         List<File> mFileList = new ArrayList<>();
         File[] fileArray = file.listFiles();
         if (fileArray == null || fileArray.length <= 0) {
@@ -116,6 +122,10 @@ public class ToolFileUtils {
     }
 
 
+    /**
+     * 删除所有的文件
+     * @param root                          root目录
+     */
     public static void deleteAllFiles(File root) {
         File files[] = root.listFiles();
         if (files != null)
@@ -182,9 +192,9 @@ public class ToolFileUtils {
     /**
      * 根据文件路径拷贝文件
      *
-     * @param src  源文件
-     * @param dest 目标文件
-     * @return boolean 成功true、失败false
+     * @param src                           源文件
+     * @param dest                          目标文件
+     * @return                              boolean 成功true、失败false
      */
     public static boolean copyFile(File src, File dest) {
         boolean result = false;

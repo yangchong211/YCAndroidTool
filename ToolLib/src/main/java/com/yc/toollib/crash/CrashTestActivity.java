@@ -2,6 +2,7 @@ package com.yc.toollib.crash;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class CrashTestActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.tv_2).setOnClickListener(this);
         findViewById(R.id.tv_3).setOnClickListener(this);
         findViewById(R.id.tv_4).setOnClickListener(this);
+        findViewById(R.id.tv_5).setOnClickListener(this);
     }
 
 
@@ -51,6 +53,13 @@ public class CrashTestActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(CrashTestActivity.this,"吐司",Toast.LENGTH_SHORT).show();
                 }
             }).start();
+        } else if ( id == R.id.tv_5){
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    throw new RuntimeException("handler异常");
+                }
+            });
         }
     }
 

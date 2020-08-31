@@ -119,8 +119,7 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
 
     private void getCrashList() {
         //重新获取
-        File fileCrash = new File(ToolFileUtils.getCrashLogPath(this));
-        fileList = ToolFileUtils.getFileList(fileCrash);
+        fileList = ToolFileUtils.getCrashFileList(this);
         //排序
         Collections.sort(fileList, new Comparator<File>() {
             @Override

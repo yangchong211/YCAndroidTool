@@ -224,6 +224,7 @@ public final class CrashToolUtils {
     @Nullable
     private static Class<? extends Activity> getRestartActivityClassWithIntentFilter(@NonNull Context context) {
         Intent searchedIntent = new Intent().setPackage(context.getPackageName());
+        //检索可以为给定意图执行的所有活动
         List<ResolveInfo> resolveInfo = context.getPackageManager().queryIntentActivities(searchedIntent,
                 PackageManager.GET_RESOLVED_FILTER);
         if (resolveInfo.size() > 0) {
@@ -231,12 +232,9 @@ public final class CrashToolUtils {
             try {
                 return (Class<? extends Activity>) Class.forName(info.activityInfo.name);
             } catch (ClassNotFoundException e) {
-                //Should not happen, print it to the log!
-                ToolLogUtils.e(CrashHandler.TAG+"Failed when resolving the restart activity" +
-                        " class via intent filter, stack trace follows!"+e.getMessage());
+                ToolLogUtils.e(CrashHandler.TAG+e.getMessage());
             }
         }
-
         return null;
     }
 
@@ -248,8 +246,7 @@ public final class CrashToolUtils {
             try {
                 return (Class<? extends Activity>) Class.forName(intent.getComponent().getClassName());
             } catch (ClassNotFoundException e) {
-                ToolLogUtils.e(CrashHandler.TAG+ "Failed when resolving the restart activity class" +
-                        " via getLaunchIntentForPackage, stack trace follows!"+e.getLocalizedMessage());
+                ToolLogUtils.e(CrashHandler.TAG+e.getLocalizedMessage());
             }
         }
         return null;

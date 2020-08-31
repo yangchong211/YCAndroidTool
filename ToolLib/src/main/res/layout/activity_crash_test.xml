@@ -46,4 +46,13 @@
         android:padding="10dp"
         android:text="4.子线程吐司异常崩溃"/>
 
+    <TextView
+        android:id="@+id/tv_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="5.handler异常导致崩溃"/>
+
 </LinearLayout>

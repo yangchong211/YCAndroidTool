@@ -47,7 +47,7 @@ public final class CrashFileUtils {
     /**
      * 时间转换
      */
-    private static final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    private static final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.CHINA);
     private static String crashTime;
     private static String crashHead;
     private static String versionName;
@@ -98,6 +98,8 @@ public final class CrashFileUtils {
                         "\n当前的版本\b\b\b:\b\b" + versionName + "—" + versionCode +
                         "\n\n";*/
         StringBuilder sb = new StringBuilder();
+        sb.append("\n软件APPLICATION_ID:").append(BuildConfig.APPLICATION_ID);
+        sb.append("\n是否是DEBUG版本:").append(BuildConfig.BUILD_TYPE);
         sb.append("\n崩溃的时间:").append(crashTime);
         sb.append("\n系统硬件商:").append(Build.MANUFACTURER);
         sb.append("\n设备的品牌:").append(Build.BRAND);
@@ -134,6 +136,8 @@ public final class CrashFileUtils {
                     return;
                 }
             }
+            ToolLogUtils.i(CrashHandler.TAG, "保存异常的log文件名称：" + fileName);
+            ToolLogUtils.i(CrashHandler.TAG, "保存异常的log文件file：" + file);
             //开始写日志
             pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
             //判断有没有额外信息需要写入
@@ -151,12 +155,21 @@ public final class CrashFileUtils {
                 cause = cause.getCause();
             }
             //重新命名文件
-            String splitEx = ex.toString().split(":")[0];
+            String string = ex.toString();
+            String splitEx;
+            if (string.contains(":")){
+                splitEx = ex.toString().split(":")[0];
+            } else {
+                splitEx = "java.lang.Exception";
+            }
             String newName = "V" + versionName + "_" + crashTime + "_" + splitEx + CRASH_REPORTER_EXTENSION;
             File newFile = new File(dir, newName);
+            //重命名文件
             ToolFileUtils.renameFile(file.getPath(), newFile.getPath());
+            //路径：/storage/emulated/0/Android/data/包名/cache/crashLogs
+            ToolLogUtils.i(CrashHandler.TAG, "保存异常的log文件路径：" + file.getPath() + "----新路径---"+newFile.getPath());
         } catch (Exception e) {
-            ToolLogUtils.e("保存日志失败：" + e.toString());
+            ToolLogUtils.e(CrashHandler.TAG, "保存日志失败：" + e.toString());
         } finally {
             if (pw != null) {
                 pw.close();
