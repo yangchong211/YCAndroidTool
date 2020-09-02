@@ -111,7 +111,7 @@
 ### 08.部分问题反馈
 - 该异常捕获实效了是什么情况？
     - Thread.setDefaultUncaughtExceptionHandler(handler) 方法如果被多次调用的话，会以最后一次传递的 handler 为准，所以如果用了第三方的统计模块，可能会出现失灵的情况。对于这种情况，在设置默认 hander 之前，可以先通过 getDefaultUncaughtExceptionHandler() 方法获取并保留旧的 hander，然后在默认 handler 的uncaughtException 方法中调用其他 handler 的 uncaughtException 方法，保证都会收到异常信息。
-    - 更加详情的信息，可以看[03.常驻应用崩溃后处理]()
+    - 更加详情的信息，可以看[03.常驻应用崩溃后处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/03.%E5%B8%B8%E9%A9%BB%E5%BA%94%E7%94%A8%E5%B4%A9%E6%BA%83%E5%90%8E%E5%A4%84%E7%90%86.md)
 - 关于上传日志介绍
     - 设置该异常初始化后，在进入全局异常时系统就提示尽快收集信息，进程将被结束，因此不可以在此时做网络上传崩溃信息。可以在此时将错误日志写入到file文件或者sp中。
     - 比如：通过SharedPreferences将错误日志的路径写入配置文件中，在启动的时候先检测该配置文件是否有错误日志信息，如果有则读取文件，然后实现日志上传。上传完成后删除该sp文件……
