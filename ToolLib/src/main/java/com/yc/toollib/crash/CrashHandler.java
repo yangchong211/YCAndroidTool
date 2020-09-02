@@ -2,7 +2,6 @@ package com.yc.toollib.crash;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Looper;
 
 import com.yc.toollib.tool.ToolLogUtils;
 
@@ -65,7 +64,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @param ctx
      */
     public void init(Application ctx , CrashListener listener) {
-        CrashToolUtils.init(ctx);
+        LifecycleCallback.getInstance().init(ctx);
         CrashHelper.getInstance().install(ctx);
         mContext = ctx;
         this.listener = listener;
