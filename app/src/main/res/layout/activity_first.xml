@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="1.重启app"/>
+        android:text="1.开启service来延时重启app"/>
 
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="2.重启app"/>
+        android:text="2.使用闹钟延时重启app"/>
 
 
 
@@ -35,6 +35,6 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="3.重启app"/>
+        android:text="3.检索项目中LauncherActivity启动app"/>
 
 </LinearLayout>

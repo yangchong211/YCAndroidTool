@@ -47,7 +47,7 @@ public final class CrashFileUtils {
     /**
      * 时间转换
      */
-    private static final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.CHINA);
+    private static final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private static String crashTime;
     private static String crashHead;
     private static String versionName;
@@ -199,15 +199,28 @@ public final class CrashFileUtils {
         if (context == null){
             return null;
         }
+        StackTraceElement[] stackTrace = ex.getStackTrace();
         StackTraceElement element;
         String packageName = context.getPackageName();
-        for (StackTraceElement ele : ex.getStackTrace()) {
+        for (StackTraceElement ele : stackTrace) {
             if (ele.getClassName().contains(packageName)) {
                 element = ele;
+                String clazzName = element.getClassName();
+                String fileName = element.getFileName();
+                int lineNumber = element.getLineNumber();
+                String methodName = element.getMethodName();
+                ToolLogUtils.i("printThrowable----1--"+clazzName+"----"
+                        +fileName+"------"+lineNumber+"----"+methodName);
                 return element;
             }
         }
-        element = ex.getStackTrace()[0];
+        element = stackTrace[0];
+        String clazzName = element.getClassName();
+        String fileName = element.getFileName();
+        int lineNumber = element.getLineNumber();
+        String methodName = element.getMethodName();
+        ToolLogUtils.i("printThrowable----2--"+clazzName+"----"
+                +fileName+"------"+lineNumber+"----"+methodName);
         return element;
     }
 

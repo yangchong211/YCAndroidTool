@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.yc.toollib.crash.CrashToolUtils;
+
 import java.util.ArrayList;
 
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,15 +29,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_1:
-                Integer.parseInt("12.3");
+                CrashToolUtils.reStartApp1(this,2000);
                 break;
             case R.id.tv_2:
-                ArrayList<String> list = new ArrayList<>();
-                list.get(5);
+                CrashToolUtils.reStartApp2(this,2000, MainActivity.class);
                 break;
             case R.id.tv_3:
-                Activity activity = null;
-                activity.finish();
+                CrashToolUtils.reStartApp3(this);
                 break;
         }
     }

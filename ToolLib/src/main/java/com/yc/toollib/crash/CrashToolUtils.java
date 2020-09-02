@@ -77,7 +77,9 @@ public final class CrashToolUtils {
             }
             //使用moveTaskToBack是为了让app退出时，不闪屏，退出柔和一些
         }
-        //注意这里是finish所有activity，然后杀死进程
+    }
+
+    private static void finishAllActivity(){
         ToolAppManager.getAppManager().finishAllActivity();
     }
 
@@ -89,6 +91,7 @@ public final class CrashToolUtils {
      * @param Delayed                       延迟多少毫秒
      */
     public static void reStartApp1(Context context, long Delayed){
+        //finishActivity();
         Intent intent = new Intent(context, KillSelfService.class);
         intent.putExtra("PackageName",context.getPackageName());
         intent.putExtra("Delayed",Delayed);
@@ -105,6 +108,7 @@ public final class CrashToolUtils {
      * @param Delayed                       延迟多少毫秒
      */
     public static void reStartApp2(Context context , long Delayed , Class clazz){
+        //finishActivity();
         //Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         Intent intent = new Intent(context.getApplicationContext(), clazz);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -131,9 +135,11 @@ public final class CrashToolUtils {
         killCurrentProcess(true);
     }
 
-    public static void reStartApp3(@NonNull Activity activity) {
+    public static void reStartApp3(Context context) {
+        String packageName = context.getPackageName();
+        Activity activity = ToolAppManager.getAppManager().currentActivity();
         Class<? extends Activity> clazz = guessRestartActivityClass(activity);
-        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--3---"+clazz);
+        ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--3-"+packageName + "--"+clazz);
         Intent intent = new Intent(activity, clazz);
         restartApplicationWithIntent(activity, intent);
     }

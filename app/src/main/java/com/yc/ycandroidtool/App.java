@@ -1,10 +1,14 @@
 package com.yc.ycandroidtool;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.util.Printer;
 
 import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
+import com.yc.toollib.crash.CrashTestDemo;
 import com.yc.toollib.crash.CrashToolUtils;
 
 public class App extends Application {
@@ -12,6 +16,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initCrash();
+        //test();
+    }
+
+    private void initCrash() {
         //ThreadHandler.getInstance().init(this);
         CrashHandler.getInstance().init(this, new CrashListener() {
             /**
@@ -19,9 +28,9 @@ public class App extends Application {
              */
             @Override
             public void againStartApp() {
-                CrashToolUtils.reStartApp1(App.this,1000);
-                //CrashToolUtils.reStartApp2(App.this,1000, MainActivity.class);
-                //CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
+                CrashToolUtils.reStartApp1(App.this,2000);
+                //CrashToolUtils.reStartApp2(App.this,2000, MainActivity.class);
+                //CrashToolUtils.reStartApp3(App.this);
             }
 
             /**
@@ -35,5 +44,10 @@ public class App extends Application {
             }
         });
     }
+
+    private void test(){
+        CrashTestDemo.test();
+    }
+
 
 }
