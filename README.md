@@ -25,10 +25,10 @@
     - 2.对于某些设备，比如做Kindle开发，可以设置崩溃重启app操作
     - 3.暴露了用户上传自己捕获的crash数据，以及崩溃重启的接口监听操作
 - 截图如下所示
-    - ![image]()
-    - ![image]()
-    - ![image]()
-    - ![image]()
+    - ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/1.jpg)
+    - ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/2.jpg)
+    - ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/3.jpg)
+    - ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/4.jpg)
 
 
 ### 02.该库优势分析
