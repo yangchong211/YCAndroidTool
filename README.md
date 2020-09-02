@@ -12,6 +12,7 @@
 
 
 ### 01.该库具有的功能
+#### 1.1 功能说明
 - 异常崩溃后思考的一些问题
     - 1.是否需要恢复activity栈，以及所在崩溃页面数据
     - 2.crash信息保存和异常捕获，是否和百度bug崩溃统计sdk等兼容
@@ -24,7 +25,8 @@
         - 主要是测试同学在测试中发现了崩溃，然后跑过去跟开发说，由于不容易复现导致开发童鞋不承认……有时候用的bug统计不是那么准！
     - 2.对于某些设备，比如做Kindle开发，可以设置崩溃重启app操作
     - 3.暴露了用户上传自己捕获的crash数据，以及崩溃重启的接口监听操作
-- 截图如下所示
+
+#### 1.2 截图如下所示
 ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/1.jpg)
 ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/2.jpg)
 ![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/3.jpg)
