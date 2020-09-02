@@ -83,13 +83,23 @@ public final class CrashToolUtils {
      */
     private static void exitApp(){
         finishActivity();
-        killCurrentProcess();
+        killCurrentProcess(true);
     }
 
-    private static void killCurrentProcess() {
+    /**
+     * 杀死进程操作，默认为异常退出
+     * System.exit(0)是正常退出程序，而System.exit(1)或者说非0表示非正常退出程序
+     * System.exit(1)一般放在catch块中，当捕获到异常，需要停止程序。这个status=1是用来表示这个程序是非正常退出。
+     * @param isThrow                           是否是异常退出
+     */
+    public static void killCurrentProcess(boolean isThrow) {
         //需要杀掉原进程，否则崩溃的app处于黑屏,卡死状态
         android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
+        if (isThrow){
+            System.exit(10);
+        } else {
+            System.exit(0);
+        }
     }
 
     private static void finishActivity() {
@@ -125,7 +135,7 @@ public final class CrashToolUtils {
         context.startService(intent);
         ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--1---");
         //exitApp();
-        killCurrentProcess();
+        killCurrentProcess(true);
     }
 
     /**
@@ -158,7 +168,7 @@ public final class CrashToolUtils {
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + Delayed,restartIntent);
         ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--2---"+clazz);
         //exitApp();
-        killCurrentProcess();
+        killCurrentProcess(true);
     }
 
     public static void reStartApp3(@NonNull Activity activity) {
@@ -205,7 +215,7 @@ public final class CrashToolUtils {
         }
         activity.startActivity(intent);
         activity.finish();
-        killCurrentProcess();
+        killCurrentProcess(true);
     }
 
 

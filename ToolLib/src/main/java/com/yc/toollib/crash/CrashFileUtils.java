@@ -144,6 +144,7 @@ public final class CrashFileUtils {
             if (!TextUtils.isEmpty(headContent)) {
                 pw.println(headContent);
             }
+            //print(ex);
             //写入设备信息
             pw.println(crashHead);
             //导出异常的调用栈信息
@@ -167,6 +168,8 @@ public final class CrashFileUtils {
             //重命名文件
             ToolFileUtils.renameFile(file.getPath(), newFile.getPath());
             //路径：/storage/emulated/0/Android/data/包名/cache/crashLogs
+            //file       V1.0_2020-09-02_09:05:01.txt
+            //newFile    V1.0_2020-09-02_09:05:01_java.lang.NullPointerException.txt
             ToolLogUtils.i(CrashHandler.TAG, "保存异常的log文件路径：" + file.getPath() + "----新路径---"+newFile.getPath());
         } catch (Exception e) {
             ToolLogUtils.e(CrashHandler.TAG, "保存日志失败：" + e.toString());
@@ -174,6 +177,18 @@ public final class CrashFileUtils {
             if (pw != null) {
                 pw.close();
             }
+        }
+    }
+
+    public static void print(Throwable thr) {
+        StackTraceElement[] stackTraces = thr.getStackTrace();
+        for (StackTraceElement stackTrace : stackTraces) {
+            String clazzName = stackTrace.getClassName();
+            String fileName = stackTrace.getFileName();
+            int lineNumber = stackTrace.getLineNumber();
+            String methodName = stackTrace.getMethodName();
+            ToolLogUtils.i("printThrowable------"+clazzName+"----"
+                    +fileName+"------"+lineNumber+"----"+methodName);
         }
     }
 

@@ -72,6 +72,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //获取系统默认的UncaughtExceptionHandler
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         //将当前实例设为系统默认的异常处理器
+        //设置一个处理者当一个线程突然因为一个未捕获的异常而终止时将自动被调用。
+        //未捕获的异常处理的控制第一个被当前线程处理，如果该线程没有捕获并处理该异常，其将被线程的ThreadGroup对象处理，最后被默认的未捕获异常处理器处理。
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
@@ -85,8 +87,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         initCustomBug(ex);
         if (mDefaultHandler != null && !isHandle) {
             //收集完信息后，交给系统自己处理崩溃
+            //uncaughtException (Thread t, Throwable e) 是一个抽象方法
+            //当给定的线程因为发生了未捕获的异常而导致终止时将通过该方法将线程对象和异常对象传递进来。
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
+            //否则自己处理
             if (mContext instanceof Application){
                 ToolLogUtils.w(TAG, "handleException--- ex----重启activity-");
                 if (listener!=null){

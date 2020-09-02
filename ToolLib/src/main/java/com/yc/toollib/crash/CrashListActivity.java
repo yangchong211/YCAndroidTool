@@ -94,7 +94,9 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initCrashFileList();
+                if (!mSwipeRefreshLayout.isRefreshing()){
+                    initCrashFileList();
+                }
             }
         });
         mSwipeRefreshLayout.post(new Runnable() {
@@ -159,37 +161,41 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
             crashInfoAdapter.setOnItemClickLitener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Intent intent = new Intent(CrashListActivity.this, CrashDetailsActivity.class);
-                    File file = fileList.get(position);
-                    intent.putExtra(CrashDetailsActivity.IntentKey_FilePath, file.getAbsolutePath());
-                    startActivity(intent);
+                    if (fileList.size()>position && position>=0){
+                        Intent intent = new Intent(CrashListActivity.this, CrashDetailsActivity.class);
+                        File file = fileList.get(position);
+                        intent.putExtra(CrashDetailsActivity.IntentKey_FilePath, file.getAbsolutePath());
+                        startActivity(intent);
+                    }
                 }
 
                 @Override
                 public void onLongClick(View view, final int position) {
-                    //弹出Dialog是否删除当前
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CrashListActivity.this);
-                    builder.setTitle("提示");
-                    builder.setMessage("是否删除当前日志?");
-                    builder.setNegativeButton("取消", null);
-                    builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            progressDialog = ProgressDialog.show(CrashListActivity.this, "提示", "正在删除...");
-                            progressDialog.show();
-                            //删除单个
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    File file = fileList.get(position);
-                                    ToolFileUtils.deleteFile(file.getPath());
-                                    //重新获取
-                                    getCrashList();
-                                }
-                            }).start();
-                        }
-                    });
-                    builder.show();
+                    if (fileList.size()>position && position>=0){
+                        //弹出Dialog是否删除当前
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CrashListActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("是否删除当前日志?");
+                        builder.setNegativeButton("取消", null);
+                        builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                progressDialog = ProgressDialog.show(CrashListActivity.this, "提示", "正在删除...");
+                                progressDialog.show();
+                                //删除单个
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        File file = fileList.get(position);
+                                        ToolFileUtils.deleteFile(file.getPath());
+                                        //重新获取
+                                        getCrashList();
+                                    }
+                                }).start();
+                            }
+                        });
+                        builder.show();
+                    }
                 }
             });
         } else {
@@ -203,33 +209,38 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.tv_delete) {
-            //弹出Dialog是否删除全部
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("提示");
-            builder.setMessage("是否删除全部日志?");
-            builder.setNegativeButton("取消", null);
-            builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    progressDialog = ProgressDialog.show(
-                            CrashListActivity.this, "提示", "正在删除...");
-                    progressDialog.show();
-
-                    //删除全部
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            File fileCrash = new File(ToolFileUtils.getCrashLogPath(CrashListActivity.this));
-                            ToolFileUtils.deleteAllFiles(fileCrash);
-                            //重新获取
-                            getCrashList();
-                        }
-                    }).start();
-                }
-            });
-            builder.show();
+            deleteAll();
         } else if (i == R.id.ll_back) {
             finish();
         }
     }
+
+    private void deleteAll() {
+        //弹出Dialog是否删除全部
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("是否删除全部日志?");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                progressDialog = ProgressDialog.show(
+                        CrashListActivity.this, "提示", "正在删除...");
+                progressDialog.show();
+
+                //删除全部
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File fileCrash = new File(ToolFileUtils.getCrashLogPath(CrashListActivity.this));
+                        ToolFileUtils.deleteAllFiles(fileCrash);
+                        //重新获取
+                        getCrashList();
+                    }
+                }).start();
+            }
+        });
+        builder.show();
+    }
+
 }
