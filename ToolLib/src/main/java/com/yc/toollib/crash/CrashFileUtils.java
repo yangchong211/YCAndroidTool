@@ -192,6 +192,25 @@ public final class CrashFileUtils {
         }
     }
 
+    private static StackTraceElement parseThrowable(Throwable ex , Context context) {
+        if (ex == null || ex.getStackTrace() == null || ex.getStackTrace().length == 0) {
+            return null;
+        }
+        if (context == null){
+            return null;
+        }
+        StackTraceElement element;
+        String packageName = context.getPackageName();
+        for (StackTraceElement ele : ex.getStackTrace()) {
+            if (ele.getClassName().contains(packageName)) {
+                element = ele;
+                return element;
+            }
+        }
+        element = ex.getStackTrace()[0];
+        return element;
+    }
+
     /**
      * 获取错误报告文件路径
      *
