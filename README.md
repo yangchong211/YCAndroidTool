@@ -26,11 +26,12 @@
     - 2.对于某些设备，比如做Kindle开发，可以设置崩溃重启app操作
     - 3.暴露了用户上传自己捕获的crash数据，以及崩溃重启的接口监听操作
 
+
 #### 1.2 截图如下所示
-![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/1.jpg)
-![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/2.jpg)
-![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/3.jpg)
-![image](https://github.com/yangchong211/YCAndroidTool/blob/master/image/4.jpg)
+![image](https://img-blog.csdnimg.cn/20200902194445625.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200902194445623.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200902194445622.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200902194445576.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
 ### 02.该库优势分析
