@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.yc.toollib.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * <pre>
@@ -32,6 +33,7 @@ public class CrashTestActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.tv_3).setOnClickListener(this);
         findViewById(R.id.tv_4).setOnClickListener(this);
         findViewById(R.id.tv_5).setOnClickListener(this);
+        findViewById(R.id.tv_6).setOnClickListener(this);
     }
 
 
@@ -60,6 +62,19 @@ public class CrashTestActivity extends AppCompatActivity implements View.OnClick
                     throw new RuntimeException("handler异常");
                 }
             });
+        } else if (id == R.id.tv_6){
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (int i=0 ; i<100 ; i++){
+                list.add(i);
+            }
+            Iterator<Integer> iterator = list.iterator();
+            while(iterator.hasNext()){
+                Integer integer = iterator.next();
+                if(integer%2==0){
+                    list.remove(integer);
+                }
+            }
+
         }
     }
 
