@@ -36,7 +36,7 @@
 
 
 #### 1.3崩溃后日志记录
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200904095027529.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200904095027529.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
 ### 02.该库优势分析
