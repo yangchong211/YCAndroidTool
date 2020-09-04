@@ -178,6 +178,13 @@
 
 
 ### 07.异常栈轨迹原理
+- Android发生异常为何崩溃
+    - 一旦线程出现抛出异常，并且我们没有捕捉的情况下，JVM将调用Thread中的dispatchUncaughtException方法把异常传递给线程的未捕获异常处理器。发现最后会使用到Thread.getDefaultUncaughtExceptionHandler()
+    - 既然Android遇到异常会发生崩溃，然后找一些哪里用到设置setDefaultUncaughtExceptionHandler，即可定位到RuntimeInit类。
+    - 具体可以找到RuntimeInit类，然后在找到KillApplicationHandler类。首先看该类的入口main方法--->commonInit()--->，然后接着往下走，找到setDefaultUncaughtExceptionHandler代码。当出现异常是try-catch，并且在finally中直接kill杀死app操作。
+    - 详细可以看：[Android项目崩溃分析](https://github.com/yangchong211/YCAndroidTool/blob/master/read/07.Android%E9%A1%B9%E7%9B%AE%E5%B4%A9%E6%BA%83%E5%88%86%E6%9E%90.md)
+- 崩溃后异常堆栈链是如何形成的
+    - 待完善，看：[异常栈轨迹处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/04.%E5%BC%82%E5%B8%B8%E6%A0%88%E8%BD%A8%E8%BF%B9%E5%A4%84%E7%90%86.md)
 
 
 
