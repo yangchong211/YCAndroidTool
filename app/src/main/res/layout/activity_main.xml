@@ -44,4 +44,13 @@
         android:padding="10dp"
         android:text="4.点击去测试崩溃页面"/>
 
+    <TextView
+        android:id="@+id/tv_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="5.获取崩溃日志记录的目录"/>
+
 </LinearLayout>

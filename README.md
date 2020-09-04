@@ -34,6 +34,11 @@
 ![image](https://img-blog.csdnimg.cn/20200902194445576.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
+
+#### 1.3崩溃后日志记录
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200904095027529.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+
+
 ### 02.该库优势分析
 - 低入侵性接入该lib，不会影响你的其他业务。
 
@@ -70,7 +75,7 @@
         }
     });
     ```
-- 关于重启App的操作有三种方式
+- 关于重启App的操作有三种方式api
     ``` java
     //开启一个新的服务KillSelfService，用来重启本APP【使用handler延迟】
     CrashToolUtils.reStartApp1(App.this,1000);
@@ -78,6 +83,13 @@
     CrashToolUtils.reStartApp2(App.this,1000, MainActivity.class);
     //检索获取项目中LauncherActivity，然后设置该activity的flag和component启动app【推荐】
     CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
+    ```
+- 关于获取崩溃目录api
+    ``` java
+    //崩溃文件存储路径：/storage/emulated/0/Android/data/你的包名/cache/crashLogs
+    //崩溃页面截图存储路径：/storage/emulated/0/Android/data/你的包名/cache/crashPics
+    String crashLogPath = ToolFileUtils.getCrashLogPath(this);
+    String crashPicPath = ToolFileUtils.getCrashPicPath(this);
     ```
 - 关于崩溃日志记录
     - 日志记录路径：/storage/emulated/0/Android/data/你的包名/cache/crashLogs
@@ -102,6 +114,8 @@
     ``` java
     CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
     ```
+- 关于app启动方式详细介绍
+    - [App启动介绍](https://github.com/yangchong211/YCAndroidTool/blob/master/read/06.App%E9%87%8D%E5%90%AF%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F.md)
 
 
 
@@ -133,6 +147,14 @@
 - 混淆
     - -keep class com.yc.toollib.** { *; }
     - -keepnames class com.yc.toollib.** { *; }
+- 该库笔记介绍
+    - [崩溃原理深度探索](https://github.com/yangchong211/YCAndroidTool/blob/master/read/02.%E5%B4%A9%E6%BA%83%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2.md)
+    - [常驻应用崩溃后处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/03.%E5%B8%B8%E9%A9%BB%E5%BA%94%E7%94%A8%E5%B4%A9%E6%BA%83%E5%90%8E%E5%A4%84%E7%90%86.md)
+    - [异常栈轨迹处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/04.%E5%BC%82%E5%B8%B8%E6%A0%88%E8%BD%A8%E8%BF%B9%E5%A4%84%E7%90%86.md)
+    - [Loop拦截崩溃和ANR](https://github.com/yangchong211/YCAndroidTool/blob/master/read/05.Loop%E6%8B%A6%E6%88%AA%E5%B4%A9%E6%BA%83%E5%92%8CANR.md)
+    - [App重启几种方式](https://github.com/yangchong211/YCAndroidTool/blob/master/read/06.App%E9%87%8D%E5%90%AF%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F.md)
+
+
 
 
 

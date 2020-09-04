@@ -29,6 +29,7 @@ public class ToolFileUtils {
 
     /**
      * 目录地址
+     * 崩溃日志记录地址
      * SDCard/Android/data/<application package>/cache
      * data/data/<application package>/cache
      */
@@ -37,6 +38,12 @@ public class ToolFileUtils {
         return path;
     }
 
+    /**
+     * 目录地址
+     * 崩溃截图记录地址
+     * SDCard/Android/data/<application package>/cache
+     * data/data/<application package>/cache
+     */
     public static String getCrashPicPath(Context context) {
         String path = getCachePath(context) + File.separator + "crashPics";
         File file = new File(path);
@@ -64,7 +71,7 @@ public class ToolFileUtils {
      * @param context
      * @return
      */
-    public static String getCachePath(Context context) {
+    private static String getCachePath(Context context) {
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {
