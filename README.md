@@ -99,6 +99,57 @@
     ``` java
     CrashToolUtils.startCrashListActivity(this);
     ```
+- 那么如何获取所有崩溃日志的list呢。建议放到子线程中处理！！
+    ``` java
+    List<File> fileList = ToolFileUtils.getCrashFileList(this);
+
+    //如果是要自己拿到这些文件，建议根据时间来排个序
+    //排序
+    Collections.sort(fileList, new Comparator<File>() {
+        @Override
+        public int compare(File file01, File file02) {
+            try {
+                //根据修改时间排序
+                long lastModified01 = file01.lastModified();
+                long lastModified02 = file02.lastModified();
+                if (lastModified01 > lastModified02) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } catch (Exception e) {
+                return 1;
+            }
+        }
+    });
+    ```
+- 如何删除单个文件操作
+    ``` java
+    //返回true表示删除成功
+    boolean isDelete = ToolFileUtils.deleteFile(file.getPath());
+    ```
+- 如何删除所有的文件。建议放到子线程中处理！！
+    ``` java
+    File fileCrash = new File(ToolFileUtils.getCrashLogPath(CrashListActivity.this));
+    ToolFileUtils.deleteAllFiles(fileCrash);
+    ```
+- 如何获取崩溃文件中的内容
+    ``` java
+    //获取内容
+    String crashContent = ToolFileUtils.readFile2String(filePath);
+    ```
+- 还有一些关于其他的api，如下。这个主要是方便测试同学或者产品，避免开发不承认那种偶发性崩溃bug……
+    ```
+    //拷贝文件，两个参数分别是源文件，还有目标文件
+    boolean copy = ToolFileUtils.copyFile(srcFile, destFile);
+    //分享文件。这个是调用原生的分享
+    CrashLibUtils.shareFile(CrashDetailsActivity.this, destFile);
+    //截图崩溃然后保存到相册。截图---> 创建截图存储文件路径---> 保存图片【图片质量，缩放比还有采样率压缩】
+    final Bitmap bitmap = ScreenShotsUtils.measureSize(this,view);
+    String crashPicPath = ToolFileUtils.getCrashPicPath(CrashDetailsActivity.this) + "/crash_pic_" + System.currentTimeMillis() + ".jpg";
+    boolean saveBitmap = CrashLibUtils.saveBitmap(CrashDetailsActivity.this, bitmap, crashPicPath);
+    ```
+
 
 
 ### 05.异常恢复原理
