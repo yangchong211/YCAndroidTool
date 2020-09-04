@@ -7,6 +7,7 @@
 - 06.后续的需求说明
 - 07.异常栈轨迹原理
 - 08.部分问题反馈
+- 09.其他内容说明
 
 
 
@@ -238,7 +239,27 @@
     - [异常栈轨迹处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/04.%E5%BC%82%E5%B8%B8%E6%A0%88%E8%BD%A8%E8%BF%B9%E5%A4%84%E7%90%86.md)
     - [Loop拦截崩溃和ANR](https://github.com/yangchong211/YCAndroidTool/blob/master/read/05.Loop%E6%8B%A6%E6%88%AA%E5%B4%A9%E6%BA%83%E5%92%8CANR.md)
     - [App重启几种方式](https://github.com/yangchong211/YCAndroidTool/blob/master/read/06.App%E9%87%8D%E5%90%AF%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F.md)
-
+- 其他项目推荐
+    - [1.开源博客汇总](https://github.com/yangchong211/YCBlogs)
+    - [2.降低Crash崩溃库](https://github.com/yangchong211/YCAndroidTool)
+    - [3.视频播放器封装库](https://github.com/yangchong211/YCVideoPlayer)
+    - [4.状态切换管理器封装库](https://github.com/yangchong211/YCStateLayout)
+    - [5.复杂RecyclerView封装库](https://github.com/yangchong211/YCRefreshView)
+    - [6.弹窗封装库](https://github.com/yangchong211/YCDialog)
+    - [7.版本更新封装库](https://github.com/yangchong211/YCUpdateApp)
+    - [8.状态栏封装库](https://github.com/yangchong211/YCStatusBar)
+    - [9.轻量级线程池封装库](https://github.com/yangchong211/YCThreadPool)
+    - [10.轮播图封装库](https://github.com/yangchong211/YCBanner)
+    - [11.音频播放器](https://github.com/yangchong211/YCAudioPlayer)
+    - [12.画廊与图片缩放控件](https://github.com/yangchong211/YCGallery)
+    - [13.Python多渠道打包](https://github.com/yangchong211/YCWalleHelper)
+    - [14.整体侧滑动画封装库](https://github.com/yangchong211/YCSlideView)
+    - [15.Python爬虫妹子图](https://github.com/yangchong211/YCMeiZiTu)
+    - [17.自定义进度条](https://github.com/yangchong211/YCProgress)
+    - [18.自定义折叠和展开布局](https://github.com/yangchong211/YCExpandView)
+    - [19.商品详情页分页加载](https://github.com/yangchong211/YCShopDetailLayout)
+    - [20.在任意View控件上设置红点控件](https://github.com/yangchong211/YCRedDotView)
+    - [21.仿抖音一次滑动一个页面播放视频库](https://github.com/yangchong211/YCScrollPager)
 
 
 
