@@ -9,14 +9,16 @@
         <service android:name=".crash.KillSelfService"/>
         <activity
             android:name=".crash.CrashListActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CrashTheme"/>
         <activity
             android:name=".crash.CrashDetailsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CrashTheme"/>
         <activity
             android:name=".crash.CrashTestActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/CrashTheme"/>
         <provider
             android:name=".crash.CrashFileProvider"
             android:authorities="${applicationId}.crashFileProvider"

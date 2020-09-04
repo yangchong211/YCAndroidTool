@@ -14,6 +14,20 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layout',
+                    'src/main/res/drawable',
+                    'src/main/res/drawable-hdpi',
+                    'src/main/res/drawable-xxhdpi',
+                    'src/main/res/values',
+                    'src/main/res/xml',
+                    'src/main/res'
+            ]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
