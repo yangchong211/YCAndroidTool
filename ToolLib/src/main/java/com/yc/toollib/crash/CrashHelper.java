@@ -24,7 +24,7 @@ import me.weishu.reflection.Reflection;
  *     email  : yangchong211@163.com
  *     time  : 2020/8/30
  *     desc  : 异常避免帮助类
- *     revise: 参考：https://github.com/android-notes/Cockroach
+ *     revise:
  * </pre>
  */
 public final class CrashHelper {
