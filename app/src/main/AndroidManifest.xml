@@ -23,6 +23,7 @@
         <activity android:name=".FirstActivity"/>
         <activity android:name=".TestActivity"/>
         <activity android:name=".TestActivity2"/>
+        <activity android:name=".fs.StudentActivity"/>
 
     </application>
 

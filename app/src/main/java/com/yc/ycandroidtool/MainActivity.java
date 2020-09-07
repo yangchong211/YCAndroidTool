@@ -1,17 +1,14 @@
 package com.yc.ycandroidtool;
 
-import android.app.Application;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yc.toollib.crash.CrashListActivity;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
+import com.yc.ycandroidtool.fs.StudentActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -27,6 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_3).setOnClickListener(this);
         findViewById(R.id.tv_4).setOnClickListener(this);
         findViewById(R.id.tv_5).setOnClickListener(this);
+        findViewById(R.id.tv_6).setOnClickListener(this);
     }
 
     @Override
@@ -52,6 +50,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Toast.makeText(this,crashLogPath,Toast.LENGTH_SHORT).show();
                 ToolLogUtils.i("目录---crashLogPath-"+crashLogPath);
                 ToolLogUtils.i("目录---crashPicPath-"+crashPicPath);
+                break;
+            case R.id.tv_6:
+                startActivity(new Intent(this, StudentActivity.class));
                 break;
         }
     }

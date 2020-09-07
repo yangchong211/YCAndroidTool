@@ -9,12 +9,24 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/tv_1"
+        android:id="@+id/tv_0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="1.重启app的普通方式"/>
+        android:text="0.反射创建对象"/>
+
+
+
+    <TextView
+        android:id="@+id/tv_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="1.获取各种属性"/>
+
 
     <TextView
         android:id="@+id/tv_2"
@@ -23,7 +35,9 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="2.测试项目崩溃重启"/>
+        android:text="2.反射调用私有，共有方法"/>
+
+
 
     <TextView
         android:id="@+id/tv_3"
@@ -32,7 +46,8 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="3.点击去崩溃页面"/>
+        android:text="3.反射访问成员变量值"/>
+
 
 
     <TextView
@@ -42,7 +57,8 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="4.点击去测试崩溃页面"/>
+        android:text="4.反射调用有参数的共有方法"/>
+
 
     <TextView
         android:id="@+id/tv_5"
@@ -51,7 +67,8 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="5.获取崩溃日志记录的目录"/>
+        android:text="5.反射获取类的属性"/>
+
 
     <TextView
         android:id="@+id/tv_6"
@@ -60,6 +77,18 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="6.测试反射，以及hook是否起作用"/>
+        android:text="6.测试class加载顺序"/>
+
+
+    <TextView
+        android:id="@+id/tv_7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="7.定义接口反射场景"/>
+
+
 
 </LinearLayout>

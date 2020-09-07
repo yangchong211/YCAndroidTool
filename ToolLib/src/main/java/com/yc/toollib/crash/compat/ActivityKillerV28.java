@@ -14,24 +14,20 @@ import java.lang.reflect.Method;
 
 public class ActivityKillerV28 implements IActivityKiller {
 
-
     @Override
     public void finishLaunchActivity(Message message) {
-
         try {
             tryFinish1(message);
             return;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-
         try {
             tryFinish2(message);
             return;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-
         try {
             tryFinish3(message);
             return;
@@ -74,17 +70,30 @@ public class ActivityKillerV28 implements IActivityKiller {
 
     @Override
     public void finishStopActivity(Message message) {
+
     }
 
     private void finish(IBinder binder) throws Exception {
-        Method getServiceMethod = ActivityManager.class.getDeclaredMethod("getService");
+        Class<?> clazz = ActivityManager.class;
+        //获取方法
+        Method getServiceMethod = clazz.getDeclaredMethod("getService");
+        getServiceMethod.setAccessible(true);
+        //通过invoke方法调用
         Object activityManager = getServiceMethod.invoke(null);
-        Method finishActivityMethod = activityManager.getClass().getDeclaredMethod(
+        Class<?> managerClass = activityManager.getClass();
+        //获取ActivityManagerService类，简称AMS，拿到finishActivity方法
+        //第四个参数是：是否完成与此活动关联的任务。
+        Method finishActivityMethod = managerClass.getDeclaredMethod(
                 "finishActivity", IBinder.class, int.class, Intent.class, int.class);
         finishActivityMethod.setAccessible(true);
+        //当活动完成时，任务还没有完成
         int DONT_FINISH_TASK_WITH_ACTIVITY = 0;
+        //FINISH_TASK_WITH_ROOT_ACTIVITY = 1
+        //表示如果完成活动是任务的根，则任务已完成。为了保存过去的行为，该任务也从最近项中删除。
+        //FINISH_TASK_WITH_ACTIVITY = 2
+        //任务与完成活动一起完成，但不会从近期中删除。
         finishActivityMethod.invoke(activityManager, binder,
                 Activity.RESULT_CANCELED, null, DONT_FINISH_TASK_WITH_ACTIVITY);
-
     }
+
 }
