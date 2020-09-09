@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_4).setOnClickListener(this);
         findViewById(R.id.tv_5).setOnClickListener(this);
         findViewById(R.id.tv_6).setOnClickListener(this);
+        findViewById(R.id.tv_7).setOnClickListener(this);
     }
 
     @Override
@@ -53,6 +54,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_6:
                 startActivity(new Intent(this, StudentActivity.class));
+                break;
+            case R.id.tv_7:
+                startActivity(new Intent(this, NetworkActivity.class));
                 break;
         }
     }

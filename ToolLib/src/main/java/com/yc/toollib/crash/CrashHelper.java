@@ -215,11 +215,15 @@ public final class CrashHelper {
         return sIsSafeMode;
     }
 
+    /**
+     * 开启保护模式
+     */
     protected void safeMode() {
         sIsSafeMode = true;
         if (sExceptionHandler != null) {
             sExceptionHandler.enterSafeMode();
         }
+        //开启一个循环
         while (true) {
             try {
                 Looper.loop();
@@ -261,6 +265,7 @@ public final class CrashHelper {
 
     protected void setSafe(Thread thread, Throwable ex) {
         ToolLogUtils.w(CrashHandler.TAG, "setSafe--- thread-----"+thread.getName());
+        //判断是否是同一个线程
         if (thread == Looper.getMainLooper().getThread()) {
             CrashHelper.getInstance().isChoreographerException(ex);
             CrashHelper.getInstance().safeMode();

@@ -62,4 +62,13 @@
         android:padding="10dp"
         android:text="6.测试反射，以及hook是否起作用"/>
 
+    <TextView
+        android:id="@+id/tv_7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="7.网络库"/>
+
 </LinearLayout>

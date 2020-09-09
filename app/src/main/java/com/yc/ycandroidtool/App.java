@@ -10,6 +10,7 @@ import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
 import com.yc.toollib.crash.CrashTestDemo;
 import com.yc.toollib.crash.CrashToolUtils;
+import com.yc.toollib.network.utils.NetworkTool;
 
 public class App extends Application {
 
@@ -17,6 +18,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         initCrash();
+        NetworkTool.getInstance().init(this);
         //test();
     }
 

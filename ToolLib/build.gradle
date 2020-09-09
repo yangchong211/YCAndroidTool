@@ -7,11 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
+        versionCode 2
+        versionName "1.0.1"
     }
 
     sourceSets {
@@ -40,9 +37,11 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
     //参考：https://github.com/tiann/FreeReflection
     //是一个允许你在Android P(包括Q和R)之上不受任何限制地使用反射的库。
     implementation 'me.weishu:free_reflection:1.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
 }
 
 
@@ -62,7 +61,7 @@ group = "cn.yc"
 //发布到JCenter上的项目名字，必须填写
 def libName = "YCAndroidTool"
 // 版本号，下次更新是只需要更改版本号即可
-version = "1.0.0"
+version = "1.0.1"
 
 //生成源文件
 task sourcesJar(type: Jar) {

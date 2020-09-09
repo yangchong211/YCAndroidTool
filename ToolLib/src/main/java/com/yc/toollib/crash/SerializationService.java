@@ -2,6 +2,7 @@ package com.yc.toollib.crash;
 
 import java.lang.reflect.Type;
 
+@Deprecated
 public interface SerializationService {
 
     @Deprecated
