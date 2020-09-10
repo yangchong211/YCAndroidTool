@@ -1,6 +1,6 @@
 package com.yc.toollib.network.ping;
 
-import android.util.Log;
+import com.yc.toollib.tool.ToolLogUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,8 +14,10 @@ import java.util.regex.Pattern;
  */
 public class NetPing {
 
-    LDNetPingListener listener; // 回传ping的结果
-    private final int _sendCount; // 每次ping发送数据包的个数
+    // 回传ping的结果
+    LDNetPingListener listener;
+    // 每次ping发送数据包的个数
+    private final int _sendCount;
 
     public NetPing(LDNetPingListener listener, int theSendCount) {
         super();
@@ -29,7 +31,7 @@ public class NetPing {
      * @author panghui
      */
     public interface LDNetPingListener {
-        public void OnNetPingFinished(String log);
+        void OnNetPingFinished(String log);
     }
 
     private static final String MATCH_PING_IP = "(?<=from ).*(?=: icmp_seq=1 ttl=)";
@@ -37,7 +39,7 @@ public class NetPing {
     /**
      * 执行ping命令，返回ping命令的全部控制台输出
      *
-     * @param ping
+     * @param ping                              ping
      * @return
      */
     private String execPing(PingTask ping, boolean isNeedL) {
@@ -46,20 +48,21 @@ public class NetPing {
             cmd = "ping -s 8185 -c  ";
         }
         Process process = null;
-        String str = "";
+        StringBuilder str = new StringBuilder();
         BufferedReader reader = null;
         try {
-            process = Runtime.getRuntime().exec(
-                    cmd + this._sendCount + " " + ping.getHost());
-            reader = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
+            String pingCmd = cmd + this._sendCount + " " + ping.getHost();
+            ToolLogUtils.i("NetPing--------pingCmd---"+pingCmd);
+            //比如 ping -c 4 10.3.140.254
+            Runtime runtime = Runtime.getRuntime();
+            process = runtime.exec(pingCmd);
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                str += line;
+                str.append(line);
             }
             reader.close();
             process.waitFor();
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -69,17 +72,20 @@ public class NetPing {
                 if (reader != null) {
                     reader.close();
                 }
-                process.destroy();
+                if (process != null) {
+                    process.destroy();
+                }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return str;
+        return str.toString();
     }
 
     /**
      * 执行指定host的traceroute
      *
-     * @param host
+     * @param host                              host
      * @return
      */
     public void exec(String host, boolean isNeedL) {
@@ -87,24 +93,23 @@ public class NetPing {
         StringBuilder log = new StringBuilder(256);
         String status = execPing(pingTask, isNeedL);
         if (Pattern.compile(MATCH_PING_IP).matcher(status).find()) {
-            Log.i("LDNetPing", "status" + status);
-            log.append("\t" + status);
+            ToolLogUtils.i("NetPing--------status---"+status);
+            log.append("\t").append(status);
         } else {
             if (status.length() == 0) {
                 log.append("unknown host or network error");
             } else {
-
                 log.append("timeout");
             }
         }
+        ToolLogUtils.i("NetPing--------exec---"+host);
         String logStr = PingParseTool.getFormattingStr(host, log.toString());
+        ToolLogUtils.i("NetPing--------logStr---"+logStr);
         this.listener.OnNetPingFinished(logStr);
     }
 
     /**
      * Ping任务
-     *
-     * @author panghui
      */
     private class PingTask {
 
@@ -123,7 +128,7 @@ public class NetPing {
             if (m.find()) {
                 this.host = m.group();
             }
-
         }
     }
+
 }

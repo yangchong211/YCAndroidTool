@@ -35,7 +35,7 @@ public class PingNetUtils {
     @SuppressWarnings({"deprecation"})
     public static String getNetWorkType(Context context) {
         String mNetWorkType = null;
-        ConnectivityManager manager = (ConnectivityManager) context
+        ConnectivityManager manager = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (manager == null) {
             return "ConnectivityManager not found";
@@ -76,10 +76,11 @@ public class PingNetUtils {
     }
 
     public static String getMobileOperator(Context context) {
-        TelephonyManager telManager = (TelephonyManager) context
+        TelephonyManager telManager = (TelephonyManager) context.getApplicationContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        if (telManager == null)
+        if (telManager == null){
             return "未知运营商";
+        }
         String operator = telManager.getSimOperator();
         if (operator != null) {
             if (operator.equals("46000") || operator.equals("46002")
@@ -98,7 +99,7 @@ public class PingNetUtils {
      * 获取本机IP(wifi)
      */
     public static String getLocalIpByWifi(Context context) {
-        WifiManager wifiManager = (WifiManager) context
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null) {
             return "wifiManager not found";
@@ -118,8 +119,7 @@ public class PingNetUtils {
      */
     public static String getLocalIpBy3G() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
                         .hasMoreElements(); ) {
@@ -128,7 +128,7 @@ public class PingNetUtils {
                             && inetAddress instanceof Inet4Address) {
                         // if (!inetAddress.isLoopbackAddress() && inetAddress
                         // instanceof Inet6Address) {
-                        return inetAddress.getHostAddress().toString();
+                        return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -143,7 +143,7 @@ public class PingNetUtils {
      */
     public static String pingGateWayInWifi(Context context) {
         String gateWay = null;
-        WifiManager wifiManager = (WifiManager) context
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null) {
             return "wifiManager not found";
@@ -162,15 +162,14 @@ public class PingNetUtils {
      */
     public static String getLocalDns(String dns) {
         Process process = null;
-        String str = "";
+        StringBuilder str = new StringBuilder();
         BufferedReader reader = null;
         try {
             process = Runtime.getRuntime().exec("getprop net." + dns);
-            reader = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                str += line;
+                str.append(line);
             }
             reader.close();
             process.waitFor();
@@ -183,11 +182,14 @@ public class PingNetUtils {
                 if (reader != null) {
                     reader.close();
                 }
-                process.destroy();
+                if (process != null) {
+                    process.destroy();
+                }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return str.trim();
+        return str.toString().trim();
     }
 
     /**
@@ -268,10 +270,10 @@ public class PingNetUtils {
     public static String getStringFromStream(InputStream is) {
         byte[] bytes = new byte[1024];
         int len = 0;
-        String res = "";
+        StringBuilder res = new StringBuilder();
         try {
             while ((len = is.read(bytes)) != -1) {
-                res = res + new String(bytes, 0, len, "gbk");
+                res.append(new String(bytes, 0, len, "gbk"));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -284,6 +286,8 @@ public class PingNetUtils {
                 }
             }
         }
-        return res;
+        return res.toString();
     }
+
+
 }

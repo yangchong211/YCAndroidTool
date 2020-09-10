@@ -2,6 +2,9 @@ package com.yc.toollib.network.ping;
 
 import android.util.Log;
 
+
+import com.yc.toollib.tool.ToolLogUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +15,7 @@ import java.util.regex.Pattern;
  * 通过ping模拟traceroute过程
  */
 public class PingNetTraceRoute {
-    private final String LOG_TAG = "LDNetTraceRoute";
+
     private static PingNetTraceRoute instance;
 
     private PingNetTraceRoute() {
@@ -112,19 +115,19 @@ public class PingNetTraceRoute {
      */
     private String execPing(PingTask ping) {
         Process process = null;
-        String str = "";
+        StringBuilder str = new StringBuilder();
         BufferedReader reader = null;
         try {
-            process = Runtime.getRuntime().exec("ping -c 1 " + ping.getHost());
-            reader = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
+            String pingCmd = "ping -c 1 " + ping.getHost();
+            ToolLogUtils.i("PingNetTraceRoute--------pingCmd---"+pingCmd);
+            process = Runtime.getRuntime().exec(pingCmd);
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                str += line;
+                str.append(line);
             }
             reader.close();
             process.waitFor();
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -134,11 +137,14 @@ public class PingNetTraceRoute {
                 if (reader != null) {
                     reader.close();
                 }
-                process.destroy();
+                if (process != null) {
+                    process.destroy();
+                }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return str;
+        return str.toString();
     }
 
     /**
@@ -161,9 +167,8 @@ public class PingNetTraceRoute {
                 // 先发出ping命令获得某个跳数的ip地址
                 String str = "";
                 // -c 1 同时发送消息次数 －t是指跳数
-                String command = "ping -c 1 -t " + trace.getHop() + " "
-                        + trace.getHost();
-
+                String command = "ping -c 1 -t " + trace.getHop() + " " + trace.getHost();
+                ToolLogUtils.i("PingNetTraceRoute--------command---"+command);
                 process = Runtime.getRuntime().exec(command);
                 reader = new BufferedReader(new InputStreamReader(
                         process.getInputStream()));
@@ -277,7 +282,6 @@ public class PingNetTraceRoute {
             if (m.find()) {
                 this.host = m.group();
             }
-
         }
     }
 

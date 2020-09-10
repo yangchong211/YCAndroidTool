@@ -1,6 +1,9 @@
 package com.yc.toollib.network.ping;
 
 
+
+import com.yc.toollib.tool.ToolLogUtils;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,6 +12,7 @@ import java.net.SocketTimeoutException;
 import java.util.List;
 
 public class NetSocket {
+
     private static final int PORT = 80;
     private static final int CONN_TIMES = 4;
     private static final String TIMEOUT = "DNS解析正常,连接超时,TCP建立失败";
@@ -16,13 +20,15 @@ public class NetSocket {
     private static final String HOSTERR = "DNS解析失败,主机地址不可达";
     private static NetSocket instance = null;
     private LDNetSocketListener listener;
-    private int timeOut = 6000;// 设置每次连接的timeout时间
+    // 设置每次连接的timeout时间
+    private int timeOut = 6000;
+    // 表示一个互联网协议(IP)地址
     public InetAddress[] _remoteInet;
+    // ip集合
     public List<String> _remoteIpList;
     private boolean[] isConnnected;
-    private final long[] RttTimes = new long[CONN_TIMES];// 用于存储三次测试中每次的RTT值
-
-    public boolean isCConn = true;
+    // 用于存储三次测试中每次的RTT值
+    private final long[] RttTimes = new long[CONN_TIMES];
 
     private NetSocket() {
 
@@ -51,25 +57,31 @@ public class NetSocket {
      */
     private boolean execUseJava(String host) {
         if (_remoteInet != null && _remoteIpList != null) {
+            //获取长度
             int len = _remoteInet.length;
             isConnnected = new boolean[len];
+            ToolLogUtils.i("NetSocket----------isConnnected---"+isConnnected.length);
             for (int i = 0; i < len; i++) {
                 if (i != 0) {
                     this.listener.OnNetSocketUpdated("\n");
                 }
-                isConnnected[i] = execIP(_remoteInet[i], _remoteIpList.get(i));
+                InetAddress inetAddresses = _remoteInet[i];
+                //www.jianshu.com/47.92.108.93
+                String ip = _remoteIpList.get(i);
+                //47.92.108.93
+                ToolLogUtils.i("NetSocket--------execIP---"+inetAddresses + "----"+ip);
+                isConnnected[i] = execIP(inetAddresses, ip);
             }
             for (Boolean i : isConnnected) {
-                if (i == true) {// 一个连接成功即认为成功
+                if (i == true) {
+                    // 一个连接成功即认为成功
                     this.listener.OnNetSocketFinished("\n");
                     return true;
                 }
             }
-
         } else {
-            this.listener.OnNetSocketFinished(HOSTERR);
+            this.listener.OnNetSocketFinished(HOSTERR+"\n");
         }
-        this.listener.OnNetSocketFinished("\n");
         return false;
     }
 
@@ -86,24 +98,26 @@ public class NetSocket {
             this.listener.OnNetSocketUpdated("Connect to host: " + ip + "..." + "\n");
             for (int i = 0; i < CONN_TIMES; i++) {
                 execSocket(socketAddress, timeOut, i);
-                if (RttTimes[i] == -1) {// 一旦发生timeOut,则尝试加长连接时间
-                    this.listener.OnNetSocketUpdated((i + 1) + "'s time=" + "TimeOut"
-                            + ",  ");
+                if (RttTimes[i] == -1) {
+                    // 一旦发生timeOut,则尝试加长连接时间
+                    this.listener.OnNetSocketUpdated((i + 1) + "'s time=" + "TimeOut" + ",  "+ "\n");
+                    this.listener.OnNetSocketUpdated(TIMEOUT+ "\n");
                     timeOut += 4000;
-                    if (i > 0 && RttTimes[i - 1] == -1) {// 连续两次连接超时,停止后续测试
+                    if (i > 0 && RttTimes[i - 1] == -1) {
+                        // 连续两次连接超时,停止后续测试
                         flag = -1;
                         break;
                     }
                 } else if (RttTimes[i] == -2) {
-                    this.listener
-                            .OnNetSocketUpdated((i + 1) + "'s time=" + "IOException");
-                    if (i > 0 && RttTimes[i - 1] == -2) {// 连续两次出现IO异常,停止后续测试
+                    this.listener.OnNetSocketUpdated((i + 1) + "'s time=" + "IOException"+ "\n");
+                    this.listener.OnNetSocketUpdated(IOERR+ "\n");
+                    if (i > 0 && RttTimes[i - 1] == -2) {
+                        // 连续两次出现IO异常,停止后续测试
                         flag = -2;
                         break;
                     }
                 } else {
-                    this.listener.OnNetSocketUpdated((i + 1) + "'s time=" + RttTimes[i]
-                            + "ms,  ");
+                    this.listener.OnNetSocketUpdated((i + 1) + "'s time=" + RttTimes[i] + "ms,  "+ "\n");
                 }
             }
             long time = 0;
@@ -123,7 +137,7 @@ public class NetSocket {
                 }
                 if (count > 0) {
                     time = time / count;
-                    log.append("average=" + time + "ms");
+                    log.append("average=").append(time).append("ms"+ "\n");
                 }
             }
         } else {
@@ -136,8 +150,7 @@ public class NetSocket {
     /**
      * 针对某个IP第index次connect
      */
-    private void execSocket(InetSocketAddress socketAddress, int timeOut,
-                            int index) {
+    private void execSocket(InetSocketAddress socketAddress, int timeOut, int index) {
         Socket socket = null;
         long start = 0;
         long end = 0;
@@ -148,10 +161,14 @@ public class NetSocket {
             end = System.currentTimeMillis();
             RttTimes[index] = end - start;
         } catch (SocketTimeoutException e) {
-            RttTimes[index] = -1;// 作为TIMEOUT标识
+            // 超时
+            RttTimes[index] = -1;
+            // 作为TIMEOUT标识
             e.printStackTrace();
         } catch (IOException e) {
-            RttTimes[index] = -2;// 作为IO异常标识
+            // 异常
+            RttTimes[index] = -2;
+            // 作为IO异常标识
             e.printStackTrace();
         } finally {
             if (socket != null) {
@@ -170,15 +187,14 @@ public class NetSocket {
         }
     }
 
-
     public void printSocketInfo(String log) {
         listener.OnNetSocketUpdated(log);
     }
 
     public interface LDNetSocketListener {
-        public void OnNetSocketFinished(String log);
+        void OnNetSocketFinished(String log);
 
-        public void OnNetSocketUpdated(String log);
+        void OnNetSocketUpdated(String log);
     }
 
 }

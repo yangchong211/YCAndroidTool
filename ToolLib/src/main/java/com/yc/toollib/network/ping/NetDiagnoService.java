@@ -34,10 +34,12 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
     private String _dormain; // 接口域名
     private String _ISOCountryCode;
     private String _carrierName;
-
-    private boolean _isNetConnected;// 当前是否联网
-    private boolean _isDomainParseOk;// 域名解析是否成功
-    private boolean _isSocketConnected;// conected是否成功
+    // 当前是否联网
+    private boolean _isNetConnected;
+    // 域名解析是否成功
+    private boolean _isDomainParseOk;
+    // conected是否成功
+    private boolean _isSocketConnected;
     private Context _context;
     private String _netType;
     private String _localIp;
@@ -61,9 +63,6 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
 
     /**
      * 初始化网络诊断服务
-     *
-     * @param theDeviceID
-     * @param theUID
      */
     public NetDiagnoService(Context context,
                             String theAppName, String theAppVersion, String theUID,
@@ -85,6 +84,11 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
 
     }
 
+    /**
+     * 后台开始解析网络
+     * @param params
+     * @return
+     */
     @Override
     protected String doInBackground(String... params) {
         if (this.isCancelled()){
@@ -93,6 +97,10 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
         return this.startNetDiagnosis();
     }
 
+    /**
+     * 结束执行这个方法
+     * @param result                        结果result
+     */
     @Override
     protected void onPostExecute(String result) {
         if (this.isCancelled()){
@@ -107,6 +115,10 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
         }
     }
 
+    /**
+     * 进度
+     * @param values
+     */
     @Override
     protected void onProgressUpdate(String... values) {
         if (this.isCancelled()){
@@ -118,6 +130,9 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
         }
     }
 
+    /**
+     * 结束
+     */
     @Override
     protected void onCancelled() {
         this.stopNetDialogsis();
@@ -127,12 +142,16 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
      * 开始诊断网络
      */
     public String startNetDiagnosis() {
-        if (TextUtils.isEmpty(this._dormain))
+        if (TextUtils.isEmpty(this._dormain)){
             return "";
+        }
         this._isRunning = true;
         this._logInfo.setLength(0);
+        //开始诊断...
         recordStepInfo("开始诊断...");
+        //输出关于应用、机器、网络诊断的基本信息
         recordCurrentAppVersion();
+        //输出本地网络环境信息
         recordLocalNetEnvironmentInfo();
 
         if (_isNetConnected) {
@@ -149,20 +168,30 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
             _netPinger = new NetPing(this, 4);
             recordStepInfo("ping...127.0.0.1");
             _netPinger.exec("127.0.0.1", false);
+
+            //ping 本机ip地址
+            recordStepInfo("");
             recordStepInfo("ping本机IP..." + _localIp);
             _netPinger.exec(_localIp, false);
-            if (PingNetUtils.NETWORKTYPE_WIFI.equals(_netType)) {// 在wifi下ping网关
+            if (PingNetUtils.NETWORKTYPE_WIFI.equals(_netType)) {
+                // 在wifi下ping网关
+                recordStepInfo("");
                 recordStepInfo("ping本地网关..." + _gateWay);
                 _netPinger.exec(_gateWay, false);
             }
+
+            //ping 本地dns
+            recordStepInfo("");
             recordStepInfo("ping本地DNS1..." + _dns1);
             _netPinger.exec(_dns1, false);
+            recordStepInfo("");
             recordStepInfo("ping本地DNS2..." + _dns2);
             _netPinger.exec(_dns2, false);
 
             if (_netPinger == null) {
                 _netPinger = new NetPing(this, 4);
             }
+
             // 开始诊断traceRoute
             recordStepInfo("\n开始traceroute...");
             _traceRouter = PingNetTraceRoute.getInstance();
@@ -217,7 +246,8 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
      * @param stepInfo
      */
     private void recordStepInfo(String stepInfo) {
-        _logInfo.append(stepInfo + "\n");
+        _logInfo.append(stepInfo)
+                .append("\n");
         publishProgress(stepInfo + "\n");
     }
 
@@ -311,7 +341,8 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
         _netType = PingNetUtils.getNetWorkType(_context);
         recordStepInfo("当前联网类型:\t" + _netType);
         if (_isNetConnected) {
-            if (PingNetUtils.NETWORKTYPE_WIFI.equals(_netType)) { // wifi：获取本地ip和网关，其他类型：只获取ip
+            // wifi：获取本地ip和网关，其他类型：只获取ip
+            if (PingNetUtils.NETWORKTYPE_WIFI.equals(_netType)) {
                 _localIp = PingNetUtils.getLocalIpByWifi(_context);
                 _gateWay = PingNetUtils.pingGateWayInWifi(_context);
             } else {
@@ -347,31 +378,35 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
     private boolean parseDomain(String _dormain) {
         boolean flag = false;
         int len = 0;
-        String ipString = "";
+        StringBuilder ipString = new StringBuilder();
         Map<String, Object> map = PingNetUtils.getDomainIp(_dormain);
         String useTime = (String) map.get("useTime");
         _remoteInet = (InetAddress[]) map.get("remoteInet");
         String timeShow = null;
-        if (Integer.parseInt(useTime) > 5000) {// 如果大于1000ms，则换用s来显示
+        if (Integer.parseInt(useTime) > 5000) {
+            // 如果大于1000ms，则换用s来显示
             timeShow = " (" + Integer.parseInt(useTime) / 1000 + "s)";
         } else {
             timeShow = " (" + useTime + "ms)";
         }
-        if (_remoteInet != null) {// 解析正确
+        if (_remoteInet != null) {
+            // 解析正确
             len = _remoteInet.length;
             for (int i = 0; i < len; i++) {
                 _remoteIpList.add(_remoteInet[i].getHostAddress());
-                ipString += _remoteInet[i].getHostAddress() + ",";
+                ipString.append(_remoteInet[i].getHostAddress()).append(",");
             }
-            ipString = ipString.substring(0, ipString.length() - 1);
+            ipString = new StringBuilder(ipString.substring(0, ipString.length() - 1));
             recordStepInfo("DNS解析结果:\t" + ipString + timeShow);
             flag = true;
-        } else {// 解析不到，判断第一次解析耗时，如果大于10s进行第二次解析
+        } else {
+            // 解析不到，判断第一次解析耗时，如果大于10s进行第二次解析
             if (Integer.parseInt(useTime) > 10000) {
                 map = PingNetUtils.getDomainIp(_dormain);
                 useTime = (String) map.get("useTime");
                 _remoteInet = (InetAddress[]) map.get("remoteInet");
-                if (Integer.parseInt(useTime) > 5000) {// 如果大于1000ms，则换用s来显示
+                if (Integer.parseInt(useTime) > 5000) {
+                    // 如果大于1000ms，则换用s来显示
                     timeShow = " (" + Integer.parseInt(useTime) / 1000 + "s)";
                 } else {
                     timeShow = " (" + useTime + "ms)";
@@ -380,9 +415,9 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
                     len = _remoteInet.length;
                     for (int i = 0; i < len; i++) {
                         _remoteIpList.add(_remoteInet[i].getHostAddress());
-                        ipString += _remoteInet[i].getHostAddress() + ",";
+                        ipString.append(_remoteInet[i].getHostAddress()).append(",");
                     }
-                    ipString = ipString.substring(0, ipString.length() - 1);
+                    ipString = new StringBuilder(ipString.substring(0, ipString.length() - 1));
                     recordStepInfo("DNS解析结果:\t" + ipString + timeShow);
                     flag = true;
                 } else {
@@ -418,10 +453,8 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
             }
             return res;
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (conn != null) {
@@ -443,8 +476,7 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
     private static final int MAXIMUM_POOL_SIZE = 1;// 10
     private static final int KEEP_ALIVE = 10;// 10
 
-    private static final BlockingQueue<Runnable> sWorkQueue = new LinkedBlockingQueue<Runnable>(
-            2);// 2
+    private static final BlockingQueue<Runnable> sWorkQueue = new LinkedBlockingQueue<Runnable>(2);// 2
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -460,7 +492,6 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
 
     @Override
     protected ThreadPoolExecutor getThreadPoolExecutor() {
-        // TODO Auto-generated method stub
         return sExecutor;
     }
 

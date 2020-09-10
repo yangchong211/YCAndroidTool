@@ -197,8 +197,7 @@ public abstract class NetAsyncTaskEx<Params, Progress, Result> {
         mStatus = Status.FINISHED;
     }
 
-    private static abstract class LDNetWorkerRunnable<Params, Result> implements
-            Callable<Result> {
+    private static abstract class LDNetWorkerRunnable<Params, Result> implements Callable<Result> {
         Params[] mParams;
     }
 
@@ -207,8 +206,7 @@ public abstract class NetAsyncTaskEx<Params, Progress, Result> {
         final NetAsyncTaskEx mTask;
         final Data[] mData;
 
-        LDNetAsyncTaskResult(@SuppressWarnings("rawtypes") NetAsyncTaskEx task,
-                             Data... data) {
+        LDNetAsyncTaskResult(@SuppressWarnings("rawtypes") NetAsyncTaskEx task, Data... data) {
             mTask = task;
             mData = data;
         }
