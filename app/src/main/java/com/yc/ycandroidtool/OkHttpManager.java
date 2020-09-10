@@ -1,8 +1,8 @@
 package com.yc.ycandroidtool;
 
 
-import com.yc.toollib.network.reporter.NetworkListener;
-import com.yc.toollib.network.reporter.NetworkInterceptor;
+import com.yc.toollib.network.stetho.NetworkListener;
+import com.yc.toollib.network.stetho.NetworkInterceptor;
 
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;

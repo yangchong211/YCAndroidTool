@@ -3,66 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-
-    <Button
-        android:id="@+id/test_button"
+    <EditText
+        android:id="@+id/et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:hint="请输入网址"/>
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:padding="10dp"
         android:background="@color/colorAccent"
-        android:text="请求网络1"/>
+        android:text="ping"/>
 
     <Button
         android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:background="@color/colorAccent"
-        android:text="请求网络2---获取首页banner"/>
+        android:text="ping https://www.wanandroid.com/article/list/0/json"/>
 
     <Button
         android:id="@+id/btn3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:background="@color/colorAccent"
-        android:text="请求网络3---获取常用网站"/>
-    <Button
-        android:id="@+id/btn4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:background="@color/colorAccent"
-        android:text="对网络进行检测-ping"/>
+        android:text="ping "/>
 
-    <Button
-        android:id="@+id/to_feed_list_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:background="@color/colorAccent"
-        android:text="Request List"/>
-
-
-    <android.support.v4.widget.NestedScrollView
+    <com.yc.toollib.network.ping.PingView
+        android:id="@+id/ping"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp">
-
-        <TextView
-            android:id="@+id/response_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#333333"/>
-
-    </android.support.v4.widget.NestedScrollView>
+        android:layout_margin="10dp"/>
 
 
 </LinearLayout>

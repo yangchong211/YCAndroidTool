@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yc.toollib.R;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
@@ -17,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.Format;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -24,10 +29,12 @@ public class NetworkDetailActivity extends AppCompatActivity {
 
     public static final int JSON_INDENT = 4;
     private NetworkFeedBean mNetworkFeedModel;
-    private TextView mCURLTextView;
-    private TextView mRequestHeadersTextView;
-    private TextView mResponseHeadersTextView;
-    private TextView mBodyTextView;
+    private LinearLayout mLlBack;
+    private TextView mTvDelete;
+    private TextView mTvUrlContent;
+    private TextView mTvRequestHeaders;
+    private TextView mTvResponseHeaders;
+    private TextView mTvBody;
 
     public static void start(Context context, String requestId) {
         Intent starter = new Intent(context, NetworkDetailActivity.class);
@@ -39,12 +46,18 @@ public class NetworkDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_detail);
-
-        mCURLTextView = findViewById(R.id.curl_content_textView);
-        mRequestHeadersTextView = findViewById(R.id.request_headers_textView);
-        mResponseHeadersTextView = findViewById(R.id.response_headers_textView);
-        mBodyTextView = findViewById(R.id.body_textView);
+        initFindViewById();
         initData();
+        initListener();
+    }
+
+    private void initFindViewById() {
+        mLlBack = findViewById(R.id.ll_back);
+        mTvDelete = findViewById(R.id.tv_delete);
+        mTvUrlContent = findViewById(R.id.tv_url_content);
+        mTvRequestHeaders = findViewById(R.id.tv_request_headers);
+        mTvResponseHeaders = findViewById(R.id.tv_response_headers);
+        mTvBody = findViewById(R.id.tv_body);
     }
 
     private void initData() {
@@ -63,8 +76,23 @@ public class NetworkDetailActivity extends AppCompatActivity {
     }
 
     private void setCURLContent() {
-        mCURLTextView.setText(mNetworkFeedModel.getCURL());
-        mCURLTextView.setOnClickListener(new View.OnClickListener() {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("Request URL",mNetworkFeedModel.getUrl());
+        map.put("Request Method",mNetworkFeedModel.getMethod());
+        int status = mNetworkFeedModel.getStatus();
+        if (status==200){
+            map.put("Status Code","200"+"  ok");
+        } else {
+            map.put("Status Code",status+"  ok");
+        }
+        map.put("Remote Address","待定");
+        map.put("Referrer Policy","待定");
+        Format format = new DecimalFormat("#.00");
+        String dataSize = format.format(mNetworkFeedModel.getSize() * 0.001) + " KB";
+        map.put("size",dataSize);
+        String string = parseHeadersMapToString(map);
+        mTvUrlContent.setText(string);
+        mTvUrlContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NetWorkUtils.copyToClipBoard(NetworkDetailActivity.this,
@@ -74,20 +102,23 @@ public class NetworkDetailActivity extends AppCompatActivity {
     }
 
     private void setRequestHeaders() {
-        mRequestHeadersTextView.setText(parseHeadersMapToString(mNetworkFeedModel.getRequestHeadersMap()));
+        Map<String, String> requestHeadersMap = mNetworkFeedModel.getRequestHeadersMap();
+        String string = parseHeadersMapToString(requestHeadersMap);
+        mTvRequestHeaders.setText(string);
     }
 
     private void setResponseHeaders() {
-        mResponseHeadersTextView.setText(parseHeadersMapToString(mNetworkFeedModel.getResponseHeadersMap()));
+        Map<String, String> responseHeadersMap = mNetworkFeedModel.getResponseHeadersMap();
+        String string = parseHeadersMapToString(responseHeadersMap);
+        mTvResponseHeaders.setText(string);
     }
 
     private void setBody() {
         if (mNetworkFeedModel.getContentType().contains("json")) {
-            mBodyTextView.setText(formatJson(mNetworkFeedModel.getBody()));
+            mTvBody.setText(formatJson(mNetworkFeedModel.getBody()));
         } else {
-            mBodyTextView.setText(mNetworkFeedModel.getBody());
+            mTvBody.setText(mNetworkFeedModel.getBody());
         }
-
     }
 
     private String parseHeadersMapToString(Map<String, String> headers) {
@@ -101,11 +132,11 @@ public class NetworkDetailActivity extends AppCompatActivity {
             }
             headersBuilder
                     .append(name)
-                    .append(": ")
+                    .append(" : ")
                     .append(headers.get(name))
                     .append("\n");
         }
-        return headersBuilder.toString();
+        return headersBuilder.toString().trim();
     }
 
     private String formatJson(String body) {
@@ -124,6 +155,21 @@ public class NetworkDetailActivity extends AppCompatActivity {
             message = body;
         }
         return message;
+    }
+
+    private void initListener() {
+        mLlBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mTvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NetworkDetailActivity.this,"后期完善",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

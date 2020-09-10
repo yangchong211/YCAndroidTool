@@ -50,6 +50,12 @@ public class NetworkActivity extends AppCompatActivity {
                 sendRequest3();
             }
         });
+        findViewById(R.id.btn4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PingActivity.start(NetworkActivity.this);
+            }
+        });
         findViewById(R.id.to_feed_list_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

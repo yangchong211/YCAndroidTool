@@ -12,7 +12,7 @@
         android:background="@color/crash_tool_bar_color">
 
         <LinearLayout
-            android:id="@+id/network_feed_back_layout"
+            android:id="@+id/ll_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -74,7 +74,7 @@
                     style="@style/DetailTitle"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
-                    android:text="cURL"/>
+                    android:text="General"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,12 +82,12 @@
                     android:textSize="13sp"
                     android:textColor="#999999"
                     android:layout_marginLeft="5dp"
-                    android:text="(Click 👇 to copy)"/>
+                    android:text="长按或者点击可以复制信息"/>
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/curl_content_textView"
+                android:id="@+id/tv_url_content"
                 android:textColor="#196EB2"
                 android:background="@drawable/shape_url_content"
                 style="@style/DetailContent"/>
@@ -97,7 +97,7 @@
                 android:text="Request Headers"/>
 
             <TextView
-                android:id="@+id/request_headers_textView"
+                android:id="@+id/tv_request_headers"
                 android:textColor="#8033b7"
                 android:background="@drawable/shape_request_headers"
                 style="@style/DetailContent"/>
@@ -107,7 +107,7 @@
                 android:text="Response Headers"/>
 
             <TextView
-                android:id="@+id/response_headers_textView"
+                android:id="@+id/tv_response_headers"
                 android:textColor="#257ada"
                 android:background="@drawable/shape_response_headers"
                 style="@style/DetailContent"/>
@@ -117,7 +117,7 @@
                 android:text="Response"/>
 
             <TextView
-                android:id="@+id/body_textView"
+                android:id="@+id/tv_body"
                 android:textColor="#4dac41"
                 android:background="@drawable/shape_response"
                 style="@style/DetailContent"/>

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.yc.toollib.R;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.data.NetworkFeedBean;
+import com.yc.toollib.tool.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,7 +56,7 @@ public class NetRequestListFragment extends Fragment {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         NetworkFeedAdapter adapter = new NetworkFeedAdapter(activity);
         mRecyclerView.setAdapter(adapter);
-        List<NetworkFeedBean> mNetworkFeedList = new ArrayList<>();
+        final List<NetworkFeedBean> mNetworkFeedList = new ArrayList<>();
         HashMap<String, NetworkFeedBean> networkFeedMap = IDataPoolHandleImpl.getInstance().getNetworkFeedMap();
         if (networkFeedMap != null) {
             Collection<NetworkFeedBean> values = networkFeedMap.values();
@@ -72,5 +73,17 @@ public class NetRequestListFragment extends Fragment {
             }
         }
         adapter.setData(mNetworkFeedList);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                NetworkFeedBean networkFeedBean = mNetworkFeedList.get(position);
+                NetworkDetailActivity.start(activity, networkFeedBean.getRequestId());
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        });
     }
 }

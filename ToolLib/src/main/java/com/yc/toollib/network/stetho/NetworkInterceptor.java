@@ -1,4 +1,4 @@
-package com.yc.toollib.network.reporter;
+package com.yc.toollib.network.stetho;
 
 
 import android.support.annotation.Nullable;
@@ -7,7 +7,9 @@ import com.yc.toollib.network.data.NetworkFeedBean;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.stetho.DefaultResponseHandler;
 import com.yc.toollib.network.stetho.NetworkEventReporter;
+import com.yc.toollib.network.stetho.NetworkReporterImpl;
 import com.yc.toollib.network.stetho.RequestBodyHelper;
+import com.yc.toollib.tool.ToolLogUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,12 +46,15 @@ import okio.Okio;
  */
 public class NetworkInterceptor implements Interceptor {
 
+    private static final String TAG = "NetworkReporterImpl";
     private final NetworkEventReporter mEventReporter = NetworkReporterImpl.getInstance();
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         String requestId = mEventReporter.nextRequestId();
+        ToolLogUtils.d(TAG+"-----requestId-----"+requestId);
         Request request = chain.request();
+        ToolLogUtils.d(TAG+"-----request-----"+request.toString());
         NetworkFeedBean networkFeedModel = IDataPoolHandleImpl.getInstance().getNetworkFeedModel(requestId);
         networkFeedModel.setCURL(request.url().toString());
         RequestBodyHelper requestBodyHelper = null;

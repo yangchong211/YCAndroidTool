@@ -28,6 +28,7 @@
         <activity android:name=".TestActivity2"/>
         <activity android:name=".fs.StudentActivity"/>
         <activity android:name=".NetworkActivity"/>
+        <activity android:name=".PingActivity"/>
 
     </application>
 

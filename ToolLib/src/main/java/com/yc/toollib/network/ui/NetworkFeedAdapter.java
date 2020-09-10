@@ -49,12 +49,6 @@ public class NetworkFeedAdapter extends BaseRecycleAdapter<NetworkFeedBean> {
         String dataSize = format.format(networkFeedModel.getSize() * 0.001) + " KB";
         mSizeTextView.setText(dataSize);
         mCostTimeTextView.setText(networkFeedModel.getCostTime() + " ms");
-        mRootLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NetworkDetailActivity.start(mContext, networkFeedModel.getRequestId());
-            }
-        });
         mMethodTextView.setText(networkFeedModel.getMethod());
         mContentTypeTextView.setText("ContentType: "+networkFeedModel.getContentType());
     }
