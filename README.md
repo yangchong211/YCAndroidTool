@@ -1,9 +1,9 @@
 #### 目录介绍
 - 01.该库具有的功能
-- 02.该库优势分析
-- 03.该库如何使用
-- 04.降低非必要crash
-- 05.异常恢复原理
+- 02.崩溃处理模块
+- 03.网络分析库模块
+- 04.ping库模块
+- 05.该库如何使用
 - 06.后续的需求说明
 - 07.异常栈轨迹原理
 - 08.部分问题反馈
@@ -13,7 +13,17 @@
 
 
 ### 01.该库具有的功能
-#### 1.1 功能说明
+- **崩溃处理相关模块**：
+    - 崩溃重启操作，崩溃记录日志操作
+- **网络分析库模块**：
+    - 网络流程分析，记录每个网络请求->响应数据，以及耗时
+- **ping库模块**：
+    - 通过ping检测网络问题，帮助诊断
+
+
+
+### 02.崩溃处理模块
+#### 2.1 异常崩溃介绍
 - 异常崩溃后思考的一些问题
     - 1.是否需要恢复activity栈，以及所在崩溃页面数据
     - 2.crash信息保存和异常捕获，是否和百度bug崩溃统计sdk等兼容。是否方便接入
@@ -32,28 +42,145 @@
     - 7.收集崩溃时的内存信息（OOM、ANR、虚拟内存耗尽等，很多崩溃都跟内存有直接关系），完善中
 
 
-#### 1.2 截图如下所示
+#### 2.2 截图如下所示
 ![image](https://img-blog.csdnimg.cn/20200902194445625.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 ![image](https://img-blog.csdnimg.cn/20200902194445623.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 ![image](https://img-blog.csdnimg.cn/20200902194445622.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 ![image](https://img-blog.csdnimg.cn/20200902194445576.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
-
-#### 1.3崩溃后日志记录
+#### 2.3崩溃后日志记录
 ![image](https://img-blog.csdnimg.cn/20200904095027529.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
-#### 1.4 崩溃流程图
+#### 2.4 崩溃流程图
 ![image](https://img-blog.csdnimg.cn/2020090417061146.jpg)
 
 
-### 02.该库优势分析
+#### 2.5 该库优势分析
 - 低入侵性接入该lib，不会影响你的其他业务。暴露崩溃重启，以及支持开发者自己捕获crash数据的接口！能够收集崩溃中的日志写入文件，记录包括设备信息，进程信息，崩溃信息(Java崩溃、Native崩溃 or ANR)，以及崩溃时内存信息到file文件中。支持用户获取崩溃列表，以及跳转崩溃日志详情页面，并且可以将崩溃日志分享，截长图，复制等操作。可以方便测试和产品给开发提出那种偶发性bug的定位日志，免得对于偶发行崩溃，开发总是不承认……开发总是不承认……
 
 
 
-### 03.该库如何使用
+### 03.网络分析库模块
+#### 3.1 网络分析库模块
+- 该工具作用
+    - 诸葛书网络拦截分析，主要是分析网络流量损耗，以及request，respond过程时间。打造网络分析工具……
+- 参考stetho库地址
+    - https://github.com/facebook/stetho
+- 功能
+    - Stetho 是 Facebook 开源的一个 Android 调试工具。
+    - 是一个 Chrome Developer Tools 的扩展，可用来检测应用的网络、数据库、WebKit 、SharePreference等方面的功能。
+- 用语言来描述应该是这样子：
+    - 1、安装了stetho插件的app启动之后，会启动一个本地server1（LocalSocketServer），这个本地server1等待着app(client)的连接。
+    - 2、同时，这个本地server1会与另外一个本地server2（ChromeDevtoolsServer）连接着。
+    - 3、本地app一旦连接上，数据将会不停的被发送到本地server1，然后转由server2.
+    - 4、然后Chrome Developer Tools，想访问网站一样的，访问了ChromeDevtoolsServer，随之将数据友好的展示给了开发者，这么一个过程就此完结。
+
+
+#### 3.2 将拦截网络操作抽取
+- 应用代码如下所示
+    ``` java
+    new OkHttpClient.Builder()
+        .addNetworkInterceptor(new StethoInterceptor())
+        .build()
+    ```
+- 那么既然网络请求添加StethoInterceptor，既可以拦截网络请求和响应信息，发送给Chrome。那么能不能自己拿来用……
+    - 可以的
+- StethoInterceptor大概流程
+    - 整个流程我们可以简化为：发送请求时，给Chrome发了条消息，收到请求时，再给Chrome发条消息（具体怎么发的可以看NetworkEventReporterImpl的实现）
+    - 两条消息通过EventID联系起来，它们的类型分别是OkHttpInspectorRequest 和 OkHttpInspectorResponse，两者分别继承自NetworkEventReporter.InspectorRequest和NetworkEventReporter.InspectorResponse。
+    - 我们只要也继承自这两个类，在自己的网络库发送和收到请求时，构造一个Request和Response并发送给Chrome即可。
+- 如何拿来用
+    - 既然Android中使用到facebook的stetho库，可以拦截手机请求请求，然后去Chrome浏览器，在浏览器地址栏输入：chrome://inspect 。即可查看请求信息。
+    - 那么能不能把这个拿到的请求信息，放到集合中，然后在Android的页面中展示呢？这样方便开发和测试查看网络请求信息，以及请求流程中的消耗时间（比如dns解析时间，请求时间，响应时间，共耗时等等）
+- 如何消耗记录时间
+    - 在OkHttp库中有一个EventListener类。该类是网络事件的侦听器。扩展这个类以监视应用程序的HTTP调用的数量、大小和持续时间。
+    - 所有启动/连接/获取事件最终将接收到匹配的结束/释放事件，要么成功(非空参数)，要么失败(非空可抛出)。
+    - 比如，可以在开始链接记录时间；dns开始，结束等方法解析记录时间，可以计算dns的解析时间。
+    - 比如，可以在开始请求记录时间，记录connectStart，connectEnd等方法时间，则可以计算出connect连接时间。
+- 该库目的
+    - 做成悬浮全局按钮，点击按钮可以查看该activity页面请求接口，可以查看请求几个接口，以及接口请求到响应消耗流量
+    - 方便查看网络请求流程，比如dns解析时间，请求时间，响应时间
+    - 方便测试查看请求数据，方便抓包。可以复制request，respond，body等内容。也可以截图
+
+
+
+#### 3.3 网络请求接口信息
+- 请求接口如下所示
+    - https://www.wanandroid.com/friend/json
+- General
+    - Request URL: https://www.wanandroid.com/friend/json
+    - Request Method: GET
+    - Status Code: 200 OK
+    - Remote Address: 47.104.74.169:443
+    - Referrer Policy: no-referrer-when-downgrade
+- Response Header
+    - HTTP/1.1 200 OK
+    - Server: Apache-Coyote/1.1
+    - Cache-Control: private
+    - Expires: Thu, 01 Jan 1970 08:00:00 CST
+    - Content-Type: application/json;charset=UTF-8
+    - Transfer-Encoding: chunked
+    - Date: Thu, 10 Sep 2020 01:05:47 GMT
+- Request Header
+    - Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+    - Accept-Encoding: gzip, deflate, br
+    - Accept-Language: zh-CN,zh;q=0.9
+    - Cache-Control: no-cache
+    - Connection: keep-alive
+    - Cookie: JSESSIONID=5D6302E64E9734210FA231A6FAF5799E; Hm_lvt_90501e13a75bb5eb3d067166e8d2cad8=1598920692,1599007288,1599094016,1599629553; Hm_lpvt_90501e13a75bb5eb3d067166e8d2cad8=1599699419
+    - Host: www.wanandroid.com
+    - Pragma: no-cache
+    - Sec-Fetch-Dest: document
+    - Sec-Fetch-Mode: navigate
+    - Sec-Fetch-Site: none
+    - Upgrade-Insecure-Requests: 1
+    - User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
+- Response返回body
+    - 这里省略
+- 看截图如下
+    - ![image](https://img-blog.csdnimg.cn/20200910095754628.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+
+
+#### 3.5案例截图如下
+![image](https://img-blog.csdnimg.cn/2020090921524345.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/2020090921524393.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200910095645227.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+
+
+
+### 04.ping库模块
+#### 4.1 ping在Android的应用
+- 为了检查网络，在android上也可以通过ping来查看是否网络通。
+- 实现方案有哪些
+    - 通过后台线程执行ping命令的方式模拟traceroute的过程，缺点就是模拟过程较慢，timeout的出现比较频繁
+    - 通过编译开源网络检测库iputilsC代码的方式对traceroute进行了套接字发送ICMP报文模拟，可以明显提高检测速度
+- 关于代码ping的过程信息
+    - 开启一个AsyncTask，在doInBackground方法中开始解析，这个是入口。
+    - 添加头部信息，主要包括：开始诊断 + 输出关于应用、机器、网络诊断的基本信息 + 输出本地网络环境信息
+    - tcp三次握手操作
+        - 开始执行链接，这里有两个重要信息。一个是ip集合，另一个是InetAddress数组，遍历【长度是ip集合length】，然后执行请求
+        - 创建socketAddress，有两个参数，一个是ip，一个是端口号80，然后for循环执行socket请求
+        - 在执行socket请求的时候，如果有监听到超时SocketTimeoutException异常则记录数据，如果有异常则记录数据
+        - 当出现发生timeOut,则尝试加长连接时间，注意连续两次连接超时,停止后续测试。连续两次出现IO异常,停止后续测试
+        - 当然只要有一次完整执行成功的流程，那么则记录三次握手操作成功
+    - 诊断ping信息, 同步过程。这个主要是直接通过ping命令监测网络
+        - 创建一个NetPing对象，设置每次ping发送数据包的个数为4个
+        - 然后ping本机ip地址，ping本地网观ip地址，ping本地dns。这个ping的指令是啥？这个主要是用java中的Runtime执行指令……
+    - 开始诊断traceRoute
+        - 先调用原生jni代码，调用jni c函数执行traceroute过程。如果发生了异常，再调用java代码执行操作……
+        - 然后通过ping命令模拟执行traceroute的过程，比如：ping -c 1 -t 1 www.jianshu.com
+        - 如果成功获得trace:IP，则再次发送ping命令获取ping的时间
+
+
+
+#### 4.2 ping使用截图
+![image](https://img-blog.csdnimg.cn/20200910145919655.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+
+
+### 05.该库如何使用
+#### 5.1 崩溃库
 - 如何引入该库
     ``` java
     implementation 'cn.yc:ToolLib:1.0.0'
@@ -158,25 +285,75 @@
     String crashPicPath = ToolFileUtils.getCrashPicPath(CrashDetailsActivity.this) + "/crash_pic_" + System.currentTimeMillis() + ".jpg";
     boolean saveBitmap = CrashLibUtils.saveBitmap(CrashDetailsActivity.this, bitmap, crashPicPath);
     ```
+- 异常恢复原理
+    - 第一种方式，开启一个新的服务KillSelfService，用来重启本APP。
+        ``` java
+        CrashToolUtils.reStartApp1(App.this,1000);
+        ```
+    - 第二种方式，使用闹钟延时，然后重启app
+        ``` java
+        CrashToolUtils.reStartApp2(App.this,1000, MainActivity.class);
+        ```
+    - 第三种方式，检索获取项目中LauncherActivity，然后设置该activity的flag和component启动app
+        ``` java
+        CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
+        ```
+    - 关于app启动方式详细介绍
+        - [App启动介绍](https://github.com/yangchong211/YCAndroidTool/blob/master/read/06.App%E9%87%8D%E5%90%AF%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F.md)
 
 
-
-### 05.异常恢复原理
-- 第一种方式，开启一个新的服务KillSelfService，用来重启本APP。
+#### 5.2 如何网络拦截
+- 如下所示
     ``` java
-    CrashToolUtils.reStartApp1(App.this,1000);
+    new OkHttpClient.Builder()
+        //配置工厂监听器。主要是计算网络过程消耗时间
+        .eventListenerFactory(NetworkListener.get())
+        //主要是处理拦截请求，响应等信息
+        .addNetworkInterceptor(new StethoInterceptor())
+        .build()
     ```
-- 第二种方式，使用闹钟延时，然后重启app
-    ``` java
-    CrashToolUtils.reStartApp2(App.this,1000, MainActivity.class);
-    ```
-- 第三种方式，检索获取项目中LauncherActivity，然后设置该activity的flag和component启动app
-    ``` java
-    CrashToolUtils.reStartApp3(AppManager.getAppManager().currentActivity());
-    ```
-- 关于app启动方式详细介绍
-    - [App启动介绍](https://github.com/yangchong211/YCAndroidTool/blob/master/read/06.App%E9%87%8D%E5%90%AF%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F.md)
 
+
+
+#### 5.3 如何使用ping
+- 直接创建一个ping，需要传递一个网址url
+    ``` java
+    _netDiagnoService = new NetDiagnoService(getContext(), getContext().getPackageName()
+            , versionName, userId, deviceId, host, this);
+    _netDiagnoService.execute();
+    ```
+- 如何取消ping
+    ``` java
+    if (_netDiagnoService!=null){
+        _netDiagnoService.cancel(true);
+        _netDiagnoService = null;
+    }
+    ```
+- 或者直接停止ping。停止线程允许，并把对象设置成null
+    ``` java
+    _netDiagnoService.stopNetDialogsis();
+    ```
+- 关于监听
+    ``` java
+    /**
+     * 诊断结束，输出全部日志记录
+     * @param log                       log日志输出
+     */
+    @Override
+    public void OnNetDiagnoFinished(String log) {
+        setText(log);
+    }
+
+    /**
+     * 监控网络诊断过程中的日志输出
+     * @param log                       log日志输出
+     */
+    @Override
+    public void OnNetDiagnoUpdated(String log) {
+        showInfo += log;
+        setText(showInfo);
+    }
+    ```
 
 
 ### 06.后续的需求说明
@@ -202,6 +379,7 @@
         - 崩溃场景（崩溃发生在哪个 Activity 或 Fragment，发生在哪个业务中）
         - 关键操作路径（记录关键的用户操作路径，这对我们复现崩溃会有比较大的帮助）
         - 其他自定义信息（不同应用关心的重点不一样。例如运行时间、是否加载了补丁、是否是全新安装或升级等）
+
 
 
 ### 07.异常栈轨迹原理
