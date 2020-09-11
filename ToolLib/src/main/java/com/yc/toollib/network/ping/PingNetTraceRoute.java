@@ -1,7 +1,5 @@
 package com.yc.toollib.network.ping;
 
-import android.util.Log;
-
 
 import com.yc.toollib.tool.ToolLogUtils;
 
@@ -31,7 +29,7 @@ public class PingNetTraceRoute {
     LDNetTraceRouteListener listener;
     public boolean isCTrace = true;
 
-    public void initListenter(LDNetTraceRouteListener listener) {
+    public void initListener(LDNetTraceRouteListener listener) {
         this.listener = listener;
     }
 
@@ -56,10 +54,11 @@ public class PingNetTraceRoute {
         if (isCTrace && loaded) {
             try {
                 startJNICTraceRoute(host);
+                ToolLogUtils.i("PingNetTraceRoute----"+"调用jni c函数执行traceroute过程");
             } catch (UnsatisfiedLinkError e) {
                 e.printStackTrace();
                 // 如果c调用失败改调JAVA代码
-                Log.i("LDNetTraceRoute", "调用java模拟traceRoute");
+                ToolLogUtils.i("PingNetTraceRoute----"+"调用java模拟traceRoute");
                 TraceTask trace = new TraceTask(host, 1);
                 execTrace(trace);
             }
@@ -82,6 +81,9 @@ public class PingNetTraceRoute {
 
     static boolean loaded;
 
+    /**
+     * 静态代码块
+     */
     static {
         try {
             System.loadLibrary("tracepath");
@@ -165,28 +167,28 @@ public class PingNetTraceRoute {
             // 通过ping的跳数控制，取得相应跳输的ip地址，然后再次执行ping命令读取时间
             while (!finish && trace.getHop() < 30) {
                 // 先发出ping命令获得某个跳数的ip地址
-                String str = "";
+                StringBuilder str = new StringBuilder();
                 // -c 1 同时发送消息次数 －t是指跳数
                 String command = "ping -c 1 -t " + trace.getHop() + " " + trace.getHost();
                 ToolLogUtils.i("PingNetTraceRoute--------command---"+command);
+                //ping -c 1 -t 1 www.jianshu.com
                 process = Runtime.getRuntime().exec(command);
-                reader = new BufferedReader(new InputStreamReader(
-                        process.getInputStream()));
+                reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line = null;
                 while ((line = reader.readLine()) != null) {
-                    str += line;
+                    str.append(line);
                 }
                 reader.close();
                 process.waitFor();
 
-                Matcher m = patternTrace.matcher(str);
+                Matcher m = patternTrace.matcher(str.toString());
 
                 // 如果成功获得trace:IP，则再次发送ping命令获取ping的时间
                 StringBuilder log = new StringBuilder(256);
                 if (m.find()) {
                     String pingIp = m.group();
                     PingTask pingTask = new PingTask(pingIp);
-
+                    //执行ping命令，返回ping命令的全部控制台输出
                     String status = execPing(pingTask);
                     if (status.length() == 0) {
                         log.append("unknown host or network error\n");
@@ -207,18 +209,17 @@ public class PingNetTraceRoute {
                             log.append(pingIp);
                             log.append("\t\t timeout \t");
                         }
-                        listener.OnNetTraceUpdated(log.toString());
+                        String string = log.toString();
+                        ToolLogUtils.i("PingNetTraceRoute----1----string---"+string);
+                        listener.OnNetTraceUpdated(string+"\n");
                         trace.setHop(trace.getHop() + 1);
                     }
-
-                }
-
-                // 否则：what
-                else {
-                    Matcher matchPingIp = patternIp.matcher(str);
+                } else {
+                    // 否则：what
+                    Matcher matchPingIp = patternIp.matcher(str.toString());
                     if (matchPingIp.find()) {
                         String pingIp = matchPingIp.group();
-                        Matcher matcherTime = patternTime.matcher(str);
+                        Matcher matcherTime = patternTime.matcher(str.toString());
                         if (matcherTime.find()) {
                             String time = matcherTime.group();
                             log.append(trace.getHop());
@@ -227,7 +228,9 @@ public class PingNetTraceRoute {
                             log.append("\t\t");
                             log.append(time);
                             log.append("\t");
-                            listener.OnNetTraceUpdated(log.toString());
+                            String string = log.toString();
+                            ToolLogUtils.i("PingNetTraceRoute----2----string---"+string);
+                            listener.OnNetTraceUpdated(string+"\n");
                         }
                         finish = true;
                     } else {
@@ -239,7 +242,9 @@ public class PingNetTraceRoute {
                             log.append("\t\t timeout \t");
                             trace.setHop(trace.getHop() + 1);
                         }
-                        listener.OnNetTraceUpdated(log.toString());
+                        String string = log.toString();
+                        ToolLogUtils.i("PingNetTraceRoute----3----string---"+string);
+                        listener.OnNetTraceUpdated(string+"\n");
                     }
                 }// else no match traceIPPattern
             }// while
@@ -252,11 +257,13 @@ public class PingNetTraceRoute {
                 if (reader != null) {
                     reader.close();
                 }
-                process.destroy();
+                if (process != null) {
+                    process.destroy();
+                }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
         listener.OnNetTraceFinished();
     }
 

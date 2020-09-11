@@ -29,9 +29,12 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
 
     private String _appName;
     private String _appVersion;
-    private String _UID; // 用户ID
-    private String _deviceID; // 客户端机器ID，如果不传入会默认取API提供的机器ID
-    private String _dormain; // 接口域名
+    // 用户ID
+    private String _UID;
+    // 客户端机器ID，如果不传入会默认取API提供的机器ID
+    private String _deviceID;
+    // 接口域名
+    private String _dormain;
     private String _ISOCountryCode;
     private String _carrierName;
     // 当前是否联网
@@ -195,7 +198,7 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
             // 开始诊断traceRoute
             recordStepInfo("\n开始traceroute...");
             _traceRouter = PingNetTraceRoute.getInstance();
-            _traceRouter.initListenter(this);
+            _traceRouter.initListener(this);
             _traceRouter.startTraceRoute(_dormain);
             return _logInfo.toString();
         } else {
@@ -264,9 +267,9 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
             return;
         }
         if (this._traceRouter != null && this._traceRouter.isCTrace) {
-            if (log.contains("ms") || log.contains("***")) {
+            /*if (log.contains("ms") || log.contains("***")) {
                 log += "\n";
-            }
+            }*/
             _logInfo.append(log);
             publishProgress(log);
         } else {
