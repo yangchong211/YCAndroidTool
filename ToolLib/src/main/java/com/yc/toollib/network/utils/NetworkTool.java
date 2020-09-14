@@ -12,6 +12,7 @@ import com.yc.toollib.network.floating.Screen;
 import com.yc.toollib.network.floating.ViewStateListener;
 import com.yc.toollib.network.ui.NetRequestActivity;
 import com.yc.toollib.network.ui.NetworkDetailActivity;
+import com.yc.toollib.network.ui.NetworkManager;
 import com.yc.toollib.tool.ToolLogUtils;
 
 
@@ -36,6 +37,11 @@ public class NetworkTool {
 
     public void init(Application application){
         this.app = application;
+        NetworkManager.get().startMonitor();
+    }
+
+    public void stopMonitor(){
+        NetworkManager.get().stopMonitor();
     }
 
     public Application getApplication() {

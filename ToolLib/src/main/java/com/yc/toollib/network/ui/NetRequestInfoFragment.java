@@ -2,35 +2,37 @@ package com.yc.toollib.network.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.yc.toollib.R;
-import com.yc.toollib.network.data.IDataPoolHandleImpl;
-import com.yc.toollib.network.data.NetworkTraceBean;
+import com.yc.toollib.network.utils.NetWorkUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class NetRequestInfoFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
     private Activity activity;
-
+    private TextView mTotalSec;
+    private TextView mTotalTips;
+    private TextView mTotalNumber;
+    private TextView mTotalUpload;
+    private TextView mTotalDown;
+    private NetBarChart mNetworkBarChart;
+    private NetPieChart mNetworkPierChart;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         activity = (Activity) context;
     }
@@ -39,38 +41,50 @@ public class NetRequestInfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.base_recycler_view, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_net_info, container, false);
         return inflate;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerView(view);
+        initFindViewById(view);
+        initData();
     }
 
-    private void initRecyclerView(View view) {
-        mRecyclerView = view.findViewById(R.id.recyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        NetworkTraceAdapter adapter = new NetworkTraceAdapter(activity);
-        List<NetworkTraceBean> traceList = new ArrayList<>();
-        Map<String, NetworkTraceBean> traceModelMap = IDataPoolHandleImpl.getInstance().getTraceModelMap();
-        if (traceModelMap!=null){
-            Collection<NetworkTraceBean> values = traceModelMap.values();
-            traceList.addAll(values);
-            try {
-                Collections.sort(traceList, new Comparator<NetworkTraceBean>() {
-                    @Override
-                    public int compare(NetworkTraceBean networkTraceModel1, NetworkTraceBean networkTraceModel2) {
-                        return (int) (networkTraceModel2.getTime() - networkTraceModel1.getTime());
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        adapter.setData(traceList);
-        mRecyclerView.setAdapter(adapter);
+
+    private void initFindViewById(View view) {
+        mTotalSec = view.findViewById(R.id.total_sec);
+        mTotalTips = view.findViewById(R.id.total_tips);
+        mTotalNumber = view.findViewById(R.id.total_number);
+        mTotalUpload = view.findViewById(R.id.total_upload);
+        mTotalDown = view.findViewById(R.id.total_down);
+        mNetworkBarChart = view.findViewById(R.id.network_bar_chart);
+        mNetworkPierChart = view.findViewById(R.id.network_pier_chart);
     }
+
+    private void initData() {
+        int postCount = NetworkManager.get().getPostCount();
+        int getCount = NetworkManager.get().getGetCount();
+        int totalCount = NetworkManager.get().getTotalCount();
+        mTotalNumber.setText(String.valueOf(totalCount));
+        long time = NetworkManager.get().getRunningTime();
+        mTotalSec.setText(NetWorkUtils.formatTime(getContext(), time));
+        long requestSize = NetworkManager.get().getTotalRequestSize();
+        long responseSize = NetworkManager.get().getTotalResponseSize();
+        mTotalUpload.setText(NetWorkUtils.getPrintSizeForSpannable(requestSize));
+        mTotalDown.setText(NetWorkUtils.getPrintSizeForSpannable(responseSize));
+        List<NetPieChart.PieData> data = new ArrayList<>();
+        Resources resource = getResources();
+        if (postCount != 0) {
+            data.add(new NetPieChart.PieData(resource.getColor(R.color.colorAccent), postCount));
+        }
+        if (getCount != 0) {
+            data.add(new NetPieChart.PieData(resource.getColor(R.color.colorPrimary), getCount));
+        }
+        mNetworkPierChart.setData(data);
+        mNetworkBarChart.setData(postCount, getResources().getColor(R.color.colorAccent),
+                getCount, getResources().getColor(R.color.colorPrimary));
+    }
+
 }

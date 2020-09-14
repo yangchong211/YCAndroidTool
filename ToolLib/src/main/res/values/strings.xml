@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">ToolLib</string>
 
+
+    <string name="network_summary_total_time_default">0秒</string>
+    <string name="network_summary_total_time_second">%d秒</string>
+    <string name="network_summary_total_time_minute">%1$d分%2$d秒</string>
+    <string name="network_summary_total_time_hour">%1$d小时%2$d分</string>
+    <string name="network_summary_total_time_day">%1$d天%2$d小时</string>
+
+
     <string-array name="timeout_ms">
         <item>No limit</item>
         <item>10ms</item>

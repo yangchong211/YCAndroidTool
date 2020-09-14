@@ -57,6 +57,7 @@ public class NetworkInterceptor implements Interceptor {
         //从map集合中取数据，如果有则直接返回，如果没有则存储该数据到map中
         NetworkFeedBean networkFeedModel = IDataPoolHandleImpl.getInstance().getNetworkFeedModel(requestId);
         networkFeedModel.setCURL(request.url().toString());
+
         // 准备发送请求
         RequestBodyHelper requestBodyHelper = null;
         if (mEventReporter.isEnabled()) {
@@ -64,6 +65,7 @@ public class NetworkInterceptor implements Interceptor {
             OkHttpInspectorRequest inspectorRequest = new OkHttpInspectorRequest(requestId, request, requestBodyHelper);
             // 请求即将发送，构造一个OkHttpInspectorRequest，报告给Chrome，此时Network会显示一条请求，处于Pending状态
             mEventReporter.requestWillBeSent(inspectorRequest);
+
         }
         Response response;
         try {
@@ -314,4 +316,6 @@ public class NetworkInterceptor implements Interceptor {
             return mInterceptedSource;
         }
     }
+
+
 }

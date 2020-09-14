@@ -1,5 +1,7 @@
 package com.yc.ycandroidtool;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import com.yc.toollib.network.ui.NetRequestActivity;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -20,6 +24,11 @@ public class NetworkActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private TextView mResponseTextView;
+
+    public static void start(Context context){
+        Intent intent = new Intent(context, NetworkActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +79,10 @@ public class NetworkActivity extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
-                String testUrl = "https://www.wanandroid.com/article/list/0/json";
-                OkHttpManager.getInstance().get(testUrl, new Callback() {
+                String testUrl = "https://www.wanandroid.com/article/query/0/json";
+                Map<String, Object> mapParams = new HashMap<>();
+                mapParams.put("k","Android");
+                OkHttpManager.getInstance().post(testUrl,mapParams, new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
                         Log.e(TAG, "e = "+e.getMessage());
@@ -188,4 +199,5 @@ public class NetworkActivity extends AppCompatActivity {
             }
         }.start();
     }
+
 }

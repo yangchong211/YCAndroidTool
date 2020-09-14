@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@color/colorAccent"
-        android:text="请求网络1"/>
+        android:text="请求网络1----post请求"/>
 
     <Button
         android:id="@+id/btn2"

@@ -3,10 +3,16 @@ package com.yc.toollib.network.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
+import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.yc.toollib.R;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.data.NetworkTraceBean;
 import com.yc.toollib.tool.ToolLogUtils;
@@ -15,6 +21,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class NetWorkUtils {
+
+    public final static long SECOND = 1000;
+    public final static long MINUTE = SECOND * 60;
+    public final static long HOUR = MINUTE * 60;
+    public final static long DAY = HOUR * 24;
 
     public static void copyToClipBoard(Context context , String content){
         if (!TextUtils.isEmpty(content)){
@@ -25,8 +36,10 @@ public final class NetWorkUtils {
             //第二个参数是要复制到剪贴版的内容
             ClipData clip = ClipData.newPlainText("", content);
             //传入clipdata对象.
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(context, "Copy succeed.", Toast.LENGTH_SHORT).show();
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(context, "复制成功", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -104,6 +117,117 @@ public final class NetWorkUtils {
         } catch (NumberFormatException e){
             e.printStackTrace();
             return 0;
+        }
+    }
+
+
+    /**
+     * sp 转 px
+     * @param spValue               sp 值
+     * @return                      px 值
+     */
+    public static int sp2px(Context context, final float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public static int dp2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
+    /**
+     * 获取屏幕宽
+     * @param context               上下文
+     * @return
+     */
+    public static int getScreenWidth(Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        return dm.widthPixels;
+    }
+
+    /**
+     * 获取屏幕高
+     * @param context               上下文
+     * @return
+     */
+    public static int getScreenHeight(Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        return dm.heightPixels;
+    }
+
+    public static SpannableString formatTime(Context context, long time) {
+        SpannableString spannableString;
+        if (time == 0) {
+            RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString = new SpannableString(context.getString(R.string.network_summary_total_time_default));
+            spannableString.setSpan(sizeSpan, spannableString.length() - 1, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else if (time < 100 * SECOND) {
+            RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString = new SpannableString(context.getString(R.string.network_summary_total_time_second, time / SECOND));
+            spannableString.setSpan(sizeSpan, spannableString.length() - 1, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else if (time < 100 * MINUTE) {
+            long minute = time / MINUTE;
+            long second = time % MINUTE / SECOND;
+            spannableString = new SpannableString(context.getString(R.string.network_summary_total_time_minute, minute, second));
+            RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, String.valueOf(minute).length(), String.valueOf(minute).length() + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, spannableString.length() - 1, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else if (time < 100 * HOUR) {
+            long hour = time / HOUR;
+            long minute = time % HOUR / MINUTE;
+            spannableString = new SpannableString(context.getString(R.string.network_summary_total_time_hour, hour, minute));
+            RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, String.valueOf(hour).length(), String.valueOf(hour).length() + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, spannableString.length() - 1, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else {
+            long day = time / DAY;
+            long hour = time % DAY / HOUR;
+            spannableString = new SpannableString(context.getString(R.string.network_summary_total_time_day, day, hour));
+            RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, String.valueOf(day).length(), String.valueOf(day).length() + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            sizeSpan = new RelativeSizeSpan(0.5f);
+            spannableString.setSpan(sizeSpan, spannableString.length() - 2, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+        return spannableString;
+    }
+
+
+    public static SpannableString getPrintSizeForSpannable(long size) {
+        SpannableString spannableString;
+        RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.5f);
+        if (size < 1024) {
+            spannableString = new SpannableString(String.valueOf(size) + "B");
+            spannableString.setSpan(sizeSpan, spannableString.length() - 1, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            return spannableString;
+        } else {
+            size = size / 1024;
+        }
+        if (size < 1024) {
+            spannableString = new SpannableString(String.valueOf(size) + "KB");
+            spannableString.setSpan(sizeSpan, spannableString.length() - 2, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            return spannableString;
+        } else {
+            size = size / 1024;
+        }
+        if (size < 1024) {
+            size = size * 100;
+            String string = String.valueOf((size / 100)) + "."
+                    + String.valueOf((size % 100)) + "MB";
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(sizeSpan, spannableString.length() - 2, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            return spannableString;
+        } else {
+            size = size * 100 / 1024;
+            String string = String.valueOf((size / 100)) + "."
+                    + String.valueOf((size % 100)) + "GB";
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(sizeSpan, spannableString.length() - 2, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            return spannableString;
         }
     }
 

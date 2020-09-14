@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-
 import com.yc.toollib.R;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class NetRequestActivity extends AppCompatActivity {
         ArrayList<String> mTitleList = new ArrayList<>();
         ArrayList<Fragment> mFragments = new ArrayList<>();
         mTitleList.add("请求内容");
-        mTitleList.add("请求流程");
+        mTitleList.add("流量统计");
         mTitleList.add("消耗时间");
         mFragments.add(new NetRequestListFragment());
         mFragments.add(new NetRequestInfoFragment());
