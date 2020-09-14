@@ -14,10 +14,12 @@ import java.util.Map;
  */
 public class NetworkFeedBean implements Serializable {
 
+
     private String mRequestId;
     private String mUrl;
     private String mHost;
     private String mMethod;
+
     private Map<String, String> mRequestHeadersMap;
 
     private String mName;
@@ -31,6 +33,9 @@ public class NetworkFeedBean implements Serializable {
     private long mCreateTime;
 
     private String mCURL;
+    private int connectTimeoutMillis;
+    private int readTimeoutMillis;
+    private int writeTimeoutMillis;
 
     public String getRequestId() {
         return mRequestId;
@@ -142,6 +147,30 @@ public class NetworkFeedBean implements Serializable {
 
     public void setCURL(String CURL) {
         mCURL = CURL;
+    }
+
+    public int getConnectTimeoutMillis() {
+        return connectTimeoutMillis;
+    }
+
+    public void setConnectTimeoutMillis(int connectTimeoutMillis) {
+        this.connectTimeoutMillis = connectTimeoutMillis;
+    }
+
+    public int getReadTimeoutMillis() {
+        return readTimeoutMillis;
+    }
+
+    public void setReadTimeoutMillis(int readTimeoutMillis) {
+        this.readTimeoutMillis = readTimeoutMillis;
+    }
+
+    public int getWriteTimeoutMillis() {
+        return writeTimeoutMillis;
+    }
+
+    public void setWriteTimeoutMillis(int writeTimeoutMillis) {
+        this.writeTimeoutMillis = writeTimeoutMillis;
     }
 
     @Override

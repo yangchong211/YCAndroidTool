@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+
 import com.yc.toollib.R;
 
 import java.util.ArrayList;
@@ -23,8 +24,16 @@ public class NetRequestActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     public static void start(Context context){
-        Intent intent = new Intent(context, NetRequestActivity.class);
-        context.startActivity(intent);
+        try {
+            Intent intent = new Intent(context, NetRequestActivity.class);
+            //为activity开启新的栈，Intent.FLAG_ACTIVITY_NEW_TASK 设置状态，
+            //首先查找是否存在和被启动的Activity具有相同的任务栈，如果有则直接把这个栈整体移到前台，并保持栈中的状态不变，
+            //既栈中的activity顺序不变，如果没有，则新建一个栈来存放被启动的Activity。
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -46,8 +55,10 @@ public class NetRequestActivity extends AppCompatActivity {
         ArrayList<String> mTitleList = new ArrayList<>();
         ArrayList<Fragment> mFragments = new ArrayList<>();
         mTitleList.add("请求内容");
-        mTitleList.add("请求过程");
+        mTitleList.add("请求流程");
+        mTitleList.add("消耗时间");
         mFragments.add(new NetRequestListFragment());
+        mFragments.add(new NetRequestInfoFragment());
         mFragments.add(new NetRequestTraceFragment());
         /*
          * 注意使用的是：getChildFragmentManager，

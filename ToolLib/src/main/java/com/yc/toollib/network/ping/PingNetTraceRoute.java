@@ -180,13 +180,13 @@ public class PingNetTraceRoute {
                 }
                 reader.close();
                 process.waitFor();
-
                 Matcher m = patternTrace.matcher(str.toString());
 
                 // 如果成功获得trace:IP，则再次发送ping命令获取ping的时间
                 StringBuilder log = new StringBuilder(256);
                 if (m.find()) {
                     String pingIp = m.group();
+                    ToolLogUtils.i("PingNetTraceRoute--------pingIp---"+pingIp);
                     PingTask pingTask = new PingTask(pingIp);
                     //执行ping命令，返回ping命令的全部控制台输出
                     String status = execPing(pingTask);

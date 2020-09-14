@@ -112,4 +112,9 @@ public class PingView extends ScrollView implements NetDiagnoListener {
         setText(showInfo);
         fullScroll(ScrollView.FOCUS_DOWN);
     }
+
+    @Override
+    public void OnNetStates(boolean isDomainParseOk, boolean isSocketConnected) {
+
+    }
 }

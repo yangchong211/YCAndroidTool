@@ -115,6 +115,7 @@ public class NetDiagnoService extends NetAsyncTaskEx<String, String, String>
         this.stopNetDialogsis();
         if (_netDiagnolistener != null) {
             _netDiagnolistener.OnNetDiagnoFinished(_logInfo.toString());
+            _netDiagnolistener.OnNetStates(_isDomainParseOk,_isSocketConnected);
         }
     }
 

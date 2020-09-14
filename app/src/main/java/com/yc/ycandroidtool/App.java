@@ -19,6 +19,8 @@ public class App extends Application {
         super.onCreate();
         initCrash();
         NetworkTool.getInstance().init(this);
+        //建议只在debug环境下显示，点击去网络拦截列表页面查看网络请求数据
+        NetworkTool.getInstance().setFloat(this);
         //test();
     }
 

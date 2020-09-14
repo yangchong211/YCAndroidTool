@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.yc.toollib.R;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.data.NetworkFeedBean;
 import com.yc.toollib.network.utils.NetWorkUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,12 +54,15 @@ public class NetworkDetailActivity extends AppCompatActivity {
     }
 
     private void initFindViewById() {
+
+
         mLlBack = findViewById(R.id.ll_back);
         mTvDelete = findViewById(R.id.tv_delete);
         mTvUrlContent = findViewById(R.id.tv_url_content);
         mTvRequestHeaders = findViewById(R.id.tv_request_headers);
         mTvResponseHeaders = findViewById(R.id.tv_response_headers);
         mTvBody = findViewById(R.id.tv_body);
+
     }
 
     private void initData() {
@@ -90,6 +95,9 @@ public class NetworkDetailActivity extends AppCompatActivity {
         Format format = new DecimalFormat("#.00");
         String dataSize = format.format(mNetworkFeedModel.getSize() * 0.001) + " KB";
         map.put("size",dataSize);
+        map.put("connectTimeoutMillis",mNetworkFeedModel.getConnectTimeoutMillis()+"");
+        map.put("readTimeoutMillis",mNetworkFeedModel.getReadTimeoutMillis()+"");
+        map.put("writeTimeoutMillis",mNetworkFeedModel.getWriteTimeoutMillis()+"");
         String string = parseHeadersMapToString(map);
         mTvUrlContent.setText(string);
         mTvUrlContent.setOnClickListener(new View.OnClickListener() {

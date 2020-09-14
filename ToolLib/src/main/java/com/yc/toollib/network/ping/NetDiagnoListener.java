@@ -19,4 +19,11 @@ public interface NetDiagnoListener {
      * @param log
      */
     void OnNetDiagnoUpdated(String log);
+
+    /**
+     * 监听状态
+     * @param isDomainParseOk               域名解析是否成功
+     * @param isSocketConnected             socket中conected是否成功
+     */
+    void OnNetStates(boolean isDomainParseOk, boolean isSocketConnected);
 }

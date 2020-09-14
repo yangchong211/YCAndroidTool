@@ -74,14 +74,16 @@ public class IDataPoolHandleImpl implements IDataPoolHandle {
         if (mNetworkFeedMap == null) {
             initDataPool();
         }
-        NetworkFeedBean networkFeedModel = mNetworkFeedMap.get(requestId);
-        if (networkFeedModel == null) {
-            networkFeedModel = new NetworkFeedBean();
-            networkFeedModel.setRequestId(requestId);
-            networkFeedModel.setCreateTime(System.currentTimeMillis());
-            mNetworkFeedMap.put(requestId, networkFeedModel);
+        NetworkFeedBean networkFeedBean = mNetworkFeedMap.get(requestId);
+        //如果取到的数据为null
+        if (networkFeedBean == null) {
+            //则存储该数据到map集合中
+            networkFeedBean = new NetworkFeedBean();
+            networkFeedBean.setRequestId(requestId);
+            networkFeedBean.setCreateTime(System.currentTimeMillis());
+            mNetworkFeedMap.put(requestId, networkFeedBean);
         }
-        return networkFeedModel;
+        return networkFeedBean;
     }
 
     @Override
