@@ -10,10 +10,14 @@ import com.yc.toollib.network.floating.FloatWindow;
 import com.yc.toollib.network.floating.PermissionListener;
 import com.yc.toollib.network.floating.Screen;
 import com.yc.toollib.network.floating.ViewStateListener;
+import com.yc.toollib.network.stetho.NetworkInterceptor;
+import com.yc.toollib.network.stetho.NetworkListener;
 import com.yc.toollib.network.ui.NetRequestActivity;
 import com.yc.toollib.network.ui.NetworkDetailActivity;
 import com.yc.toollib.network.ui.NetworkManager;
 import com.yc.toollib.tool.ToolLogUtils;
+
+import okhttp3.OkHttpClient;
 
 
 public class NetworkTool {
@@ -47,6 +51,36 @@ public class NetworkTool {
     public Application getApplication() {
         return app;
     }
+
+    /**
+     *     每个拦截器都有自己的相对优点。
+     *
+     *     应用拦截器
+     *     不需要担心中间响应，如重定向和重试。
+     *     总是调用一次，即使从缓存提供HTTP响应。
+     *     遵守应用程序的原始意图。
+     *     不注意OkHttp注入的头像If-None-Match。
+     *     允许短路和不通话Chain.proceed()。
+     *     允许重试并进行多次呼叫Chain.proceed()。
+     *
+     *     网络拦截器
+     *     能够对重定向和重试等中间响应进行操作。
+     *     不调用缓存的响应来短路网络。
+     *     观察数据，就像通过网络传输一样。
+     *     访问Connection该请求。
+     */
+    private OkHttpClient.Builder localBuild;
+    public OkHttpClient.Builder addOkHttp(OkHttpClient.Builder builder){
+        ToolLogUtils.i("OkHttpHook"+"-------addOkHttp");
+        if (localBuild==null){
+            localBuild = builder
+                    .eventListenerFactory(NetworkListener.get())
+                    //.addNetworkInterceptor(new WeakNetworkInterceptor())
+                    .addNetworkInterceptor(new NetworkInterceptor());
+        }
+        return localBuild;
+    }
+
 
     /**
      * 设置全局悬浮按钮，点击可以去网络列表页面
