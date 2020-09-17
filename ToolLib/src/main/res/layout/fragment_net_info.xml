@@ -11,120 +11,104 @@
         android:layout_margin="6dp"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+
+        <TextView
+            android:id="@+id/total_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/total_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:text="总计已为您抓包"
+            android:textSize="10sp"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/total_sec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/total_tips"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:text="总计已为您抓包"
-                android:textSize="10sp"
-                android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/total_sec" />
-
-            <TextView
-                android:id="@+id/total_number"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:textSize="22sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/total_upload"
-                app:layout_constraintTop_toBottomOf="@id/total_tips"
-                app:layout_constraintWidth_percent="0.33" />
-
-            <TextView
-                android:id="@+id/total_upload"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="22sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintLeft_toRightOf="@id/total_number"
-                app:layout_constraintTop_toTopOf="@id/total_number"
-                app:layout_constraintWidth_percent="0.33" />
-
-            <TextView
-                android:id="@+id/total_down"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="22sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintLeft_toRightOf="@id/total_upload"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/total_number"
-                app:layout_constraintWidth_percent="0.33" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/total_upload"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="6dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="数据上传"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/total_upload"
-                app:layout_constraintTop_toBottomOf="@id/total_upload"
-                app:layout_constraintWidth_percent="0.33" />
-
-
-            <TextView
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/total_number"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:text="抓包数量"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/total_number"
-                app:layout_constraintTop_toBottomOf="@id/total_number"
-                app:layout_constraintWidth_percent="0.33" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/total_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="抓包数量"
+                    android:textSize="10sp"/>
+            </LinearLayout>
 
-
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/total_down"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:text="数据下载"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/total_down"
-                app:layout_constraintTop_toBottomOf="@id/total_down"
-                app:layout_constraintWidth_percent="0.33" />
-        </android.support.constraint.ConstraintLayout>
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/total_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="22sp"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="数据上传"
+                    android:textSize="10sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/total_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="22sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="数据下载"
+                    android:textSize="10sp"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -165,7 +149,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="40dp" />
         </LinearLayout>
-
     </LinearLayout>
 
 

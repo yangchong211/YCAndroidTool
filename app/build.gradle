@@ -26,5 +26,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation project(path: ':ToolLib')
-
+//    implementation 'cn.yc:ToolLib:1.0.2'
 }
