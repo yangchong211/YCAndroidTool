@@ -184,7 +184,7 @@
 #### 5.1 崩溃库
 - 如何引入该库
     ``` java
-    implementation 'cn.yc:ToolLib:1.0.2'
+    implementation 'cn.yc:ToolLib:1.0.0'
     //GitHub代码
     https://github.com/yangchong211/YCAndroidTool
     ```
