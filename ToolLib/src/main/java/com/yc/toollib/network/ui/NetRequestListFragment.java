@@ -17,6 +17,8 @@ import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.data.NetworkFeedBean;
 import com.yc.toollib.tool.OnItemClickListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,9 +31,8 @@ public class NetRequestListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Activity activity;
 
-
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         activity = (Activity) context;
     }

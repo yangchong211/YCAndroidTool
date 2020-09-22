@@ -37,7 +37,7 @@ import okhttp3.Response;
 public class NetworkListener extends EventListener {
 
     private static final String TAG = "NetworkEventListener";
-    private AtomicInteger mNextRequestId = new AtomicInteger(0);
+    private static AtomicInteger mNextRequestId = new AtomicInteger(0);
     private String mRequestId ;
 
     public static Factory get(){
@@ -54,7 +54,10 @@ public class NetworkListener extends EventListener {
     @Override
     public void callStart(@NotNull Call call) {
         super.callStart(call);
-        mRequestId = mNextRequestId.getAndDecrement() + "";
+        //mRequestId = mNextRequestId.getAndIncrement() + "";
+        //getAndAdd，在多线程下使用cas保证原子性
+        mRequestId = String.valueOf(mNextRequestId.getAndIncrement());
+        ToolLogUtils.i(TAG+"-------callStart---requestId-----"+mRequestId);
         saveEvent(NetworkTraceBean.CALL_START);
         saveUrl(call.request().url().toString());
     }

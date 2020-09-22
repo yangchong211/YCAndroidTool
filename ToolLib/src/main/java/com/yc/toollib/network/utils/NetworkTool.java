@@ -17,6 +17,8 @@ import com.yc.toollib.network.ui.NetworkDetailActivity;
 import com.yc.toollib.network.ui.NetworkManager;
 import com.yc.toollib.tool.ToolLogUtils;
 
+import java.net.Proxy;
+
 import okhttp3.OkHttpClient;
 
 
@@ -70,13 +72,17 @@ public class NetworkTool {
      *     访问Connection该请求。
      */
     private OkHttpClient.Builder localBuild;
-    public OkHttpClient.Builder addOkHttp(OkHttpClient.Builder builder){
+    public OkHttpClient.Builder addOkHttp(OkHttpClient.Builder builder,boolean isProxy){
         ToolLogUtils.i("OkHttpHook"+"-------addOkHttp");
         if (localBuild==null){
             localBuild = builder
                     .eventListenerFactory(NetworkListener.get())
                     //.addNetworkInterceptor(new WeakNetworkInterceptor())
                     .addNetworkInterceptor(new NetworkInterceptor());
+            if (isProxy){
+                //基于抓包原理的基础上，直接使用okHttp禁止代理，经过测试，可以避免第三方工具(比如charles)抓包
+                localBuild.proxy(Proxy.NO_PROXY);
+            }
         }
         return localBuild;
     }

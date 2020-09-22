@@ -11,11 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.yc.toollib.R;
 import com.yc.toollib.network.data.IDataPoolHandleImpl;
 import com.yc.toollib.network.data.NetworkFeedBean;
-import com.yc.toollib.network.utils.NetWorkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +80,14 @@ public class NetworkDetailActivity extends AppCompatActivity {
 
     private void setCURLContent() {
         Map<String, String> map = new LinkedHashMap<>();
-        map.put("Request URL",mNetworkFeedModel.getUrl());
+        String url = mNetworkFeedModel.getUrl();
+        if (url.length()>40){
+            String substring = url.substring(0, 40);
+            url = substring + "……";
+            map.put("Request URL",url);
+        } else {
+            map.put("Request URL",url);
+        }
         map.put("Request Method",mNetworkFeedModel.getMethod());
         int status = mNetworkFeedModel.getStatus();
         if (status==200){
@@ -103,8 +108,10 @@ public class NetworkDetailActivity extends AppCompatActivity {
         mTvUrlContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NetWorkUtils.copyToClipBoard(NetworkDetailActivity.this,
-                        mNetworkFeedModel.getCURL());
+                NetInfoUrlDialog dialog = new NetInfoUrlDialog(NetworkDetailActivity.this);
+                String curl = mNetworkFeedModel.getCURL();
+                dialog.setData(curl);
+                dialog.show();
             }
         });
     }

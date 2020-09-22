@@ -2,6 +2,7 @@ package com.yc.toollib.network.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ public class NetworkFeedAdapter extends BaseRecycleAdapter<NetworkFeedBean> {
     private Context mContext;
 
     public NetworkFeedAdapter(Context context) {
-        super(context,R.layout.item_network_feed);
+        super(context, R.layout.item_network_feed);
         mContext = context;
     }
 
@@ -26,7 +27,7 @@ public class NetworkFeedAdapter extends BaseRecycleAdapter<NetworkFeedBean> {
     @Override
     protected void bindData(BaseViewHolder holder, final NetworkFeedBean networkFeedModel) {
         LinearLayout mRootLayout = holder.getView(R.id.ll_feed_root_layout);
-        TextView mUrlTextView = holder.getView(R.id.tv_network_feed_url);
+        final TextView mUrlTextView = holder.getView(R.id.tv_network_feed_url);
         TextView mStatusCodeTextView = holder.getView(R.id.tv_feed_status);
         TextView mSizeTextView = holder.getView(R.id.tv_feed_size);
         TextView mCostTimeTextView = holder.getView(R.id.tv_feed_cost_time);
@@ -36,6 +37,17 @@ public class NetworkFeedAdapter extends BaseRecycleAdapter<NetworkFeedBean> {
 
 
         mUrlTextView.setText(networkFeedModel.getUrl());
+        mUrlTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCount = mUrlTextView.getLineCount();
+                if (lineCount>2){
+                    mUrlTextView.setLines(2);
+                    mUrlTextView.setMaxLines(2);
+                    mUrlTextView.setEllipsize(TextUtils.TruncateAt.END);
+                }
+            }
+        });
         if (networkFeedModel.getStatus() >= 400 && networkFeedModel.getStatus() <= 600) {
             mStatusView.setBackgroundResource(R.color.red);
             mStatusCodeTextView.setTextColor(mContext.getResources().getColor(R.color.red));
