@@ -14,12 +14,13 @@
 
 ### 01.该库具有的功能
 - **崩溃处理相关模块**：
-    - 崩溃重启操作，崩溃记录日志操作
+    - 崩溃重启操作，崩溃记录日志操作，崩溃日志列表支持查询，删除，查看详情，分享，保存文本，以及截图等操作。
 - **网络分析库模块**：
-    - 网络流程分析，记录每个网络请求->响应数据，以及耗时
+    - 网络流程分析，记录每个网络请求->响应数据，方便查看很全面的请求头信息，响应头信息，以及body实体，以及网络连接，dns解析，TLS连接，请求响应等时间差……
 - **ping库模块**：
-    - 通过ping检测网络问题，帮助诊断
-
+    - 通过ping检测网络问题，帮助诊断，这个在Android中检查域名的诊断信息……
+- **最大特点**
+    - 入侵性低，你不用改动愿项目代码，几行代码设置即可使用这几个模块功能，已经用于多个实际项目中。如果觉得可以，麻烦star一下……
 
 
 ### 02.崩溃处理模块
@@ -64,29 +65,14 @@
 
 ### 03.网络分析库模块
 #### 3.1 网络分析库模块
-- 该工具作用
-    - 诸葛书网络拦截分析，主要是分析网络流量损耗，以及request，respond过程时间。打造网络分析工具……
 - 参考stetho库地址
     - https://github.com/facebook/stetho
 - 功能
     - Stetho 是 Facebook 开源的一个 Android 调试工具。
     - 是一个 Chrome Developer Tools 的扩展，可用来检测应用的网络、数据库、WebKit 、SharePreference等方面的功能。
-- 用语言来描述应该是这样子：
-    - 1、安装了stetho插件的app启动之后，会启动一个本地server1（LocalSocketServer），这个本地server1等待着app(client)的连接。
-    - 2、同时，这个本地server1会与另外一个本地server2（ChromeDevtoolsServer）连接着。
-    - 3、本地app一旦连接上，数据将会不停的被发送到本地server1，然后转由server2.
-    - 4、然后Chrome Developer Tools，想访问网站一样的，访问了ChromeDevtoolsServer，随之将数据友好的展示给了开发者，这么一个过程就此完结。
-
-
-#### 3.2 将拦截网络操作抽取
-- 应用代码如下所示
-    ``` java
-    new OkHttpClient.Builder()
-        .addNetworkInterceptor(new StethoInterceptor())
-        .build()
-    ```
+    - 开发者也可通过它的 dumpapp 工具提供强大的命令行接口来访问应用内部。
 - 那么既然网络请求添加StethoInterceptor，既可以拦截网络请求和响应信息，发送给Chrome。那么能不能自己拿来用……
-    - 可以的
+    - 可以的，直接致敬Stetho库，扒代码
 - StethoInterceptor大概流程
     - 整个流程我们可以简化为：发送请求时，给Chrome发了条消息，收到请求时，再给Chrome发条消息（具体怎么发的可以看NetworkEventReporterImpl的实现）
     - 两条消息通过EventID联系起来，它们的类型分别是OkHttpInspectorRequest 和 OkHttpInspectorResponse，两者分别继承自NetworkEventReporter.InspectorRequest和NetworkEventReporter.InspectorResponse。
@@ -94,16 +80,35 @@
 - 如何拿来用
     - 既然Android中使用到facebook的stetho库，可以拦截手机请求请求，然后去Chrome浏览器，在浏览器地址栏输入：chrome://inspect 。即可查看请求信息。
     - 那么能不能把这个拿到的请求信息，放到集合中，然后在Android的页面中展示呢？这样方便开发和测试查看网络请求信息，以及请求流程中的消耗时间（比如dns解析时间，请求时间，响应时间，共耗时等等）
+- OkHttp如何进行各个请求环节的耗时统计呢？
+    - OkHttp 版本提供了EventListener接口，可以让调用者接收一系列网络请求过程中的事件，例如DNS解析、TSL/SSL连接、Response接收等。
+    - 通过继承此接口，调用者可以监视整个应用中网络请求次数、流量大小、耗时(比如dns解析时间，请求时间，响应时间等等)情况。
+    - 因此统计耗时，需要致敬EventListener实现，照搬代码即可。
 - 如何消耗记录时间
     - 在OkHttp库中有一个EventListener类。该类是网络事件的侦听器。扩展这个类以监视应用程序的HTTP调用的数量、大小和持续时间。
     - 所有启动/连接/获取事件最终将接收到匹配的结束/释放事件，要么成功(非空参数)，要么失败(非空可抛出)。
     - 比如，可以在开始链接记录时间；dns开始，结束等方法解析记录时间，可以计算dns的解析时间。
     - 比如，可以在开始请求记录时间，记录connectStart，connectEnd等方法时间，则可以计算出connect连接时间。
-- 该库目的
-    - 做成悬浮全局按钮，点击按钮可以查看该activity页面请求接口，可以查看请求几个接口，以及接口请求到响应消耗流量
-    - 方便查看网络请求流程，比如dns解析时间，请求时间，响应时间
-    - 方便测试查看请求数据，方便抓包。可以复制request，respond，body等内容。也可以截图
 
+
+#### 3.2 将拦截网络操作抽取
+- 网络请求拦截
+    - 记录每个页面网络请求的数据，保存在map中，方便查看网络请求的请求头，响应头，响应body
+    - 针对获取的网络数据，记录网络状态，请求耗时，请求方式，完善了网络日志包括的绝大部分字段信息展示
+- 流量统计
+    - 目前只是针对get，post网络请求以及上传流量统计，并且针对get和post比例展示，以及抓包数量统计
+    - 后期完善比如glide加载图片消耗的流量统计
+- 网络消耗时间
+    - 网络请求到完成耗时，dns消耗时间，连接消耗时间，TLS连接开始结束消耗时间，request请求消耗时间，response响应消耗时间等等
+- 设备信息
+    - 获取手机设备信息，包括硬件厂商，版本，root，包名等信息
+    - 获取本机wifi信息，主要是wifi的名称，mac地址，ip地址，dns信息，子网掩码等
+    - 获取服务端信息，根据网络请求host，获取服务端ip，mac，是ipv4还是ipv6等，这个还在完善中
+- ping网络诊断
+    - 致敬网易ping方案，应用于Android项目中，获取Android项目域名，拿到ping信息
+- 全局悬浮按钮
+    - 为了方便查看每个activity页面的网络请求数据，因此在每个activity页面显示全局悬浮按钮，点击即可跳入查看数据页面
+    - 这个一行代码设置即可，无任何耦合作用，低入侵
 
 
 #### 3.3 网络请求接口信息
@@ -148,6 +153,7 @@
 ![image](https://img-blog.csdnimg.cn/2020090921524393.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 ![image](https://img-blog.csdnimg.cn/20200910095645227.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 ![image](https://img-blog.csdnimg.cn/20200914194859602.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
+![image](https://img-blog.csdnimg.cn/20200923103832877.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzAwMjc1,size_16,color_FFFFFF,t_70#pic_center)
 
 
 
@@ -310,10 +316,18 @@
         //配置工厂监听器。主要是计算网络过程消耗时间
         .eventListenerFactory(NetworkListener.get())
         //主要是处理拦截请求，响应等信息
-        .addNetworkInterceptor(new StethoInterceptor())
+        .addNetworkInterceptor(new NetworkInterceptor())
         .build()
     ```
-
+- 如何开启悬浮按钮
+    ```
+    //建议只在debug环境下显示，点击去网络拦截列表页面查看网络请求数据
+    NetworkTool.getInstance().setFloat(getApplication());
+    ```
+- 该库目的
+    - 做成悬浮全局按钮，点击按钮可以查看该activity页面请求接口，可以查看请求几个接口，以及接口请求到响应消耗流量
+    - 方便查看网络请求流程，比如dns解析时间，请求时间，响应时间
+    - 方便测试查看请求数据，方便抓包。可以复制request，respond，body等内容。也可以截图
 
 
 #### 5.3 如何使用ping
