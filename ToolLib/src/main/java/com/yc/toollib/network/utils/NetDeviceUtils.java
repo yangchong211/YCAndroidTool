@@ -2,7 +2,9 @@ package com.yc.toollib.network.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -16,7 +18,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
@@ -143,6 +147,88 @@ public final class NetDeviceUtils {
         return model;
     }
 
+
+    /**
+     * 获取wifi的强弱
+     * @param context                               上下文
+     * @return
+     */
+    public static String getWifiState(Context context){
+        if (isWifiConnect(context)) {
+            WifiManager mWifiManager = (WifiManager) context.getApplicationContext()
+                    .getSystemService(Context.WIFI_SERVICE);
+            WifiInfo mWifiInfo = null;
+            if (mWifiManager != null) {
+                mWifiInfo = mWifiManager.getConnectionInfo();
+                int wifi = mWifiInfo.getRssi();//获取wifi信号强度
+                if (wifi > -50 && wifi < 0) {//最强
+                    return "最强";
+                } else if (wifi > -70 && wifi < -50) {//较强
+                    return "较强";
+                } else if (wifi > -80 && wifi < -70) {//较弱
+                    return "较弱";
+                } else if (wifi > -100 && wifi < -80) {//微弱
+                    return "微弱";
+                } else {
+                    return "微弱";
+                }
+            }
+        }
+        return "无wifi连接";
+    }
+
+    public static boolean isWifiConnect(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager)
+                context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifiInfo = null;
+        if (connManager != null) {
+            mWifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            return mWifiInfo.isConnected();
+        }
+        return false;
+    }
+
+    /**
+     * 通过域名获取真实的ip地址 (此方法需要在线程中调用)
+     * @param domain                                host
+     * @return
+     */
+    public static String getHostIP(String domain) {
+        String ipAddress = "";
+        InetAddress iAddress = null;
+        try {
+            iAddress = InetAddress.getByName(domain);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        if (iAddress == null)
+            ToolLogUtils.i("xxx", "iAddress ==null");
+        else {
+            ipAddress = iAddress.getHostAddress();
+        }
+        return ipAddress;
+    }
+
+    /**
+     * 通过域名获取真实的ip地址 (此方法需要在线程中调用)
+     * @param domain                                host
+     * @return
+     */
+    public static String getHostName(String domain) {
+        String ipAddress = "";
+        InetAddress iAddress = null;
+        try {
+            iAddress = InetAddress.getByName(domain);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        if (iAddress == null)
+            ToolLogUtils.i("xxx", "iAddress ==null");
+        else {
+            ipAddress = iAddress.getHostName();
+        }
+        return ipAddress;
+    }
 
     /**
      * 获取wifi的名称

@@ -1,5 +1,6 @@
 package com.yc.toollib.network.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.net.DhcpInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +45,21 @@ public class NetRequestPhoneFragment extends Fragment {
     private TextView tvContentInfo;
     private TextView tvWebInfo;
     private PingView tvNetInfo;
+    private List<NetworkFeedBean> mNetworkFeedList;
+    private static final int MESSAGE = 1;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MESSAGE){
+                String content = (String) msg.obj;
+                tvWebInfo.setText(content);
+            }
+        }
+    };
+
 
     @Override
     public void onAttach(@NotNull Context context) {
@@ -73,6 +91,7 @@ public class NetRequestPhoneFragment extends Fragment {
     }
 
     private void initData() {
+        initListData();
         //手机设备信息
         setPhoneInfo();
 
@@ -86,6 +105,25 @@ public class NetRequestPhoneFragment extends Fragment {
 
         //网络诊断，也就是ping一下
         setPingInfo();
+    }
+
+    private void initListData() {
+        mNetworkFeedList = new ArrayList<>();
+        HashMap<String, NetworkFeedBean> networkFeedMap = IDataPoolHandleImpl.getInstance().getNetworkFeedMap();
+        if (networkFeedMap != null) {
+            Collection<NetworkFeedBean> values = networkFeedMap.values();
+            mNetworkFeedList.addAll(values);
+            try {
+                Collections.sort(mNetworkFeedList, new Comparator<NetworkFeedBean>() {
+                    @Override
+                    public int compare(NetworkFeedBean networkFeedModel1, NetworkFeedBean networkFeedModel2) {
+                        return (int) (networkFeedModel2.getCreateTime() - networkFeedModel1.getCreateTime());
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setPhoneInfo() {
@@ -130,26 +168,44 @@ public class NetRequestPhoneFragment extends Fragment {
     private void setLocationInfo() {
         Application application = NetworkTool.getInstance().getApplication();
         StringBuilder sb = new StringBuilder();
-        sb.append("AndroidID:").append(NetDeviceUtils.getAndroidID(application));
+        sb.append("wifi信号强度:").append(NetDeviceUtils.getWifiState(application));
+        sb.append("\nAndroidID:").append(NetDeviceUtils.getAndroidID(application));
         sb.append("\nMac地址:").append(NetDeviceUtils.getMacAddress(application));
         sb.append("\nWifi名称:").append(NetDeviceUtils.getWifiName(application));
         int wifiIp = NetDeviceUtils.getWifiIp(application);
         String ip = NetDeviceUtils.intToIp(wifiIp);
-        sb.append("\n网络Ip地址:").append(ip);
+        sb.append("\nWifi的Ip地址:").append(ip);
         DhcpInfo dhcpInfo = NetDeviceUtils.getDhcpInfo(application);
         if (dhcpInfo!=null){
-            sb.append("\nipAddress：").append(NetDeviceUtils.intToIp(dhcpInfo.ipAddress));
-            sb.append("\nnetmask：").append(NetDeviceUtils.intToIp(dhcpInfo.netmask));
-            sb.append("\ngateway：").append(NetDeviceUtils.intToIp(dhcpInfo.gateway));
+            //sb.append("\nipAddress：").append(NetDeviceUtils.intToIp(dhcpInfo.ipAddress));
+            sb.append("\n子网掩码地址：").append(NetDeviceUtils.intToIp(dhcpInfo.netmask));
+            sb.append("\n网关地址：").append(NetDeviceUtils.intToIp(dhcpInfo.gateway));
             sb.append("\nserverAddress：").append(NetDeviceUtils.intToIp(dhcpInfo.serverAddress));
-            sb.append("\ndns1：").append(NetDeviceUtils.intToIp(dhcpInfo.dns1));
-            sb.append("\ndns2：").append(NetDeviceUtils.intToIp(dhcpInfo.dns2));
+            sb.append("\nDns1：").append(NetDeviceUtils.intToIp(dhcpInfo.dns1));
+            sb.append("\nDns2：").append(NetDeviceUtils.intToIp(dhcpInfo.dns2));
         }
         tvContentInfo.setText(sb.toString());
     }
 
     private void setNetInfo() {
-        tvWebInfo.setText("待完善：获取服务端ip，mac，是ipv4还是ipv6等信息");
+        if (mNetworkFeedList.size()>0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String curl = mNetworkFeedList.get(0).getCURL();
+                    String host = Uri.parse(curl).getHost();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("域名ip地址:").append(NetDeviceUtils.getHostIP(host));
+                    sb.append("\n域名host名称:").append(NetDeviceUtils.getHostName(host));
+                    sb.append("\n待完善:").append("获取服务端ip，mac，是ipv4还是ipv6等信息");
+                    String string = sb.toString();
+                    Message message = new Message();
+                    message.what = MESSAGE;
+                    message.obj = string;
+                    handler.sendMessage(message);
+                }
+            }).start();
+        }
     }
 
     private void setPingInfo() {
@@ -169,28 +225,11 @@ public class NetRequestPhoneFragment extends Fragment {
             e.printStackTrace();
         }
         tvNetInfo.setVersionName(versionName);
-        final List<NetworkFeedBean> mNetworkFeedList = new ArrayList<>();
-        HashMap<String, NetworkFeedBean> networkFeedMap = IDataPoolHandleImpl.getInstance().getNetworkFeedMap();
-        if (networkFeedMap != null) {
-            Collection<NetworkFeedBean> values = networkFeedMap.values();
-            mNetworkFeedList.addAll(values);
-            try {
-                Collections.sort(mNetworkFeedList, new Comparator<NetworkFeedBean>() {
-                    @Override
-                    public int compare(NetworkFeedBean networkFeedModel1, NetworkFeedBean networkFeedModel2) {
-                        return (int) (networkFeedModel2.getCreateTime() - networkFeedModel1.getCreateTime());
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         if (mNetworkFeedList.size()>0){
             String curl = mNetworkFeedList.get(0).getCURL();
             String host = Uri.parse(curl).getHost();
             tvNetInfo.pingHost(host);
         }
     }
-
 
 }
