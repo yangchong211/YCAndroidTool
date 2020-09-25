@@ -39,11 +39,23 @@
             android:id="@+id/tv_delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/tv_about"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="删除"
+            android:textColor="@color/crash_white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_about"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:paddingLeft="34dp"
-            android:paddingRight="14dp"
-            android:text="删除"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="关于"
             android:textColor="@color/crash_white"
             android:textSize="15sp" />
     </RelativeLayout>

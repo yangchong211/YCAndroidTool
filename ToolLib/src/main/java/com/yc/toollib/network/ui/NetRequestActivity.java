@@ -11,8 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yc.toollib.R;
+import com.yc.toollib.network.utils.NetWorkUtils;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class NetRequestActivity extends AppCompatActivity {
     private LinearLayout mLlBack;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private TextView mTvAbout;
 
     public static void start(Context context){
         try {
@@ -48,6 +51,7 @@ public class NetRequestActivity extends AppCompatActivity {
         mLlBack = findViewById(R.id.ll_back);
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
+        mTvAbout = findViewById(R.id.tv_about);
     }
 
     private void initTabLayout() {
@@ -83,6 +87,13 @@ public class NetRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        mTvAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetWorkUtils.openLink(NetRequestActivity.this,
+                        "https://github.com/yangchong211/YCAndroidTool");
             }
         });
     }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 
 import com.yc.toollib.R;
+import com.yc.toollib.network.utils.NetWorkUtils;
 import com.yc.toollib.tool.OnItemClickListener;
 import com.yc.toollib.tool.ToolFileUtils;
 
@@ -41,6 +42,7 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
     private LinearLayout mActivityCrashList;
     private LinearLayout mLlBack;
     private TextView mTvDelete;
+    private TextView tvAbout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private List<File> fileList;
@@ -71,6 +73,7 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
         mActivityCrashList = findViewById(R.id.activity_crash_list);
         mLlBack = findViewById(R.id.ll_back);
         mTvDelete = findViewById(R.id.tv_delete);
+        tvAbout = findViewById(R.id.tv_about);
         mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         mRecycleView = findViewById(R.id.recycleView);
     }
@@ -86,6 +89,7 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
     private void initListener() {
         mLlBack.setOnClickListener(this);
         mTvDelete.setOnClickListener(this);
+        tvAbout.setOnClickListener(this);
     }
 
 
@@ -213,6 +217,8 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
             deleteAll();
         } else if (i == R.id.ll_back) {
             finish();
+        } else if (i == R.id.tv_about){
+            NetWorkUtils.openLink(this, "https://github.com/yangchong211/YCAndroidTool");
         }
     }
 
