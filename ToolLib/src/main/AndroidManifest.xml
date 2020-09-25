@@ -18,16 +18,13 @@
         <service android:name=".crash.KillSelfService"/>
         <activity
             android:name=".crash.CrashListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CrashTheme"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".crash.CrashDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CrashTheme"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".crash.CrashTestActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CrashTheme"/>
+            android:screenOrientation="portrait"/>
         <provider
             android:name=".crash.CrashFileProvider"
             android:authorities="${applicationId}.crashFileProvider"
@@ -43,18 +40,15 @@
         <activity
             android:name=".network.ui.NetRequestActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            android:theme="@style/CrashTheme"/>
+            android:launchMode="singleTask"/>
         <activity
             android:name=".network.ui.NetworkDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CrashTheme"/>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".network.floating.FloatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
-            android:theme="@style/CrashTheme"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
     </application>
 
