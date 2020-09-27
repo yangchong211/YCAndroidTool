@@ -1,14 +1,24 @@
 package com.yc.toollib.network.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.text.format.Formatter;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.yc.toollib.tool.ToolLogUtils;
 
@@ -16,8 +26,11 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -146,7 +159,6 @@ public final class NetDeviceUtils {
         }
         return model;
     }
-
 
     /**
      * 获取wifi的强弱
@@ -306,6 +318,196 @@ public final class NetDeviceUtils {
                 + (0xFF & paramInt >> 24);
     }
 
+
+    public static String getSDCardSpace(Context context) {
+        try {
+            String free = getSDAvailableSize(context);
+            String total = getSDTotalSize(context);
+            return free + "/" + total;
+        } catch (Exception e) {
+            return "-/-";
+        }
+    }
+
+    /**
+     * 获得SD卡总大小
+     *
+     * @return
+     */
+    private static String getSDTotalSize(Context context) {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return Formatter.formatFileSize(context, blockSize * totalBlocks);
+    }
+
+    /**
+     * 获得sd卡剩余容量，即可用大小
+     *
+     * @return
+     */
+    private static String getSDAvailableSize(Context context) {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return Formatter.formatFileSize(context, blockSize * availableBlocks);
+    }
+
+    public static String getRomSpace(Context context) {
+        try {
+            String free = getRomAvailableSize(context);
+            String total = getRomTotalSize(context);
+            return free + "/" + total;
+        } catch (Exception e) {
+            return "-/-";
+        }
+    }
+
+    /**
+     * 获得机身可用内存
+     *
+     * @return
+     */
+    private static String getRomAvailableSize(Context context) {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return Formatter.formatFileSize(context, blockSize * availableBlocks);
+    }
+
+    /**
+     * 获得机身内存总大小
+     *
+     * @return
+     */
+    private static String getRomTotalSize(Context context) {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return Formatter.formatFileSize(context, blockSize * totalBlocks);
+    }
+
+    /**
+     * 手机总内存
+     * @param context
+     * @return 手机总内存(兆)
+     */
+    public static long getTotalMemory(Context context) {
+        String str1 = "/proc/meminfo";// 系统内存信息文件
+        String str2;
+        String[] arrayOfString;
+        long initial_memory = 0;
+        try {
+            FileReader localFileReader = new FileReader(str1);
+            BufferedReader localBufferedReader = new BufferedReader(
+                    localFileReader, 8192);
+            str2 = localBufferedReader.readLine();// 读取meminfo第一行，系统总内存大小
+            if (!TextUtils.isEmpty(str2)) {
+                arrayOfString = str2.split("\\s+");
+                // 获得系统总内存，单位是KB，乘以1024转换为Byte
+                initial_memory = Integer.valueOf(arrayOfString[1]).intValue() / 1024;
+            }
+            localBufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return initial_memory;// Byte转换为KB或者MB，内存大小规格化
+    }
+
+    /**
+     * 手机当前可用内存
+     * @param context
+     * @return 手机当前可用内存(兆)
+     */
+    public static long getAvailMemory(Context context) {// 获取android当前可用内存大小
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        if (am != null) {
+            am.getMemoryInfo(mi);
+        }
+        return mi.availMem / 1024 / 1024;
+    }
+
+    public static int getWidthPixels(Context context) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager == null) {
+            return 0;
+        }
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return metrics.widthPixels;
+    }
+
+    public static int getRealHeightPixels(Context context) {
+        WindowManager windowManager = (WindowManager) context.getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        int height = 0;
+        Display display = null;
+        if (windowManager != null) {
+            display = windowManager.getDefaultDisplay();
+        }
+        DisplayMetrics dm = new DisplayMetrics();
+        Class c;
+        try {
+            c = Class.forName("android.view.Display");
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, dm);
+            height = dm.heightPixels;
+        } catch (Exception e) {
+            ToolLogUtils.d(e.toString());
+        }
+        return height;
+    }
+
+    /**
+     * 获取屏幕尺寸
+     * @param context
+     * @return
+     */
+    public static double getScreenInch(Activity context) {
+        double inch = 0;
+        try {
+            int realWidth = 0, realHeight = 0;
+            Display display = context.getWindowManager().getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getMetrics(metrics);
+            if (android.os.Build.VERSION.SDK_INT >= 17) {
+                Point size = new Point();
+                display.getRealSize(size);
+                realWidth = size.x;
+                realHeight = size.y;
+            } else if (android.os.Build.VERSION.SDK_INT < 17
+                    && android.os.Build.VERSION.SDK_INT >= 14) {
+                Method mGetRawH = Display.class.getMethod("getRawHeight");
+                Method mGetRawW = Display.class.getMethod("getRawWidth");
+                realWidth = (Integer) mGetRawW.invoke(display);
+                realHeight = (Integer) mGetRawH.invoke(display);
+            } else {
+                realWidth = metrics.widthPixels;
+                realHeight = metrics.heightPixels;
+            }
+            inch = formatDouble(Math.sqrt((realWidth / metrics.xdpi) * (realWidth / metrics.xdpi)
+                    + (realHeight / metrics.ydpi) * (realHeight / metrics.ydpi)), 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return inch;
+    }
+
+    /**
+     * Double类型保留指定位数的小数，返回double类型（四舍五入）
+     * newScale 为指定的位数
+     */
+    private static double formatDouble(double d, int newScale) {
+        BigDecimal bd = new BigDecimal(d);
+        return bd.setScale(newScale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
 
     /**
      * 获取设备 MAC 地址
