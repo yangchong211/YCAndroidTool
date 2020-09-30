@@ -1,6 +1,7 @@
 package com.yc.toollib.crash;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +11,8 @@ import android.text.TextUtils;
 
 import com.yc.toollib.BuildConfig;
 import com.yc.toollib.R;
+import com.yc.toollib.network.utils.NetDeviceUtils;
+import com.yc.toollib.tool.ToolAppManager;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
 
@@ -50,6 +53,8 @@ public final class CrashFileUtils {
     private static final SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     private static String crashTime;
     private static String crashHead;
+    private static String crashMem;
+    private static String crashThread;
     private static String versionName;
     private static String versionCode;
 
@@ -66,6 +71,8 @@ public final class CrashFileUtils {
      */
     public static void saveCrashInfoInFile(Context context , Throwable ex){
         initCrashHead(context);
+        initPhoneHead(context);
+        initThreadHead(context,ex);
         dumpExceptionToFile(context,ex);
         //saveCrashInfoToFile(context,ex);
     }
@@ -86,31 +93,68 @@ public final class CrashFileUtils {
             e.printStackTrace();
         }
         //组合Android相关信息
-        /*crashHead =
-                "\n崩溃的时间\b\b\b:\b\b" + crashTime +
-                        "\n系统硬件商\b\b\b:\b\b" + Build.MANUFACTURER +
-                        "\n设备的品牌\b\b\b:\b\b" + Build.BRAND +
-                        "\n手机的型号\b\b\b:\b\b" + Build.MODEL +
-                        "\n设备版本号\b\b\b:\b\b" + Build.ID +
-                        "\nCPU的类型\b\b\b:\b\b" + Build.CPU_ABI +
-                        "\n系统的版本\b\b\b:\b\b" + Build.VERSION.RELEASE +
-                        "\n系统版本值\b\b\b:\b\b" + Build.VERSION.SDK_INT +
-                        "\n当前的版本\b\b\b:\b\b" + versionName + "—" + versionCode +
-                        "\n\n";*/
         StringBuilder sb = new StringBuilder();
-        sb.append("\n软件APPLICATION_ID:").append(BuildConfig.APPLICATION_ID);
+        sb.append("\n软件App的Id:").append(BuildConfig.APPLICATION_ID);
         sb.append("\n是否是DEBUG版本:").append(BuildConfig.BUILD_TYPE);
         sb.append("\n崩溃的时间:").append(crashTime);
-        sb.append("\n系统硬件商:").append(Build.MANUFACTURER);
-        sb.append("\n设备的品牌:").append(Build.BRAND);
-        sb.append("\n手机的型号:").append(Build.MODEL);
-        sb.append("\n设备版本号:").append(Build.ID);
-        sb.append("\nCPU的类型:").append(Build.CPU_ABI);
-        sb.append("\n系统的版本:").append(Build.VERSION.RELEASE);
-        sb.append("\n系统版本值:").append(Build.VERSION.SDK_INT);
+        sb.append("\n是否root:").append(NetDeviceUtils.isDeviceRooted());
+        sb.append("\n系统硬件商:").append(NetDeviceUtils.getManufacturer());
+        sb.append("\n设备的品牌:").append(NetDeviceUtils.getBrand());
+        sb.append("\n手机的型号:").append(NetDeviceUtils.getModel());
+        sb.append("\n设备版本号:").append(NetDeviceUtils.getId());
+        sb.append("\nCPU的类型:").append(NetDeviceUtils.getCpuType());
+        sb.append("\n系统的版本:").append(NetDeviceUtils.getSDKVersionName());
+        sb.append("\n系统版本值:").append(NetDeviceUtils.getSDKVersionCode());
         sb.append("\n当前的版本:").append(versionName).append("—").append(versionCode);
         sb.append("\n\n");
         crashHead = sb.toString();
+    }
+
+
+    private static void initPhoneHead(Context context) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("手机内存分析:");
+        final int pid = MemoryUtils.getCurrentPid();
+        MemoryUtils.PssInfo pssInfo = MemoryUtils.getAppPssInfo(context, pid);
+        sb.append("\ndalvik堆大小:").append(MemoryUtils.getFormatSize(pssInfo.dalvikPss));
+        sb.append("\n手机堆大小:").append(MemoryUtils.getFormatSize(pssInfo.nativePss));
+        sb.append("\nPSS内存使用量:").append(MemoryUtils.getFormatSize(pssInfo.totalPss));
+        sb.append("\n其他比例大小:").append(MemoryUtils.getFormatSize(pssInfo.otherPss));
+
+        final MemoryUtils.DalvikHeapMem dalvikHeapMem = MemoryUtils.getAppDalvikHeapMem();
+        sb.append("\n已用内存:").append(MemoryUtils.getFormatSize(dalvikHeapMem.allocated));
+        sb.append("\n最大内存:").append(MemoryUtils.getFormatSize(dalvikHeapMem.maxMem));
+        sb.append("\n空闲内存:").append(MemoryUtils.getFormatSize(dalvikHeapMem.freeMem));
+
+        long appTotalDalvikHeapSize = MemoryUtils.getAppTotalDalvikHeapSize(context);
+        sb.append("\n应用占用内存:").append(MemoryUtils.getFormatSize(appTotalDalvikHeapSize));
+        sb.append("\n\n");
+        crashMem = sb.toString();
+    }
+
+
+    private static void initThreadHead(Context context, Throwable ex) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("该App信息:");
+        String currentProcessName = ProcessUtils.getCurrentProcessName(context);
+        if (currentProcessName!=null){
+            sb.append("\nApp进程名称:").append(currentProcessName);
+        }
+        sb.append("\n进程号:").append(android.os.Process.myPid());
+        sb.append("\n当前线程号:").append(android.os.Process.myTid());
+        sb.append("\n当前调用该进程的用户号:").append(android.os.Process.myUid());
+        sb.append("\n当前线程ID:").append(Thread.currentThread().getId());
+        sb.append("\n当前线程名称:").append(Thread.currentThread().getName());
+        sb.append("\n主线程ID:").append(context.getMainLooper().getThread().getId());
+        sb.append("\n主线程名称:").append(context.getMainLooper().getThread().getName());
+        sb.append("\n主线程优先级:").append(context.getMainLooper().getThread().getPriority());
+        Activity activity = ToolAppManager.getAppManager().currentActivity();
+        if (activity!=null){
+            sb.append("\n当前Activity名称:").append(activity.getComponentName().getClassName());
+            sb.append("\n当前Activity所在栈的ID:").append(activity.getTaskId());
+        }
+        sb.append("\n\n");
+        crashThread = sb.toString();
     }
 
     private static void dumpExceptionToFile(Context context , Throwable ex) {
@@ -147,6 +191,8 @@ public final class CrashFileUtils {
             //print(ex);
             //写入设备信息
             pw.println(crashHead);
+            pw.println(crashMem);
+            pw.println(crashThread);
             //导出异常的调用栈信息
             ex.printStackTrace(pw);
             //异常信息

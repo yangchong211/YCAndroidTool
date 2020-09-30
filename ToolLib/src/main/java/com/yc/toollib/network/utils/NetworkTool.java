@@ -43,6 +43,7 @@ public class NetworkTool {
 
     public void init(Application application){
         this.app = application;
+        setOkHttpHook();
         NetworkManager.get().startMonitor();
     }
 
@@ -87,6 +88,11 @@ public class NetworkTool {
         return localBuild;
     }
 
+    public void setOkHttpHook(){
+        OkHttpHooker.installEventListenerFactory(NetworkListener.get());
+        //OkHttpHooker.installDns(new CustomGlobalDns());
+        OkHttpHooker.installInterceptor(new NetworkInterceptor());
+    }
 
     /**
      * 设置全局悬浮按钮，点击可以去网络列表页面
