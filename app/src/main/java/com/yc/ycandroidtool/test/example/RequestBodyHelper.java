@@ -11,12 +11,13 @@ package com.yc.ycandroidtool.test.example;
 
 
 
+import android.support.annotation.Nullable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.InflaterOutputStream;
 
-import javax.annotation.Nullable;
 
 /**
  * Helper which manages provides computed request sizes as well as transparent decompression.

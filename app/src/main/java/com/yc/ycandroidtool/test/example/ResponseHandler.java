@@ -9,7 +9,6 @@
 
 package com.yc.ycandroidtool.test.example;
 
-import com.facebook.stetho.inspector.network.NetworkEventReporter;
 
 import java.io.IOException;
 

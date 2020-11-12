@@ -9,8 +9,9 @@
 
 package com.yc.ycandroidtool.test.example;
 
-import com.facebook.stetho.common.ExceptionUtil;
-import com.facebook.stetho.common.Util;
+
+import com.yc.toollib.network.stetho.ExceptionUtil;
+import com.yc.toollib.network.stetho.StethoUtils;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -24,6 +25,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
+
+import okhttp3.internal.Util;
 
 /**
  * An {@link OutputStream} filter which decompresses gzip data before it is written to the
@@ -95,7 +98,7 @@ class GunzippingOutputStream extends FilterOutputStream {
     public Void call() throws IOException {
       GZIPInputStream in = new GZIPInputStream(mIn);
       try {
-        Util.copy(in, mOut, new byte[1024]);
+        StethoUtils.copy(in, mOut, new byte[1024]);
       } finally {
         in.close();
         mOut.close();

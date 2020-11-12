@@ -8,10 +8,10 @@
  */
 
 package com.yc.ycandroidtool.test.example;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.annotation.Nullable;
 
 /**
  * Interface that callers must invoke in order to supply data to the Network tab in

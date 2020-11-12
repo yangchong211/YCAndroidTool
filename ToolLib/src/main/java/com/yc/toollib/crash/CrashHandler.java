@@ -33,6 +33,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * 监听
      */
     private CrashListener listener;
+    /**
+     * 是否写崩溃日志到file文件夹，默认开启
+     */
+    private boolean isWriteLog = true;
+    /**
+     * 点击按钮异常后设置处理崩溃而是关闭当前activity
+     */
+    private boolean isFinishActivity = false;
 
 
     /**
@@ -56,6 +64,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return INSTANCE;
     }
 
+    public void setWriteLog(boolean writeLog) {
+        isWriteLog = writeLog;
+    }
+
+    public void setFinishActivity(boolean finishActivity) {
+        isFinishActivity = finishActivity;
+    }
+
     /**
      * 初始化,注册Context对象,
      * 获取系统默认的UncaughtException处理器,
@@ -65,7 +81,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     public void init(Application ctx , CrashListener listener) {
         LifecycleCallback.getInstance().init(ctx);
-        CrashHelper.getInstance().install(ctx);
+        if (isFinishActivity){
+            CrashHelper.getInstance().install(ctx);
+        }
         mContext = ctx;
         this.listener = listener;
         //获取系统默认的UncaughtExceptionHandler
@@ -98,7 +116,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 }
             }
         }
-        CrashHelper.getInstance().setSafe(thread,ex);
+        if (isFinishActivity){
+            CrashHelper.getInstance().setSafe(thread,ex);
+        }
     }
 
     /**
@@ -137,7 +157,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         ex.printStackTrace();
         //收集设备信息
         //保存错误报告文件
-        CrashFileUtils.saveCrashInfoInFile(mContext,ex);
+        if (isWriteLog){
+            CrashFileUtils.saveCrashInfoInFile(mContext,ex);
+        }
         return true;
     }
 

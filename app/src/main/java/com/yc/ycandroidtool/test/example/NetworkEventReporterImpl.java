@@ -10,6 +10,7 @@
 package com.yc.ycandroidtool.test.example;
 
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 
 
 import com.yc.toollib.tool.ToolLogUtils;
@@ -23,8 +24,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Implementation of {@link NetworkEventReporter} which allows callers to inform the Stetho
