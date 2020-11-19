@@ -10,8 +10,8 @@
 package com.yc.ycandroidtool.test.example;
 
 
-import com.yc.toollib.network.stetho.ExceptionUtil;
-import com.yc.toollib.network.stetho.StethoUtils;
+import com.yc.netlib.stetho.ExceptionUtil;
+import com.yc.netlib.stetho.StethoUtils;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -25,8 +25,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
-
-import okhttp3.internal.Util;
 
 /**
  * An {@link OutputStream} filter which decompresses gzip data before it is written to the

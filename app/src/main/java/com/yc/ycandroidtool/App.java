@@ -1,16 +1,12 @@
 package com.yc.ycandroidtool;
 
 import android.app.Application;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import android.util.Printer;
 
 import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
 import com.yc.toollib.crash.CrashTestDemo;
 import com.yc.toollib.crash.CrashToolUtils;
-import com.yc.toollib.network.utils.NetworkTool;
+import com.yc.netlib.utils.NetworkTool;
 
 public class App extends Application {
 

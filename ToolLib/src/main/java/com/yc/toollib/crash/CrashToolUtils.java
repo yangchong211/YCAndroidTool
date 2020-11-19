@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.yc.toollib.tool.ToolAppManager;
 import com.yc.toollib.tool.ToolLogUtils;
@@ -35,7 +37,6 @@ public final class CrashToolUtils {
      * 3.崩溃信息的保存显示，以及是否添加过期清除
      * 4.开闭原则，支持拓展性，后期上报数据到自己服务器【待定】
      * 5.是清空缓存处理还是重启app
-     * 6.
      */
 
     /**
@@ -50,6 +51,8 @@ public final class CrashToolUtils {
      * 杀死进程操作，默认为异常退出
      * System.exit(0)是正常退出程序，而System.exit(1)或者说非0表示非正常退出程序
      * System.exit(1)一般放在catch块中，当捕获到异常，需要停止程序。这个status=1是用来表示这个程序是非正常退出。
+     *
+     * 为何要杀死进程：如果不主动退出进程，重启后会一直黑屏，所以加入主动杀掉进程
      * @param isThrow                           是否是异常退出
      */
     public static void killCurrentProcess(boolean isThrow) {
@@ -125,6 +128,7 @@ public final class CrashToolUtils {
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
         }
+        //为何用PendingIntent，不能Intent
         PendingIntent restartIntent = PendingIntent.getActivity(
                 context.getApplicationContext(), 0, intent,PendingIntent.FLAG_ONE_SHOT);
         //退出程序
@@ -142,6 +146,30 @@ public final class CrashToolUtils {
         ToolLogUtils.w(CrashHandler.TAG, "reStartApp--- 用来重启本APP--3-"+packageName + "--"+clazz);
         Intent intent = new Intent(activity, clazz);
         restartApplicationWithIntent(activity, intent);
+    }
+
+
+    public static void reStartApp4(Context context) {
+        relaunchApp(context,false);
+    }
+
+    /**
+     * 通过包名打开app
+     * @param packageName                           包名
+     */
+    public static void reStartApp5(Context context,final String packageName) {
+        if (packageName==null || packageName.length()==0){
+            return;
+        }
+        if (context==null){
+            return;
+        }
+        Intent launchAppIntent = getLaunchAppIntent(context,packageName);
+        if (launchAppIntent == null) {
+            Log.e("AppUtils", "Didn't exist launcher activity.");
+            return;
+        }
+        context.startActivity(launchAppIntent);
     }
 
     /**
@@ -226,6 +254,62 @@ public final class CrashToolUtils {
             }
         }
         return null;
+    }
+
+
+    /**
+     * Relaunch the application.
+     *
+     * @param context
+     * @param isKillProcess True to kill the process, false otherwise.
+     */
+    public static void relaunchApp(Context context, final boolean isKillProcess) {
+        Intent intent = getLaunchAppIntent(context,context.getApplicationContext().getPackageName(), true);
+        if (intent == null) {
+            Log.e("AppUtils", "Didn't exist launcher activity.");
+            return;
+        }
+        intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+        context.startActivity(intent);
+        if (!isKillProcess) return;
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
+    private static Intent getLaunchAppIntent(Context context, final String packageName) {
+        return getLaunchAppIntent(context,packageName, false);
+    }
+
+    private static Intent getLaunchAppIntent(Context context, final String packageName, final boolean isNewTask) {
+        String launcherActivity = getLauncherActivity(context,packageName);
+        if (!launcherActivity.isEmpty()) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            ComponentName cn = new ComponentName(packageName, launcherActivity);
+            intent.setComponent(cn);
+            return isNewTask ? intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) : intent;
+        }
+        return null;
+    }
+
+    private static String getLauncherActivity(Context context, @NonNull final String pkg) {
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setPackage(pkg);
+        PackageManager pm = context.getApplicationContext().getPackageManager();
+        List<ResolveInfo> info = pm.queryIntentActivities(intent, 0);
+        int size = info.size();
+        if (size == 0) return "";
+        for (int i = 0; i < size; i++) {
+            ResolveInfo ri = info.get(i);
+            if (ri.activityInfo.processName.equals(pkg)) {
+                return ri.activityInfo.name;
+            }
+        }
+        return info.get(0).activityInfo.name;
     }
 
 }

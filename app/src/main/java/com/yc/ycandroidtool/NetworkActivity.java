@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.yc.toollib.network.ui.NetRequestActivity;
+import com.yc.netlib.ui.NetRequestActivity;
 
 import java.io.IOException;
 import java.util.HashMap;

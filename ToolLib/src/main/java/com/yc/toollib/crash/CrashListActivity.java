@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.yc.netlib.utils.NetWorkUtils;
 import com.yc.toollib.R;
-import com.yc.toollib.network.utils.NetWorkUtils;
 import com.yc.toollib.tool.OnItemClickListener;
 import com.yc.toollib.tool.ToolFileUtils;
 

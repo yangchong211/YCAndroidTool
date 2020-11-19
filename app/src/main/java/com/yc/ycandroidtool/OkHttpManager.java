@@ -1,8 +1,8 @@
 package com.yc.ycandroidtool;
 
 
-import com.yc.toollib.network.stetho.NetworkListener;
-import com.yc.toollib.network.stetho.NetworkInterceptor;
+import com.yc.netlib.stetho.NetworkListener;
+import com.yc.netlib.stetho.NetworkInterceptor;
 
 import java.util.Map;
 

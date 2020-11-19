@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.yc.toollib.network.ping.PingView;
+import com.yc.netlib.ping.PingView;
 
 
 public class PingActivity extends AppCompatActivity implements View.OnClickListener {
