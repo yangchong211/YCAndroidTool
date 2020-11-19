@@ -138,6 +138,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
                 NetInfoUrlDialog dialog = new NetInfoUrlDialog(NetworkDetailActivity.this);
                 String curl = mNetworkFeedModel.getCURL();
                 dialog.setData(curl);
+                dialog.setTitle("复制请求链接url");
                 dialog.show();
             }
         });
@@ -158,6 +159,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
                     response = string;
                 }
                 dialog.setData(response);
+                dialog.setTitle("复制请求头数据");
                 dialog.show();
             }
         });
@@ -178,6 +180,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
                     response = string;
                 }
                 dialog.setData(response);
+                dialog.setTitle("复制响应头数据");
                 dialog.show();
             }
         });
@@ -198,6 +201,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
                     string = string.substring(0, 200);
                 }
                 dialog.setData(string);
+                dialog.setTitle("复制响应体body数据");
                 dialog.show();
             }
         });

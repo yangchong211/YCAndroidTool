@@ -70,6 +70,11 @@ public class NetInfoUrlDialog extends Dialog {
     }
 
     private void initData() {
+        if (mConfig.title!=null && mConfig.title.length()>0){
+            tvTitle.setText(mConfig.title);
+        } else {
+            tvTitle.setText("复制下面数据");
+        }
         if (mConfig.content!=null){
             tvContent.setText(mConfig.content);
         } else {
@@ -82,6 +87,11 @@ public class NetInfoUrlDialog extends Dialog {
      */
     public NetInfoUrlDialog setData(String content) {
         mConfig.content = content;
+        return this;
+    }
+
+    public NetInfoUrlDialog setTitle(String title) {
+        mConfig.title = title;
         return this;
     }
 
@@ -110,6 +120,7 @@ public class NetInfoUrlDialog extends Dialog {
         //点击外部是否可以取消
         boolean canCancelOnTouchOutside = true;
         String content;
+        String title;
     }
 
     /**

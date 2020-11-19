@@ -43,7 +43,7 @@
             android:layout_toLeftOf="@+id/tv_delete"
             android:gravity="center"
             android:paddingLeft="20dp"
-            android:paddingRight="15dp"
+            android:paddingRight="5dp"
             android:text="截图"
             android:textColor="@color/crash_white"
             android:textSize="15sp" />
