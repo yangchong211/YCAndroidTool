@@ -61,8 +61,8 @@ public class NetInfoUrlDialog extends Dialog {
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mConfig.url!=null){
-                    NetWorkUtils.copyToClipBoard(mContext, mConfig.url);
+                if (mConfig.content!=null){
+                    NetWorkUtils.copyToClipBoard(mContext, mConfig.content);
                 }
                 dismiss();
             }
@@ -70,8 +70,8 @@ public class NetInfoUrlDialog extends Dialog {
     }
 
     private void initData() {
-        if (mConfig.url!=null){
-            tvContent.setText(mConfig.url);
+        if (mConfig.content!=null){
+            tvContent.setText(mConfig.content);
         } else {
             dismiss();
         }
@@ -80,8 +80,8 @@ public class NetInfoUrlDialog extends Dialog {
     /**
      * url
      */
-    public NetInfoUrlDialog setData(String url) {
-        mConfig.url = url;
+    public NetInfoUrlDialog setData(String content) {
+        mConfig.content = content;
         return this;
     }
 
@@ -109,7 +109,7 @@ public class NetInfoUrlDialog extends Dialog {
         boolean canCancel = true;
         //点击外部是否可以取消
         boolean canCancelOnTouchOutside = true;
-        String url;
+        String content;
     }
 
     /**

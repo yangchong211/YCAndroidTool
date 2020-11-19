@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -36,94 +37,128 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_screenshot"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/tv_delete"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="截图"
+            android:textColor="@color/crash_white"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/tv_delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:paddingLeft="34dp"
-            android:paddingRight="14dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
             android:text="删除"
             android:textColor="@color/crash_white"
             android:textSize="15sp" />
     </RelativeLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="30dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="30dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/DetailTitle"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:text="General"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="#999999"
+                        android:layout_marginLeft="5dp"
+                        android:text="长按或者点击可以复制信息"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_url_content"
+                    android:textColor="#196EB2"
+                    android:background="@drawable/shape_url_content"
+                    style="@style/DetailContent"/>
 
                 <TextView
                     style="@style/DetailTitle"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:text="General"/>
+                    android:text="Request Headers"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:textColor="#999999"
-                    android:layout_marginLeft="5dp"
-                    android:text="长按或者点击可以复制信息"/>
+                    android:id="@+id/tv_request_headers"
+                    android:textColor="#8033b7"
+                    android:background="@drawable/shape_request_headers"
+                    style="@style/DetailContent"/>
+
+                <TextView
+                    style="@style/DetailTitle"
+                    android:text="Response Headers"/>
+
+                <TextView
+                    android:id="@+id/tv_response_headers"
+                    android:textColor="#257ada"
+                    android:background="@drawable/shape_response_headers"
+                    style="@style/DetailContent"/>
+
+                <TextView
+                    style="@style/DetailTitle"
+                    android:text="Response"/>
+
+                <TextView
+                    android:id="@+id/tv_body"
+                    android:textColor="#4dac41"
+                    android:background="@drawable/shape_response"
+                    style="@style/DetailContent"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_url_content"
-                android:textColor="#196EB2"
-                android:background="@drawable/shape_url_content"
-                style="@style/DetailContent"/>
+        </android.support.v4.widget.NestedScrollView>
 
-            <TextView
-                style="@style/DetailTitle"
-                android:text="Request Headers"/>
+        <!--显示截图的图片-->
+        <ImageView
+            android:id="@+id/iv_screen_shot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/tv_request_headers"
-                android:textColor="#8033b7"
-                android:background="@drawable/shape_request_headers"
-                style="@style/DetailContent"/>
+        <include layout="@layout/layout_progress_loading" />
 
-            <TextView
-                style="@style/DetailTitle"
-                android:text="Response Headers"/>
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_response_headers"
-                android:textColor="#257ada"
-                android:background="@drawable/shape_response_headers"
-                style="@style/DetailContent"/>
-
-            <TextView
-                style="@style/DetailTitle"
-                android:text="Response"/>
-
-            <TextView
-                android:id="@+id/tv_body"
-                android:textColor="#4dac41"
-                android:background="@drawable/shape_response"
-                style="@style/DetailContent"/>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>
