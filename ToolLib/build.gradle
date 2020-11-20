@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 20
-        versionName "1.2.0"
+        versionCode 23
+        versionName "1.2.3"
     }
 
     buildTypes {
@@ -52,7 +52,7 @@ group = "cn.yc"
 //发布到JCenter上的项目名字，必须填写
 def libName = "YCAndroidTool"
 // 版本号，下次更新是只需要更改版本号即可
-version = "1.2.2"
+version = "1.2.3"
 
 //生成源文件
 task sourcesJar(type: Jar) {
