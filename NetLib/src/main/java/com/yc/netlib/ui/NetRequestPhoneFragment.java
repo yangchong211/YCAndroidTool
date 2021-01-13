@@ -257,6 +257,12 @@ public class NetRequestPhoneFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         sb.append("wifi信号强度:").append(NetDeviceUtils.getWifiState(application));
         sb.append("\nAndroidID:").append(NetDeviceUtils.getAndroidID(application));
+        boolean wifiProxy = NetWorkUtils.isWifiProxy(application);
+        if (wifiProxy){
+            sb.append("wifi是否代理:").append("已经链接代理");
+        } else {
+            sb.append("wifi是否代理:").append("未链接代理");
+        }
         sb.append("\nMac地址:").append(NetDeviceUtils.getMacAddress(application));
         sb.append("\nWifi名称:").append(NetDeviceUtils.getWifiName(application));
         int wifiIp = NetDeviceUtils.getWifiIp(application);
