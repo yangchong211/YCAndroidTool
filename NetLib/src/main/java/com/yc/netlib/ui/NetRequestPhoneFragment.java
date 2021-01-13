@@ -259,9 +259,9 @@ public class NetRequestPhoneFragment extends Fragment {
         sb.append("\nAndroidID:").append(NetDeviceUtils.getAndroidID(application));
         boolean wifiProxy = NetWorkUtils.isWifiProxy(application);
         if (wifiProxy){
-            sb.append("wifi是否代理:").append("已经链接代理");
+            sb.append("\nwifi是否代理:").append("已经链接代理");
         } else {
-            sb.append("wifi是否代理:").append("未链接代理");
+            sb.append("\nwifi是否代理:").append("未链接代理");
         }
         sb.append("\nMac地址:").append(NetDeviceUtils.getMacAddress(application));
         sb.append("\nWifi名称:").append(NetDeviceUtils.getWifiName(application));
