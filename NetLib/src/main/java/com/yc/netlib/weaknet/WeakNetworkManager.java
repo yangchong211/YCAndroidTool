@@ -12,7 +12,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-
+/**
+ * <pre>
+ *     @author 杨充
+ *     blog  : https://github.com/yangchong211
+ *     time  : 2017/01/30
+ *     desc  : 弱网管理Manager
+ *     revise:
+ * </pre>
+ */
 public class WeakNetworkManager {
 
     public static final int TYPE_OFF_NETWORK = 0;
@@ -35,18 +43,32 @@ public class WeakNetworkManager {
     }
 
     public static WeakNetworkManager get() {
+        //单利模式
         return WeakNetworkManager.Holder.INSTANCE;
     }
 
+    /**
+     * 判断是否可用
+     * @return
+     */
     public boolean isActive() {
         return mIsActive.get();
     }
 
+    /**
+     * 设置是否可用
+     * @param isActive                      是否可用
+     */
     public void setActive(boolean isActive) {
         mIsActive.set(isActive);
     }
 
-
+    /**
+     * 设置相关参数
+     * @param timeOutMillis                 超时时间
+     * @param requestSpeed                  请求限速值
+     * @param responseSpeed                 响应限速值
+     */
     public void setParameter(long timeOutMillis, long requestSpeed, long responseSpeed) {
         if (timeOutMillis > 0) {
             mTimeOutMillis = timeOutMillis;
@@ -55,18 +77,34 @@ public class WeakNetworkManager {
         mResponseSpeed = responseSpeed;
     }
 
+    /**
+     * 设置类型
+     * @param type
+     */
     public void setType(int type) {
         mType = type;
     }
 
+    /**
+     * 获取类型
+     * @return
+     */
     public int getType() {
         return mType;
     }
 
+    /**
+     * 获取网络超时时间
+     * @return
+     */
     public long getTimeOutMillis() {
         return mTimeOutMillis;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getRequestSpeed() {
         return mRequestSpeed;
     }

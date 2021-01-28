@@ -18,7 +18,7 @@ public class WeakNetworkInterceptor implements Interceptor {
 
     @NotNull
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NotNull Chain chain) throws IOException {
         if (!WeakNetworkManager.get().isActive()) {
             Request request = chain.request();
             return chain.proceed(request);

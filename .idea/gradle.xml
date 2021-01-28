@@ -11,6 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ImageLib" />
+            <option value="$PROJECT_DIR$/Kotlin/ImageLibKotlin" />
+            <option value="$PROJECT_DIR$/Kotlin/NetLibKotlin" />
+            <option value="$PROJECT_DIR$/Kotlin/ToolLibKotlin" />
             <option value="$PROJECT_DIR$/NetLib" />
             <option value="$PROJECT_DIR$/OkHttpPlugin" />
             <option value="$PROJECT_DIR$/ToolLib" />
