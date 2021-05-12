@@ -4,11 +4,11 @@ include ':NetLibKotlin'
 include ':ImageLibKotlin'
 include ':NetLib'
 include ':OkHttpPlugin'
-include ':ToolLib'
+include ':CrashLib'
 include ':app'
 project(':app').projectDir = new File('app')
 project(':NetLib').projectDir = new File('NetLib')
-project(':ToolLib').projectDir = new File('ToolLib')
+project(':CrashLib').projectDir = new File('CrashLib')
 project(':ToolLibKotlin').projectDir = new File('Kotlin/ToolLibKotlin')
 project(':NetLibKotlin').projectDir = new File('Kotlin/NetLibKotlin')
 project(':ImageLibKotlin').projectDir = new File('Kotlin/ImageLibKotlin')
