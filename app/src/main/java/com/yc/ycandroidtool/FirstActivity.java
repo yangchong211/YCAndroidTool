@@ -22,7 +22,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.tv_1).setOnClickListener(this);
         findViewById(R.id.tv_2).setOnClickListener(this);
         findViewById(R.id.tv_3).setOnClickListener(this);
-        finish();
     }
 
 

@@ -12,8 +12,6 @@ import com.yc.ycandroidtool.fs.StudentActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    String a = "aa";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_5).setOnClickListener(this);
         findViewById(R.id.tv_6).setOnClickListener(this);
         findViewById(R.id.tv_7).setOnClickListener(this);
+        findViewById(R.id.tv_8).setOnClickListener(this);
     }
 
     @Override
@@ -57,6 +56,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_7:
                 startActivity(new Intent(this, NetworkActivity.class));
+                break;
+            case R.id.tv_8:
+                startActivity(new Intent(this, MemoryActivity.class));
                 break;
         }
     }

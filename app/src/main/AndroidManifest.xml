@@ -39,6 +39,7 @@
         <activity android:name=".fs.StudentActivity"/>
         <activity android:name=".NetworkActivity"/>
         <activity android:name=".PingActivity"/>
+        <activity android:name=".MemoryActivity"/>
 
     </application>
 

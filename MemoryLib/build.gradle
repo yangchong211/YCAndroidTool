@@ -1,21 +1,25 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.yc.ycandroidtool"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 23
+        versionName "1.2.3"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "boolean", "IS_IMAGE_DEBUG", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            buildConfigField "boolean", "IS_IMAGE_DEBUG", "true"
         }
     }
 }
@@ -23,10 +27,5 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-//    implementation project(path: ':ToolLib')
-//    implementation project(path: ':NetLib')
-    implementation 'cn.yc:ToolLib:1.2.3'
-    implementation 'cn.yc:NetLib:1.0.1'
-    implementation project(path: ':MemoryLib')
 }
+
