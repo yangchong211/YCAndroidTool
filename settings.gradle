@@ -13,3 +13,4 @@ project(':ToolLibKotlin').projectDir = new File('Kotlin/ToolLibKotlin')
 project(':NetLibKotlin').projectDir = new File('Kotlin/NetLibKotlin')
 project(':ImageLibKotlin').projectDir = new File('Kotlin/ImageLibKotlin')
 include ':MemoryLib'
+include ':MockLib'
