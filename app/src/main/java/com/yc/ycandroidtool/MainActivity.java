@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.yc.longevitylib.LongevityMonitor;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
@@ -25,6 +26,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_6).setOnClickListener(this);
         findViewById(R.id.tv_7).setOnClickListener(this);
         findViewById(R.id.tv_8).setOnClickListener(this);
+
+        //开启保活sdk
+        LongevityMonitor.onActivityCreate(savedInstanceState);
     }
 
     @Override

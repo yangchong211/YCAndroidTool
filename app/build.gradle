@@ -29,4 +29,5 @@ dependencies {
     implementation 'cn.yc:ToolLib:1.2.3'
     implementation 'cn.yc:NetLib:1.0.1'
     implementation project(path: ':MemoryLib')
+    implementation project(path: ':LongevityLib')
 }

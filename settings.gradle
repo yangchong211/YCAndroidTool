@@ -14,3 +14,5 @@ project(':NetLibKotlin').projectDir = new File('Kotlin/NetLibKotlin')
 project(':ImageLibKotlin').projectDir = new File('Kotlin/ImageLibKotlin')
 include ':MemoryLib'
 include ':MockLib'
+include ':Longevity'
+include ':LongevityLib'
