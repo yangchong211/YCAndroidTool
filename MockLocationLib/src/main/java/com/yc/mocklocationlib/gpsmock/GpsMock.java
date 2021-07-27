@@ -3,6 +3,9 @@ package com.yc.mocklocationlib.gpsmock;
 
 import android.content.Context;
 
+import com.yc.mocklocationlib.gpsmock.bean.LatLng;
+import com.yc.mocklocationlib.gpsmock.utils.GpsMockConfig;
+
 
 public class GpsMock {
 

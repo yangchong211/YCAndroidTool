@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.bean;
 import java.io.Serializable;
 
 public class LatLng implements Serializable {

@@ -82,8 +82,11 @@ public class MockLocationManager {
      */
     public void initService(Context context) {
         mockProviders = new ArrayList<>();
+        //gps
         mockProviders.add(LocationManager.GPS_PROVIDER);
+        //network
         mockProviders.add(LocationManager.NETWORK_PROVIDER);
+        //第一步获取LocationManager
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // 防止程序意外终止，没有停止模拟GPS
         stopMockLocation();

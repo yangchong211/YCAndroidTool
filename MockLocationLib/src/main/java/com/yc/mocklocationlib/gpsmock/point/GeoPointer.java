@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.point;
 
 
 import java.text.DecimalFormat;

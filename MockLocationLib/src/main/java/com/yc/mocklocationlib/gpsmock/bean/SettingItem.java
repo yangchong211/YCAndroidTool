@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.bean;
 
 
 import android.support.annotation.DrawableRes;

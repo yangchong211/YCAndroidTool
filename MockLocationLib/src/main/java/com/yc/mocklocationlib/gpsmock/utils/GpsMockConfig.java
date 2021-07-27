@@ -1,8 +1,8 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.utils;
 
 import android.content.Context;
 
-import com.yc.mocklocationlib.gpsmock.utils.CacheUtils;
+import com.yc.mocklocationlib.gpsmock.bean.LatLng;
 
 public class GpsMockConfig {
     public GpsMockConfig() {

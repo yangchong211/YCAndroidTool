@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.utils;
 
 
 import android.content.Context;

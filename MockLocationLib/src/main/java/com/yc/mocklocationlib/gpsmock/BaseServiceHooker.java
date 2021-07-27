@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 public abstract class BaseServiceHooker implements InvocationHandler {
+
     protected static final String METHOD_ASINTERFACE = "asInterface";
     private Object mOriginService;
 

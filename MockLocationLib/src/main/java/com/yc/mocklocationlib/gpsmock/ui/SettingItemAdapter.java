@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.ui;
 
 
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.yc.mocklocationlib.R;
+import com.yc.mocklocationlib.gpsmock.bean.SettingItem;
 
 public class SettingItemAdapter extends AbsRecyclerAdapter<AbsViewBinder<SettingItem>, SettingItem> {
     private static final String TAG = "SettingItemAdapter";

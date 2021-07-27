@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

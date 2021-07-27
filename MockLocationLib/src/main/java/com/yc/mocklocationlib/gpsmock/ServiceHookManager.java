@@ -4,6 +4,8 @@ package com.yc.mocklocationlib.gpsmock;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
+
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServiceHookManager {
+
     private static final String CLASS_SERVICE_MANAGER = "android.os.ServiceManager";
     private static final String METHOD_GET_SERVICE = "getService";
     private static final String FIELD_S_CACHE = "sCache";

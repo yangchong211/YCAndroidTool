@@ -1,5 +1,8 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.point;
 
+
+import com.yc.mocklocationlib.gpsmock.point.GcjPointer;
+import com.yc.mocklocationlib.gpsmock.point.GeoPointer;
 
 public class WgsPointer extends GeoPointer {
     public WgsPointer(double latitude, double longitude) {

@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.point;
 
 public class GcjPointer extends GeoPointer {
     public GcjPointer(double latitude, double longitude) {
