@@ -1,15 +1,19 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.yc.ycandroidtool"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -18,17 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-//    implementation project(path: ':ToolLib')
-//    implementation project(path: ':NetLib')
-    implementation 'cn.yc:ToolLib:1.2.3'
-    implementation 'cn.yc:NetLib:1.0.1'
-    implementation project(path: ':MemoryLib')
-    implementation project(path: ':LongevityLib')
-    implementation project(path: ':MockLocationLib')
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

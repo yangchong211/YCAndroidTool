@@ -40,6 +40,7 @@
         <activity android:name=".NetworkActivity"/>
         <activity android:name=".PingActivity"/>
         <activity android:name=".MemoryActivity"/>
+        <activity android:name=".location.LocationActivity"/>
 
     </application>
 

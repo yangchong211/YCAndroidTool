@@ -81,4 +81,14 @@
         android:padding="10dp"
         android:text="8.内存测试"/>
 
+
+    <TextView
+        android:id="@+id/tv_9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="9.mock定位坐标"/>
+
 </LinearLayout>

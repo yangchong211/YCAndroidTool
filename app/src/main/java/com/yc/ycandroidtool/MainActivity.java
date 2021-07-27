@@ -10,6 +10,7 @@ import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
 import com.yc.ycandroidtool.fs.StudentActivity;
+import com.yc.ycandroidtool.location.LocationActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -26,6 +27,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_6).setOnClickListener(this);
         findViewById(R.id.tv_7).setOnClickListener(this);
         findViewById(R.id.tv_8).setOnClickListener(this);
+        findViewById(R.id.tv_9).setOnClickListener(this);
 
         //开启保活sdk
         LongevityMonitor.onActivityCreate(savedInstanceState);
@@ -63,6 +65,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_8:
                 startActivity(new Intent(this, MemoryActivity.class));
+                break;
+            case R.id.tv_9:
+                startActivity(new Intent(this, LocationActivity.class));
                 break;
         }
     }
