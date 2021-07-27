@@ -4,8 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_container"
+    <Button
+        android:id="@+id/btn_1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="1.使用工具类获取经纬度"/>
+
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="2.使用mock库修改经纬度"/>
+
+
 </LinearLayout>
