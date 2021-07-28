@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.longevitylib.LongevityMonitorConfig;
+import com.yc.mocklocationlib.gpsmock.ServiceHookManager;
 import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
 import com.yc.toollib.crash.CrashTestDemo;
@@ -23,6 +24,9 @@ public class App extends Application {
         //建议只在debug环境下显示，点击去网络拦截列表页面查看网络请求数据
         NetworkTool.getInstance().setFloat(this);
         init(this);
+
+        //Hook WIFI GPS Telephony系统服务
+        ServiceHookManager.getInstance().install(this);
     }
 
     private void initCrash() {

@@ -70,5 +70,9 @@ public class LocationActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocationUtils.getInstance(LocationActivity.this).removeLocationUpdatesListener();
+    }
 }

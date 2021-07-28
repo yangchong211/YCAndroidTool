@@ -1,8 +1,10 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.hook;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
+
+import com.yc.mocklocationlib.gpsmock.GpsMockManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WifiHooker extends BaseServiceHooker {
+
     public WifiHooker() {
     }
 

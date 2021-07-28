@@ -1,9 +1,10 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.hook;
 
 
 import android.annotation.SuppressLint;
 import android.os.IBinder;
 import android.os.IInterface;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

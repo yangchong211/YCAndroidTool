@@ -18,21 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * <pre>
+ *     @author yangchong
+ *     email  : yangchong211@163.com
+ *     time   : 2020/07/22
+ *     desc   : 定位工具类
+ *     revise :
+ * </pre>
+ */
 public final class LocationUtils {
 
     private volatile static LocationUtils uniqueInstance;
     private LocationManager locationManager;
     private final Context mContext;
-    private static ArrayList<AddressCallback> addressCallbacks = new ArrayList<>();
     private AddressCallback addressCallback;
     private static Location location;
     //是否加载过
     private boolean isInit = false;
-
-
-    public AddressCallback getAddressCallback() {
-        return addressCallback;
-    }
 
     public void setAddressCallback(AddressCallback addressCallback) {
         this.addressCallback = addressCallback;
@@ -58,35 +61,6 @@ public final class LocationUtils {
             }
         }
         return uniqueInstance;
-    }
-
-    /**
-     * 添加回调事件
-     * @param addressCallback
-     */
-    private void addAddressCallback(AddressCallback addressCallback){
-        addressCallbacks.add(addressCallback);
-        if(isInit){
-            showLocation();
-        }
-    }
-
-    /**
-     * 移除回调事件
-     * @param addressCallback
-     */
-    public void removeAddressCallback(AddressCallback addressCallback){
-        if(addressCallbacks.contains(addressCallback)){
-            addressCallbacks.remove(addressCallback);
-        }
-    }
-
-    /**
-     * 清空回调事件
-     */
-    public void clearAddressCallback(){
-        removeLocationUpdatesListener();
-        addressCallbacks.clear();
     }
 
     private void getLocation() {
@@ -133,21 +107,21 @@ public final class LocationUtils {
             getLngAndLatWithNetwork();
         }
         // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
-        //LocationManager 每隔 5 秒钟会检测一下位置的变化情况，当移动距离超过 10 米的时候，
+        // LocationManager 每隔 5 秒钟会检测一下位置的变化情况，当移动距离超过 10 米的时候，
         // 就会调用 LocationListener 的 onLocationChanged() 方法，并把新的位置信息作为参数传入。
-        locationManager.requestLocationUpdates(locationProvider, 5000, 10, locationListener);
+        locationManager.requestLocationUpdates(locationProvider,
+                5000, 10, locationListener);
     }
 
-    //获取经纬度
+    /**
+     * 获取经纬度
+     */
     private void showLocation() {
         if(location == null){
             getLocation();
         }else {
             double latitude = location.getLatitude();//纬度
             double longitude = location.getLongitude();//经度
-//            for(AddressCallback addressCallback:addressCallbacks){
-//                addressCallback.onGetLocation(latitude,longitude);
-//            }
             if(addressCallback != null){
                 addressCallback.onGetLocation(latitude,longitude);
             }
@@ -155,6 +129,11 @@ public final class LocationUtils {
         }
     }
 
+    /**
+     * 通过经纬度获取具体信息
+     * @param latitude                          纬度
+     * @param longitude                         经度
+     */
     private void getAddress(double latitude, double longitude) {
         //Geocoder通过经纬度获取具体信息
         Geocoder gc = new Geocoder(mContext, Locale.getDefault());
@@ -177,16 +156,16 @@ public final class LocationUtils {
                 if(addressCallback != null){
                     addressCallback.onGetAddress(address);
                 }
-//                for(AddressCallback addressCallback:addressCallbacks){
-//                    addressCallback.onGetAddress(address);
-//                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void removeLocationUpdatesListener() {
+    /**
+     * 移除定位
+     */
+    public void removeLocationUpdatesListener() {
         if (locationManager != null) {
             uniqueInstance = null;
             locationManager.removeUpdates(locationListener);
@@ -194,7 +173,7 @@ public final class LocationUtils {
     }
 
 
-    private LocationListener locationListener = new LocationListener() {
+    private final LocationListener locationListener = new LocationListener() {
         // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
         @Override
         public void onStatusChanged(String provider, int status, Bundle arg2) {
@@ -213,21 +192,25 @@ public final class LocationUtils {
         //当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
         @Override
         public void onLocationChanged(Location loc) {
-            System.out.println("==onLocationChanged==");
-//            location = loc;
-//            showLocation();
+            location = loc;
+            showLocation();
+            if (addressCallback!=null){
+                addressCallback.onGetLocation(loc.getLatitude(),loc.getLongitude());
+            }
         }
     };
 
     //从网络获取经纬度
     private void getLngAndLatWithNetwork() {
         //添加用户权限申请判断
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(mContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                5000, 10, locationListener);
         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         showLocation();
     }

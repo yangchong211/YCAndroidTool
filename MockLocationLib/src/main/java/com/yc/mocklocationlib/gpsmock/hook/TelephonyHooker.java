@@ -1,8 +1,10 @@
-package com.yc.mocklocationlib.gpsmock;
+package com.yc.mocklocationlib.gpsmock.hook;
 
 
 import android.content.Context;
 import android.os.IBinder;
+
+import com.yc.mocklocationlib.gpsmock.GpsMockManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
