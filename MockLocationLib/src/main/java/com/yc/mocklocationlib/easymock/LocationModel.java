@@ -1,6 +1,6 @@
-package com.yc.mocklocationlib.testmock;
+package com.yc.mocklocationlib.easymock;
 
-public final class MockLocationModel {
+public final class LocationModel {
 
     private double latitude;
     private double longitude;
@@ -20,4 +20,5 @@ public final class MockLocationModel {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
 }

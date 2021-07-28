@@ -1,10 +1,8 @@
 package com.yc.mocklocationlib.gpsmock.point;
 
 
-import com.yc.mocklocationlib.gpsmock.point.GcjPointer;
-import com.yc.mocklocationlib.gpsmock.point.GeoPointer;
-
 public class WgsPointer extends GeoPointer {
+
     public WgsPointer(double latitude, double longitude) {
         super(latitude, longitude);
     }
@@ -14,7 +12,8 @@ public class WgsPointer extends GeoPointer {
             return new GcjPointer(this.mLatitude, this.mLongitude);
         } else {
             double[] delta = GeoPointer.delta(this.mLatitude, this.mLongitude);
-            return new GcjPointer(this.mLatitude + delta[0], this.mLongitude + delta[1]);
+            return new GcjPointer(this.mLatitude + delta[0],
+                    this.mLongitude + delta[1]);
         }
     }
 }

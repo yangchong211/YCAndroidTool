@@ -44,15 +44,6 @@ public class BaseFragment extends Fragment {
         if (this.mRootView == null) {
             this.mRootView = this.onCreateView(savedInstanceState);
         }
-
-        if (this.interceptTouchEvents() && this.mRootView != null) {
-            this.mRootView.setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    return true;
-                }
-            });
-        }
-
         return this.mRootView;
     }
 
@@ -84,10 +75,6 @@ public class BaseFragment extends Fragment {
         return this.mRootView;
     }
 
-    protected boolean interceptTouchEvents() {
-        return false;
-    }
-
     public int getContainer() {
         if (this.mContainer == 0) {
             this.tryGetContainerId();
@@ -96,17 +83,8 @@ public class BaseFragment extends Fragment {
         return this.mContainer;
     }
 
-    protected boolean onBackPressed() {
-        return false;
-    }
-
-
     public void finish() {
         Objects.requireNonNull(getActivity()).finish();
-    }
-
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
 }

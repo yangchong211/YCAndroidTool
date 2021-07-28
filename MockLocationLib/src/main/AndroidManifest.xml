@@ -15,7 +15,7 @@
 
     <application>
         <activity
-            android:name=".testmock.PermissionUtils$PermissionActivity"
+            android:name=".easymock.PermissionUtils$PermissionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:multiprocess="true"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />

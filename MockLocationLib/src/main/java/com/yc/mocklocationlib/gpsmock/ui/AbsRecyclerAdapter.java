@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yc.mocklocationlib.gpsmock.utils.LogMockGps;
+import com.yc.mocklocationlib.gpsmock.utils.LogMockUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +19,7 @@ public abstract class AbsRecyclerAdapter<T extends AbsViewBinder, V> extends Rec
 
     public AbsRecyclerAdapter(Context context) {
         if (context == null) {
-            LogMockGps.e("AbsRecyclerAdapter", "Context should not be null");
+            LogMockUtils.e("AbsRecyclerAdapter", "Context should not be null");
         } else {
             this.mList = new ArrayList();
             this.mInflater = LayoutInflater.from(context);

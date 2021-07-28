@@ -79,9 +79,9 @@ public final class LocationTools {
     private LocationTools(Context context) {
         mContext = context;
         //gps
-        mockProviders.add(android.location.LocationManager.GPS_PROVIDER);
+        mockProviders.add(LocationManager.GPS_PROVIDER);
         //network
-        mockProviders.add(android.location.LocationManager.NETWORK_PROVIDER);
+        mockProviders.add(LocationManager.NETWORK_PROVIDER);
         getLocation();
     }
 
@@ -114,14 +114,14 @@ public final class LocationTools {
         //provider 是使用的定位服务商，主要有
         //LocationManager.NETWORK_PROVIDER， LocationManager.GPS_PROVIDER， LocationManager.PASSIVE_PROVIDER
         //第一个是网络定位，第二个是GPS定位，第三个是直接取缓存。
-        if (providerList.contains(android.location.LocationManager.GPS_PROVIDER)) {
+        if (providerList.contains(LocationManager.GPS_PROVIDER)) {
             //GPS 定位的精准度比较高，但是非常耗电。
             LocationUtils.log("=====GPS_PROVIDER=====");
-            locationProvider = android.location.LocationManager.GPS_PROVIDER;
-        } else if (providerList.contains(android.location.LocationManager.NETWORK_PROVIDER)) {//Google服务被墙不可用
+            locationProvider = LocationManager.GPS_PROVIDER;
+        } else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {//Google服务被墙不可用
             //网络定位的精准度稍差，但耗电量比较少。
             LocationUtils.log("=====NETWORK_PROVIDER=====");
-            locationProvider = android.location.LocationManager.NETWORK_PROVIDER;
+            locationProvider = LocationManager.NETWORK_PROVIDER;
         } else {
             LocationUtils.log("=====NO_PROVIDER=====");
             // 当没有可用的位置提供器时，弹出Toast提示用户
@@ -318,7 +318,7 @@ public final class LocationTools {
                         , provider.getPowerRequirement()
                         , provider.getAccuracy());
             } else {
-                if (providerStr.equals(android.location.LocationManager.GPS_PROVIDER)) {
+                if (providerStr.equals(LocationManager.GPS_PROVIDER)) {
                     //GPS 定位的精准度比较高
                     locationManager.addTestProvider(
                             providerStr
@@ -326,7 +326,7 @@ public final class LocationTools {
                             false, false,
                             true, true, true
                             , Criteria.POWER_HIGH, Criteria.ACCURACY_FINE);
-                } else if (providerStr.equals(android.location.LocationManager.NETWORK_PROVIDER)) {
+                } else if (providerStr.equals(LocationManager.NETWORK_PROVIDER)) {
                     //走网络定位
                     locationManager.addTestProvider(
                             providerStr
@@ -344,6 +344,7 @@ public final class LocationTools {
                             , Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
                 }
             }
+            //为给定的提供程序设置启用模拟的值。该值将在适当的地方使用提供程序的任何实际值。
             locationManager.setTestProviderEnabled(providerStr, true);
             //AVAILABLE状态表示：当前GPS为可用状态
             locationManager.setTestProviderStatus(providerStr,
@@ -406,6 +407,14 @@ public final class LocationTools {
         requestLocation(LocationManager.NETWORK_PROVIDER);
         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         showLocation();
+    }
+
+    public void start() {
+
+    }
+
+    public void stop(){
+        stopMockLocation();
     }
 
     public interface AddressCallback{

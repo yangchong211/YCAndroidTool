@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
 import com.yc.mocklocationlib.easymock.LocationTools;
-import com.yc.mocklocationlib.gpsmock.GpsMock;
+import com.yc.mocklocationlib.easymock.LocationUtils;
 import com.yc.mocklocationlib.gpsmock.GpsMockFragment;
+import com.yc.mocklocationlib.gpsmock.GpsMockManager;
 import com.yc.toollib.tool.ToolLogUtils;
 import com.yc.ycandroidtool.R;
 
@@ -23,6 +25,9 @@ public class LocationActivity extends AppCompatActivity {
     private TextView tv11;
     private TextView tv12;
     private Button btn2;
+    private EditText longitude;
+    private EditText latitude;
+    private Button btn3;
 
 
     @Override
@@ -30,13 +35,14 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_content_view);
 
+
         btn1 = findViewById(R.id.btn_1);
-
-
         tv11 = findViewById(R.id.tv_1_1);
         tv12 = findViewById(R.id.tv_1_2);
-
         btn2 = findViewById(R.id.btn_2);
+        longitude = findViewById(R.id.longitude);
+        latitude = findViewById(R.id.latitude);
+        btn3 = findViewById(R.id.btn_3);
 
 
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +77,16 @@ public class LocationActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GpsMock.onAppInit(LocationActivity.this);
+                double lat = LocationUtils.parseDouble(latitude.getText().toString());
+                double log = LocationUtils.parseDouble(longitude.getText().toString());
+                //开始开启线程去定位
+                LocationTools.getInstance(LocationActivity.this).start();
+            }
+        });
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GpsMockManager.onAppInit(LocationActivity.this);
                 GpsMockFragment fragment = new GpsMockFragment();
                 FragmentManager fragmentManager = LocationActivity.this.getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -86,6 +101,7 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocationTools.getInstance(LocationActivity.this).stop();
         LocationTools.getInstance(LocationActivity.this).removeLocationUpdatesListener();
     }
 }

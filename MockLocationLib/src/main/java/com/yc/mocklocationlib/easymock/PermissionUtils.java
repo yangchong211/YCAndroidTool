@@ -1,4 +1,4 @@
-package com.yc.mocklocationlib.testmock;
+package com.yc.mocklocationlib.easymock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

@@ -1,6 +1,5 @@
 package com.yc.mocklocationlib.gpsmock;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,6 +47,12 @@ public class GpsMockFragment extends BaseFragment implements
         this.intiSettingList();
         this.initTitleBar();
         this.initMockLocationArea();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MockGpsManager.getInstance(this.getContext()).destroy();
     }
 
     private void initMockLocationArea() {
@@ -106,8 +111,10 @@ public class GpsMockFragment extends BaseFragment implements
                             new Object[]{mLatitude.getText(), mLongitude.getText()}),
                     Toast.LENGTH_LONG).show();
             //开始开启线程去定位
-            MockGpsManager.getInstance(GpsMockFragment.this.getContext())
-                    .start();
+            Toast.makeText(getContext(),"开始开启线程去定位",Toast.LENGTH_LONG).show();
+            MockGpsManager.getInstance(GpsMockFragment.this.getContext()).start();
+        } else {
+            Toast.makeText(getContext(),"请打开mock开关或者设置经纬度",Toast.LENGTH_LONG).show();
         }
     }
 

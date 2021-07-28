@@ -5,14 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
-public class SharedPrefsUtil {
-    private static final String SHARED_PREFS_DORAEMON = "shared_prefs_doraemon";
+public final class SharedPrefsUtil {
 
-    public SharedPrefsUtil() {
+    private SharedPrefsUtil() {
+        
     }
 
     private static SharedPreferences getSharedPrefs(Context context) {
-        return getSharedPrefs(context, "shared_prefs_doraemon");
+        return getSharedPrefs(context, "shared_prefs_mock");
     }
 
     @Nullable
@@ -25,7 +25,7 @@ public class SharedPrefsUtil {
     }
 
     public static void putString(Context context, String key, String value) {
-        putString(context, "shared_prefs_doraemon", key, value);
+        putString(context, "shared_prefs_mock", key, value);
     }
 
     public static void putString(Context context, String table, String key, String value) {
@@ -34,7 +34,7 @@ public class SharedPrefsUtil {
 
     public static void putBoolean(Context context, String key, boolean value) {
         if (context != null) {
-            putBoolean(context, "shared_prefs_doraemon", key, value);
+            putBoolean(context, "shared_prefs_mock", key, value);
         }
     }
 
@@ -47,7 +47,7 @@ public class SharedPrefsUtil {
     }
 
     public static void putInt(Context context, String key, int value) {
-        putInt(context, "shared_prefs_doraemon", key, value);
+        putInt(context, "shared_prefs_mock", key, value);
     }
 
     public static void putInt(Context context, String table, String key, Integer value) {
@@ -63,7 +63,7 @@ public class SharedPrefsUtil {
     }
 
     public static void putFloat(Context context, String key, Float value) {
-        getSharedPrefs(context, "shared_prefs_doraemon").edit().putFloat(key, value).apply();
+        getSharedPrefs(context, "shared_prefs_mock").edit().putFloat(key, value).apply();
     }
 
     public static void putLong(Context context, String table, String key, Long value) {

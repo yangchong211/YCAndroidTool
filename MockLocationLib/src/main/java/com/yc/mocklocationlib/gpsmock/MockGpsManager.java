@@ -11,79 +11,112 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.os.Build.VERSION;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.yc.mocklocationlib.gpsmock.bean.LatLng;
 import com.yc.mocklocationlib.gpsmock.point.GcjPointer;
 import com.yc.mocklocationlib.gpsmock.point.WgsPointer;
 import com.yc.mocklocationlib.gpsmock.utils.GpsMockConfig;
-import com.yc.mocklocationlib.gpsmock.utils.LogMockGps;
+import com.yc.mocklocationlib.gpsmock.utils.LogMockUtils;
 
 import java.util.List;
 
 public final class MockGpsManager {
 
-    private static final String TAG = "MockGpsManager";
     private static float sBearing = 0.0F;
     private static float sSpeed = 3.0F;
     private static MockGpsManager sInstance;
     int triedInit;
     private LocationManager mLocationManager;
-    private Location mLocation = new Location("gps");
+    private final Location mLocation = new Location(LocationManager.GPS_PROVIDER);
     private WgsPointer mLastPoint;
-    private MockGpsManager.OnMessage mOnMessage;
+    /**
+     * 判断mock定位是否可用，尝试三次
+     */
     private boolean mIsAvailable;
-    private Handler mHandlerUI;
-    private Handler mHandlerWorker;
-    private Context mContext;
+    private final Handler mHandlerUI;
+    private final Handler mHandlerWorker;
+    private final Context mContext;
 
+    /**
+     * 初始化判断模拟位置是否可用
+     */
     private final Runnable laterInitRunnable = new Runnable() {
         public void run() {
             mHandlerWorker.removeCallbacks(laterInitRunnable);
-            try {
-                List<String> providers = mLocationManager.getProviders(true);
-                LogMockGps.log("MockGpsManager", "当前可用的 providers 有:" + providers);
-                mLocationManager.addTestProvider("gps", false, false, false, false, true, true, true, 0, 5);
-                mLocationManager.setTestProviderEnabled("gps", true);
-                mIsAvailable = true;
-            } catch (Exception var6) {
-                String msg = "请到开发者选项中打开模拟定位\n初始化失败 tried " + triedInit;
-                onMessage(msg + var6.getMessage());
+            mIsAvailable = getUseMockPositionEnable();
+            if (!mIsAvailable){
                 if (triedInit < 3) {
                     mHandlerUI.postDelayed(laterInitRunnable, (long)(triedInit * 2000));
-                    LogMockGps.log("MockGpsManager", msg);
+                    LogMockUtils.log("MockGpsManager", "postDelayed再试一次");
                 }
-                disableTestProvider();
-                LogMockGps.e("MockGpsManager", msg);
-            } finally {
-                ++triedInit;
             }
         }
     };
 
+    /**
+     * 判断模拟位置是否启用
+     * @return
+     */
+    private boolean getUseMockPositionEnable() {
+        boolean isAvailable;
+        try {
+            List<String> providers = mLocationManager.getProviders(true);
+            LogMockUtils.log("MockGpsManager", "当前可用的 providers 有:" + providers);
+            //创建一个模拟位置提供程序并将其添加到活动提供程序集。
+            mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
+                    false, false, false,
+                    false, true, true,
+                    true, 0, 5);
+            //为给定的提供程序设置启用模拟的值。该值将在适当的地方使用提供程序的任何实际值。
+            mLocationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+            isAvailable = true;
+        } catch (Exception var6) {
+            String msg = "请到开发者选项中打开模拟定位\n初始化失败 tried " + triedInit;
+            disableTestProvider();
+            LogMockUtils.e("MockGpsManager", msg);
+            isAvailable = false;
+        } finally {
+            ++triedInit;
+        }
+        return isAvailable;
+    }
+
+    /**
+     * mock gps 经纬度
+     */
     private final Runnable mockGpsRunnable = new Runnable() {
         public void run() {
             mHandlerWorker.removeCallbacks(mockGpsRunnable);
+            //获取经纬度
             double latitude = GpsMockManager.getInstance().getLatitude();
             double longitude = GpsMockManager.getInstance().getLongitude();
+            //为给定的提供程序设置模拟位置
             teleportWgs(latitude,longitude);
             if (GpsMockManager.getInstance().isMocking()) {
+                LogMockUtils.log("MockGpsManager", "延迟3秒mock经纬度");
                 mHandlerWorker.postDelayed(this, 3000L);
             }
         }
     };
 
+    /**
+     * 创建的时候初始化操作
+     * @param context                           上下文
+     */
     private MockGpsManager(@NonNull Context context) {
-        LogMockGps.log("MockGpsManager", "模拟路测工具初始化");
+        LogMockUtils.log("MockGpsManager", "模拟路测工具初始化");
         HandlerThread handlerThread = new HandlerThread("MockGpsManager Thread");
         handlerThread.start();
-        this.mHandlerWorker = new Handler(handlerThread.getLooper());
-        this.mHandlerUI = new Handler(Looper.getMainLooper());
-        this.mContext = context.getApplicationContext();
+        mHandlerWorker = new Handler(handlerThread.getLooper());
+        mHandlerUI = new Handler(Looper.getMainLooper());
+        mContext = context.getApplicationContext();
         //获取LocationManager对象
-        this.mLocationManager = (LocationManager)
+        mLocationManager = (LocationManager)
                 mContext.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        this.removeTestProvider();
-        this.mHandlerUI.post(this.laterInitRunnable);
+        removeTestProvider();
+        //初始化，主要是判断mock经纬度是否可用
+        mHandlerUI.post(laterInitRunnable);
     }
 
     public static float getBearing() {
@@ -91,7 +124,8 @@ public final class MockGpsManager {
     }
 
     public static void setBearing(float bearing) {
-        LogMockGps.log("MockGpsManager", "⚠️setBearing() called with: bearing = [" + bearing + "]");
+        LogMockUtils.log("MockGpsManager", "⚠️setBearing() called with" +
+                ": bearing = [" + bearing + "]");
         sBearing = bearing;
     }
 
@@ -100,7 +134,8 @@ public final class MockGpsManager {
     }
 
     public static void setSpeed(float speed) {
-        LogMockGps.log("MockGpsManager", "⚠️setSpeed() called with: speed = [" + speed + "]");
+        LogMockUtils.log("MockGpsManager", "⚠️setSpeed() called with" +
+                ": speed = [" + speed + "]");
         sSpeed = speed;
     }
 
@@ -112,21 +147,25 @@ public final class MockGpsManager {
         if (sInstance == null) {
             sInstance = new MockGpsManager(context);
         }
-
         return sInstance;
     }
 
+    /**
+     * 移除test操作
+     */
     public void disableTestProvider() {
         try {
-            if (this.mLocationManager == null) {
-                this.mLocationManager = (LocationManager)this.mContext.getApplicationContext().getSystemService("location");
+            if (mLocationManager == null) {
+                mLocationManager = (LocationManager)
+                        mContext.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
             }
-
-            this.removeTestProvider();
-            this.mLocationManager.setTestProviderEnabled("gps", false);
+            //移除操作
+            removeTestProvider();
+            //为给定的提供程序设置启用模拟的值。该值将在适当的地方使用提供程序的任何实际值。
+            //enabled设置成false表示不可用
+            mLocationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
         } catch (Exception var2) {
         }
-
     }
 
     public boolean changeMockLoc(@NonNull Context context, double latitude, double longitude) {
@@ -143,98 +182,115 @@ public final class MockGpsManager {
         }
     }
 
+    /**
+     * 开始mock轮训
+     */
     public void start() {
         if (GpsMockManager.getInstance().isMocking()) {
+            LogMockUtils.log("MockGpsManager", "start");
             //发送消息
-            this.mHandlerWorker.post(this.mockGpsRunnable);
+            mHandlerWorker.post(mockGpsRunnable);
+        } else {
+            Toast.makeText(mContext,"mock stop",Toast.LENGTH_LONG).show();
         }
     }
 
+    /**
+     * 停止mock
+     */
     public void stop() {
-        this.mHandlerWorker.removeCallbacks(this.mockGpsRunnable);
+        LogMockUtils.log("MockGpsManager", "stop");
+        mHandlerWorker.removeCallbacks(mockGpsRunnable);
     }
 
     @SuppressLint({"DefaultLocale"})
     public void teleportGcj(double lat, double lng) {
         GcjPointer pointer = new GcjPointer(lat, lng);
         WgsPointer pointerWgs = pointer.toWgsPointer();
-        LogMockGps.log("MockGpsManager", String.format("MockGpsManager 请求模拟定位 火星坐标 lat=%g, lng=%g", lat, lng));
+        LogMockUtils.log("MockGpsManager", String.format(
+                "MockGpsManager 请求模拟定位 火星坐标 lat=%g, lng=%g", lat, lng));
         teleportWgs(pointerWgs.getLatitude(), pointerWgs.getLongitude());
     }
 
+    /**
+     * 为给定的提供程序设置模拟位置
+     * @param lat                           纬度
+     * @param lng                           经度
+     */
     public void teleportWgs(double lat, double lng) {
         if (!mIsAvailable) {
-            String msg = "第一、设置我们手机允许模拟定位【系统设置】=》开发者选项=》打开允许模拟位置\n第二、进入位置服务切换成只是用gps确定位置";
-            this.onMessage(msg);
-            LogMockGps.log("MockGpsManager", "⚠️teleportWgs() called with mIsAvailable: lat = [" + lat + "], lng = [" + lng + "], sSpeed = [" + sSpeed + "], bearing = [" + sBearing + "]");
+            String msg = "第一、设置我们手机允许模拟定位【系统设置】=》开发者选项=》" +
+                    "打开允许模拟位置\n第二、进入位置服务切换成只是用gps确定位置";
+            onMessage(msg);
+            LogMockUtils.log("MockGpsManager", "⚠️teleportWgs() called with " +
+                    "mIsAvailable: lat = [" + lat + "], lng = [" + lng + "], sSpeed =" +
+                    " [" + sSpeed + "], bearing = [" + sBearing + "]");
+            Toast.makeText(mContext,msg,Toast.LENGTH_LONG).show();
+            return;
         }
 
         try {
             WgsPointer pointerWgs = new WgsPointer(lat, lng);
-            this.mLastPoint = pointerWgs;
-            this.mLocation.setLatitude(pointerWgs.getLatitude());
-            this.mLocation.setLongitude(pointerWgs.getLongitude());
-            this.mLocation.setAltitude(0.0D);
-            this.mLocation.setAccuracy(5.0F);
-            this.mLocation.setBearing(sBearing);
-            this.mLocation.setSpeed(sSpeed);
-            this.mLocation.setTime(System.currentTimeMillis());
+            mLastPoint = pointerWgs;
+            mLocation.setLatitude(pointerWgs.getLatitude());
+            mLocation.setLongitude(pointerWgs.getLongitude());
+            mLocation.setAltitude(0.0D);
+            mLocation.setAccuracy(5.0F);
+            mLocation.setBearing(sBearing);
+            mLocation.setSpeed(sSpeed);
+            mLocation.setTime(System.currentTimeMillis());
             if (VERSION.SDK_INT >= 17) {
-                this.mLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+                mLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
             }
 
-            LogMockGps.log("MockGpsManager", "⚠️teleportWgs() 中 GPS Provider 可用, " +
+            LogMockUtils.log("MockGpsManager", "⚠️teleportWgs() 中 GPS Provider 可用, " +
                     "设置坐标: lat = [" + lat + "], lng = [" + lng + "], sSpeed = ["
                     + sSpeed + "], bearing = [" + sBearing + "]");
-            this.mLocationManager.setTestProviderLocation("gps", this.mLocation);
+            // 为给定的提供程序设置模拟位置。此位置将用于替代提供者提供的任何实际位置。
+            // location对象必须设置一个最小数量的字段，才能被认为是有效的LocationProvider location
+            mLocationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, mLocation);
         } catch (SecurityException var8) {
             String msg = "请到开发者选项中打开模拟定位";
-            this.onMessage(msg);
+            onMessage(msg);
         } catch (Exception var9) {
-            LogMockGps.log("MockGpsManager", "Provider \"gps\" unknown. 拦截下来了.");
-
+            LogMockUtils.log("MockGpsManager", "Exception Provider \"gps\" unknown. 拦截下来了.");
             try {
-                this.removeTestProvider();
-                this.mLocationManager.addTestProvider("gps", false, false, false, false, true, true, true, 0, 5);
-                this.mLocationManager.setTestProviderEnabled("gps", true);
-                teleportWgs(this.mLastPoint.getLatitude(), this.mLastPoint.getLongitude());
+                removeTestProvider();
+                //创建一个模拟位置提供程序并将其添加到活动提供程序集。
+                mLocationManager.addTestProvider(LocationManager.GPS_PROVIDER,
+                        false, false, false,
+                        false, true, true,
+                        true, 0, 5);
+                //为给定的提供程序设置启用模拟的值。该值将在适当的地方使用提供程序的任何实际值。
+                mLocationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+                //递归调用
+                teleportWgs(mLastPoint.getLatitude(), mLastPoint.getLongitude());
             } catch (Exception var7) {
                 var7.printStackTrace();
-                this.disableTestProvider();
+                disableTestProvider();
             }
         }
-
     }
 
-    public void setListener(MockGpsManager.OnMessage onMessage) {
-        this.mOnMessage = onMessage;
-    }
-
-    public void stopMock() {
-        this.disableTestProvider();
+    public void destroy(){
+        stop();
+        disableTestProvider();
     }
 
     private void removeTestProvider() {
         try {
-            LogMockGps.log("MockGpsManager", "removeTestProvider();" +
+            LogMockUtils.log("MockGpsManager", "removeTestProvider();" +
                     "Removing Test providers");
-            this.mLocationManager.removeTestProvider("gps");
+            mLocationManager.removeTestProvider(LocationManager.GPS_PROVIDER);
         } catch (Exception var2) {
-            LogMockGps.log("MockGpsManager", "⚠️Got exception in removing test  " +
-                    "provider :" + var2.toString());
+            LogMockUtils.log("MockGpsManager", "⚠️Got exception in removing test " +
+                    " Exception" + "provider :" + var2.toString());
         }
-
     }
 
     private void onMessage(String msg) {
-        if (this.mOnMessage != null) {
-            this.mOnMessage.onMessage(msg);
-        }
-
+        LogMockUtils.log("MockGpsManager", msg);
     }
 
-    interface OnMessage {
-        void onMessage(String var1);
-    }
 }
 

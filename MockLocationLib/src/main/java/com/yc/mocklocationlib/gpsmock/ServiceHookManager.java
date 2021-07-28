@@ -1,7 +1,6 @@
 package com.yc.mocklocationlib.gpsmock;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 
@@ -99,7 +98,8 @@ public class ServiceHookManager {
     }
 
     private static class Holder {
-        private static ServiceHookManager INSTANCE = new ServiceHookManager();
+
+        private static final ServiceHookManager INSTANCE = new ServiceHookManager();
 
         private Holder() {
         }

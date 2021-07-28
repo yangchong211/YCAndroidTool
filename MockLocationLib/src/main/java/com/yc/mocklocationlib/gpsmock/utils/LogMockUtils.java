@@ -2,11 +2,11 @@ package com.yc.mocklocationlib.gpsmock.utils;
 
 import android.util.Log;
 
-public final class LogMockGps {
+public final class LogMockUtils {
 
     public static boolean sShowLog = true;
 
-    private LogMockGps() {
+    private LogMockUtils() {
     }
 
     public static void log(String tag, String msg) {

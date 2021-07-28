@@ -22,8 +22,12 @@ public abstract class BaseServiceHooker implements InvocationHandler {
 
     public abstract Map<String, BaseServiceHooker.MethodHandler> getMethodHandlers();
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws InvocationTargetException, IllegalAccessException, NoSuchFieldException {
-        return this.getMethodHandlers().containsKey(method.getName()) ? ((BaseServiceHooker.MethodHandler)this.getMethodHandlers().get(method.getName())).onInvoke(this.mOriginService, proxy, method, args) : method.invoke(this.mOriginService, args);
+    public Object invoke(Object proxy, Method method, Object[] args)
+            throws InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+        return this.getMethodHandlers().containsKey(method.getName())
+                ? ((BaseServiceHooker.MethodHandler)this.getMethodHandlers()
+                    .get(method.getName())).onInvoke(this.mOriginService, proxy, method, args)
+                : method.invoke(this.mOriginService, args);
     }
 
     public void setBinder(IBinder binder) {
@@ -37,10 +41,13 @@ public abstract class BaseServiceHooker implements InvocationHandler {
 
     }
 
-    public abstract void replaceBinder(Context var1, IBinder var2) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException;
+    public abstract void replaceBinder(Context var1, IBinder var2)
+            throws NoSuchFieldException, IllegalAccessException,
+            ClassNotFoundException, NoSuchMethodException, InvocationTargetException;
 
     public interface MethodHandler {
-        Object onInvoke(Object var1, Object var2, Method var3, Object[] var4) throws InvocationTargetException, IllegalAccessException, NoSuchFieldException;
+        Object onInvoke(Object var1, Object var2, Method var3, Object[] var4)
+                throws InvocationTargetException, IllegalAccessException, NoSuchFieldException;
     }
 }
 

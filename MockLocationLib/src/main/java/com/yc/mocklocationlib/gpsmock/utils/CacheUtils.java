@@ -25,7 +25,7 @@ public class CacheUtils {
             try {
                 file.createNewFile();
             } catch (IOException var5) {
-                LogMockGps.e("CacheUtils", var5.toString());
+                LogMockUtils.e("CacheUtils", var5.toString());
             }
         }
 
@@ -50,14 +50,14 @@ public class CacheUtils {
             boolean var4 = true;
             return var4;
         } catch (IOException var19) {
-            LogMockGps.e("CacheUtils", var19.toString());
+            LogMockUtils.e("CacheUtils", var19.toString());
             var5 = false;
         } finally {
             if (oos != null) {
                 try {
                     oos.close();
                 } catch (IOException var18) {
-                    LogMockGps.e("CacheUtils", var18.toString());
+                    LogMockUtils.e("CacheUtils", var18.toString());
                 }
             }
 
@@ -65,7 +65,7 @@ public class CacheUtils {
                 try {
                     fos.close();
                 } catch (IOException var17) {
-                    LogMockGps.e("CacheUtils", var17.toString());
+                    LogMockUtils.e("CacheUtils", var17.toString());
                 }
             }
 
@@ -90,10 +90,10 @@ public class CacheUtils {
                     file.delete();
                 }
 
-                LogMockGps.e("CacheUtils", var21.toString());
+                LogMockUtils.e("CacheUtils", var21.toString());
                 var4 = null;
             } catch (ClassNotFoundException var22) {
-                LogMockGps.e("CacheUtils", var22.toString());
+                LogMockUtils.e("CacheUtils", var22.toString());
                 var4 = null;
                 return (Serializable)var4;
             } finally {
@@ -101,7 +101,7 @@ public class CacheUtils {
                     try {
                         fis.close();
                     } catch (IOException var20) {
-                        LogMockGps.e("CacheUtils", var20.toString());
+                        LogMockUtils.e("CacheUtils", var20.toString());
                     }
                 }
 
@@ -109,7 +109,7 @@ public class CacheUtils {
                     try {
                         ois.close();
                     } catch (IOException var19) {
-                        LogMockGps.e("CacheUtils", var19.toString());
+                        LogMockUtils.e("CacheUtils", var19.toString());
                     }
                 }
 
