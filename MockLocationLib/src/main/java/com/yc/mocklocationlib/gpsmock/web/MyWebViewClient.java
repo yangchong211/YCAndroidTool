@@ -1,6 +1,7 @@
 package com.yc.mocklocationlib.gpsmock.web;
 
 
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.webkit.SslErrorHandler;
@@ -24,6 +25,7 @@ public class MyWebViewClient extends WebViewClient {
     }
 
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        LogMockGps.log("MyWebViewClient" , "shouldOverrideUrlLoading:" + url);
         if (url.startsWith("doraemon://invokeNative")) {
             this.handleInvokeFromJs(url);
             return true;
@@ -50,6 +52,18 @@ public class MyWebViewClient extends WebViewClient {
 
     public interface InvokeListener {
         void onNativeInvoke(String var1);
+    }
+
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        LogMockGps.log("MyWebViewClient" , "onPageStarted:" + url);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        LogMockGps.log("MyWebViewClient" , "onPageFinished:" + url);
     }
 
     @Override

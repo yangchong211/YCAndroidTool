@@ -139,7 +139,7 @@ public final class LocationUtils {
         Geocoder gc = new Geocoder(mContext, Locale.getDefault());
         try {
             List<Address> locationList = gc.getFromLocation(latitude, longitude, 1);
-            if (locationList != null) {
+            if (locationList != null && locationList.size()>0) {
                 Address address = locationList.get(0);
                 String countryName = address.getCountryName();//国家
                 String countryCode = address.getCountryCode();

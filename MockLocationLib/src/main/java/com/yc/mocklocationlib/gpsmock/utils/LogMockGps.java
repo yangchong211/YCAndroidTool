@@ -3,7 +3,8 @@ package com.yc.mocklocationlib.gpsmock.utils;
 import android.util.Log;
 
 public final class LogMockGps {
-    public static boolean sShowLog = false;
+
+    public static boolean sShowLog = true;
 
     private LogMockGps() {
     }

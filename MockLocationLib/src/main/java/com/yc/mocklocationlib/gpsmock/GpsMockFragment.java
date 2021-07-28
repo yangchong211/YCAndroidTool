@@ -163,7 +163,8 @@ public class GpsMockFragment extends BaseFragment implements
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         this.mSettingList.setLayoutManager(layoutManager);
         List<SettingItem> settingItems = new ArrayList();
-        settingItems.add(new SettingItem(R.string.dk_gpsmock_open, GpsMockConfig.isGPSMockOpen(this.getContext())));
+        settingItems.add(new SettingItem(R.string.dk_gpsmock_open,
+                GpsMockConfig.isGPSMockOpen(this.getContext())));
         this.mSettingItemAdapter = new SettingItemAdapter(this.getContext());
         this.mSettingItemAdapter.setData(settingItems);
         this.mSettingItemAdapter.setOnSettingItemSwitchListener(this);
