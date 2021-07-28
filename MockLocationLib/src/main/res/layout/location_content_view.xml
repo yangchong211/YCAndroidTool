@@ -11,12 +11,20 @@
         android:layout_marginTop="10dp"
         android:text="1.使用工具类获取经纬度"/>
 
+    <TextView
+        android:id="@+id/tv_1_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_1_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btn_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="2.使用mock库修改经纬度"/>
 
 

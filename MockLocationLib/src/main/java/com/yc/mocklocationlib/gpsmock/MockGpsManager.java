@@ -57,10 +57,10 @@ public final class MockGpsManager {
             } finally {
                 ++triedInit;
             }
-
         }
     };
-    private Runnable mockGpsRunnable = new Runnable() {
+
+    private final Runnable mockGpsRunnable = new Runnable() {
         public void run() {
             mHandlerWorker.removeCallbacks(mockGpsRunnable);
             double latitude = GpsMockManager.getInstance().getLatitude();
@@ -69,7 +69,6 @@ public final class MockGpsManager {
             if (GpsMockManager.getInstance().isMocking()) {
                 mHandlerWorker.postDelayed(this, 3000L);
             }
-
         }
     };
 
@@ -149,7 +148,6 @@ public final class MockGpsManager {
             //发送消息
             this.mHandlerWorker.post(this.mockGpsRunnable);
         }
-
     }
 
     public void stop() {
@@ -161,11 +159,11 @@ public final class MockGpsManager {
         GcjPointer pointer = new GcjPointer(lat, lng);
         WgsPointer pointerWgs = pointer.toWgsPointer();
         LogMockGps.log("MockGpsManager", String.format("MockGpsManager 请求模拟定位 火星坐标 lat=%g, lng=%g", lat, lng));
-        this.teleportWgs(pointerWgs.getLatitude(), pointerWgs.getLongitude());
+        teleportWgs(pointerWgs.getLatitude(), pointerWgs.getLongitude());
     }
 
     public void teleportWgs(double lat, double lng) {
-        if (!this.mIsAvailable) {
+        if (!mIsAvailable) {
             String msg = "第一、设置我们手机允许模拟定位【系统设置】=》开发者选项=》打开允许模拟位置\n第二、进入位置服务切换成只是用gps确定位置";
             this.onMessage(msg);
             LogMockGps.log("MockGpsManager", "⚠️teleportWgs() called with mIsAvailable: lat = [" + lat + "], lng = [" + lng + "], sSpeed = [" + sSpeed + "], bearing = [" + sBearing + "]");
@@ -199,7 +197,7 @@ public final class MockGpsManager {
                 this.removeTestProvider();
                 this.mLocationManager.addTestProvider("gps", false, false, false, false, true, true, true, 0, 5);
                 this.mLocationManager.setTestProviderEnabled("gps", true);
-                this.teleportWgs(this.mLastPoint.getLatitude(), this.mLastPoint.getLongitude());
+                teleportWgs(this.mLastPoint.getLatitude(), this.mLastPoint.getLongitude());
             } catch (Exception var7) {
                 var7.printStackTrace();
                 this.disableTestProvider();

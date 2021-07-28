@@ -23,16 +23,12 @@ import com.yc.mocklocationlib.gpsmock.ui.BaseFragment;
 import com.yc.mocklocationlib.gpsmock.ui.HomeTitleBar;
 import com.yc.mocklocationlib.gpsmock.ui.SettingItemAdapter;
 import com.yc.mocklocationlib.gpsmock.utils.GpsMockConfig;
-import com.yc.mocklocationlib.gpsmock.web.MyWebView;
-import com.yc.mocklocationlib.gpsmock.web.MyWebViewClient;
-import com.yc.mocklocationlib.gpsmock.web.WebUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GpsMockFragment extends BaseFragment implements
-        SettingItemAdapter.OnSettingItemSwitchListener,
-        MyWebViewClient.InvokeListener {
+        SettingItemAdapter.OnSettingItemSwitchListener {
 
     private static final String TAG = "GpsMockFragment";
     private HomeTitleBar mTitleBar;
@@ -41,33 +37,17 @@ public class GpsMockFragment extends BaseFragment implements
     private EditText mLongitude;
     private EditText mLatitude;
     private TextView mMockLocationBtn;
-    private MyWebView mWebView;
 
     public GpsMockFragment() {
 
     }
 
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.intiSettingList();
         this.initTitleBar();
         this.initMockLocationArea();
-        this.initWebView();
-    }
-
-    private void initWebView() {
-        this.mWebView = (MyWebView)this.findViewById(R.id.web_view);
-        WebUtil.webViewLoadLocalHtml(this.mWebView, "html/map.html");
-        this.mWebView.addInvokeListener(this);
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        this.mWebView.removeInvokeListener(this);
     }
 
     private void initMockLocationArea() {
@@ -91,6 +71,7 @@ public class GpsMockFragment extends BaseFragment implements
         });
         this.mLongitude.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -108,22 +89,26 @@ public class GpsMockFragment extends BaseFragment implements
         this.mMockLocationBtn = (TextView)this.findViewById(R.id.mock_location);
         this.mMockLocationBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (GpsMockFragment.this.checkInput()) {
-                    double latitude = Double.valueOf(GpsMockFragment.this.mLatitude.getText().toString());
-                    double longitude = Double.valueOf(GpsMockFragment.this.mLongitude.getText().toString());
-                    GpsMockManager.getInstance().mockLocation(latitude, longitude);
-                    GpsMockConfig.saveMockLocation(GpsMockFragment.this.getContext(), new LatLng(latitude, longitude));
-                    Toast.makeText(GpsMockFragment.this.getContext(),
-                            GpsMockFragment.this.getString(
-                                    R.string.dk_gps_location_change_toast,
-                                    new Object[]{GpsMockFragment.this.mLatitude.getText(),
-                                            GpsMockFragment.this.mLongitude.getText()}),
-                            Toast.LENGTH_LONG).show();
-                    //开始开启线程去定位
-                    MockGpsManager.getInstance(GpsMockFragment.this.getContext()).start();
-                }
+                start();
             }
         });
+    }
+
+    private void start() {
+        if (GpsMockFragment.this.checkInput()) {
+            double latitude = Double.valueOf(mLatitude.getText().toString());
+            double longitude = Double.valueOf(mLongitude.getText().toString());
+            GpsMockManager.getInstance().mockLocation(latitude, longitude);
+            GpsMockConfig.saveMockLocation(GpsMockFragment.this.getContext(), new LatLng(latitude, longitude));
+            Toast.makeText(GpsMockFragment.this.getContext(),
+                    GpsMockFragment.this.getString(
+                            R.string.dk_gps_location_change_toast,
+                            new Object[]{mLatitude.getText(), mLongitude.getText()}),
+                    Toast.LENGTH_LONG).show();
+            //开始开启线程去定位
+            MockGpsManager.getInstance(GpsMockFragment.this.getContext())
+                    .start();
+        }
     }
 
     private boolean checkInput() {
@@ -190,19 +175,5 @@ public class GpsMockFragment extends BaseFragment implements
         return R.layout.dk_fragment_gps_mock;
     }
 
-    public void onNativeInvoke(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            Uri uri = Uri.parse(url);
-            String lastPath = uri.getLastPathSegment();
-            if ("sendLocation".equals(lastPath)) {
-                String lat = uri.getQueryParameter("lat");
-                String lnt = uri.getQueryParameter("lng");
-                if (!TextUtils.isEmpty(lat) || !TextUtils.isEmpty(lnt)) {
-                    this.mLatitude.setText(lat);
-                    this.mLongitude.setText(lnt);
-                }
-            }
-        }
-    }
 }
 
