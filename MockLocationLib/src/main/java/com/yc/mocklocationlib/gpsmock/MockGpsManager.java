@@ -225,8 +225,8 @@ public final class MockGpsManager {
             LogMockUtils.log("MockGpsManager", "⚠️teleportWgs() called with " +
                     "mIsAvailable: lat = [" + lat + "], lng = [" + lng + "], sSpeed =" +
                     " [" + sSpeed + "], bearing = [" + sBearing + "]");
-            Toast.makeText(mContext,msg,Toast.LENGTH_LONG).show();
-            return;
+            //Toast.makeText(mContext,msg,Toast.LENGTH_LONG).show();
+            //return;
         }
 
         try {
