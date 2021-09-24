@@ -24,9 +24,9 @@ import android.widget.TextView;
 
 import com.yc.netlib.BuildConfig;
 import com.yc.netlib.R;
-import com.yc.netlib.con.ConnectionClassManager;
-import com.yc.netlib.con.ConnectionQuality;
-import com.yc.netlib.con.DeviceBandwidthSampler;
+import com.yc.netlib.connect.ConnectionClassManager;
+import com.yc.netlib.connect.ConnectionQuality;
+import com.yc.netlib.connect.DeviceBandwidthSampler;
 import com.yc.netlib.data.IDataPoolHandleImpl;
 import com.yc.netlib.data.NetworkFeedBean;
 import com.yc.netlib.ping.PingView;
@@ -48,7 +48,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.yc.netlib.con.ConnectionQuality.UNKNOWN;
+import static com.yc.netlib.connect.ConnectionQuality.UNKNOWN;
 
 public class NetRequestPhoneFragment extends Fragment {
 

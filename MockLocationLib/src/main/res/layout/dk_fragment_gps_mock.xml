@@ -5,7 +5,7 @@
     android:background="#FFFFFF"
     android:layout_height="match_parent" >
 
-    <com.yc.mocklocationlib.gpsmock.ui.HomeTitleBar
+    <com.com.yc.mocklocationlib.gpsmock.ui.HomeTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="89dp"/>

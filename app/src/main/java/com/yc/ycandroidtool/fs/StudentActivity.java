@@ -295,7 +295,7 @@ public class StudentActivity extends BaseActivity implements View.OnClickListene
 
     private void test7(){
 //        try {
-//            Sing palyer = (Sing) Class.forName("com.yc.ycandroidtool.fs.Sing").newInstance();
+//            Sing palyer = (Sing) Class.forName("com.com.yc.ycandroidtool.fs.Sing").newInstance();
 //            palyer.start();
 //        } catch (Exception e) {
 //            e.printStackTrace();

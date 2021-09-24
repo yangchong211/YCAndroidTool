@@ -11,12 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AnotherMonitor" />
+            <option value="$PROJECT_DIR$/AnrToolLib" />
             <option value="$PROJECT_DIR$/CrashToolLib" />
-            <option value="$PROJECT_DIR$/ImageLib" />
-            <option value="$PROJECT_DIR$/Kotlin/ImageLibKotlin" />
-            <option value="$PROJECT_DIR$/Kotlin/NetLibKotlin" />
-            <option value="$PROJECT_DIR$/Kotlin/ToolLibKotlin" />
-            <option value="$PROJECT_DIR$/Longevity" />
+            <option value="$PROJECT_DIR$/ImageMonitorLib" />
             <option value="$PROJECT_DIR$/LongevityLib" />
             <option value="$PROJECT_DIR$/MemoryLib" />
             <option value="$PROJECT_DIR$/MockLocationLib" />

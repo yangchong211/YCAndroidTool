@@ -12,7 +12,7 @@ import org.objectweb.asm.commons.LocalVariablesSorter;
 public final class OkHttpMethodAdapter extends LocalVariablesSorter implements Opcodes {
 
     private static final LoggerWrapper logger = LoggerWrapper.getLogger(OkHttpMethodAdapter.class);
-    private static final String pathName = "com/yc/toollib/network/utils/OkHttpHooker";
+    private static final String pathName = "com/com.yc/toollib/network/utils/OkHttpHooker";
 
     private boolean weaveEventListener;
 

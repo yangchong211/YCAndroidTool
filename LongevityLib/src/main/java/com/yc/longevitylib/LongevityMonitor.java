@@ -38,7 +38,7 @@ public class LongevityMonitor {
     private static long sLastLiveTimeStamp;
     private static int sLastPid;
     private static int sLastScreenState;
-    public static int sCurrentScreenState = 1;
+    public static int sCurrentScreenState = LongevityConstant.LONGEVITY_SCREEN_STATE_ON;
     private static Bundle sSavedInstanceState;
     private static final Runnable sWatchDogRunnable = new Runnable() {
         public void run() {
@@ -48,13 +48,21 @@ public class LongevityMonitor {
                 long periodMillis = currentTimestamp - LongevityMonitor.sLastLiveTimeStamp;
                 if (periodMillis > WATCH_DOG_PERIOD_THRESHOLD && periodMillis < WATCH_DOG_INTERVAL_UP_LIMIT) {
                     if (currentPid == LongevityMonitor.sLastPid) {
-                        LongevityMonitor.report("longevity_monitor_event_sleep", "longevity_monitor_event_sleep_type_sleep", periodMillis, currentTimestamp, LongevityMonitor.sLastLiveTimeStamp);
+                        LongevityMonitor.report(LongevityConstant.LONGEVITY_MONITOR_EVENT_SLEEP,
+                                LongevityConstant.LONGEVITY_MONITOR_EVENT_SLEEP_TYPE_SLEEP,
+                                periodMillis, currentTimestamp, LongevityMonitor.sLastLiveTimeStamp);
                     } else if (LongevityMonitor.sSavedInstanceState != null) {
-                        LongevityMonitor.report("longevity_monitor_event_system_kill", "", periodMillis, currentTimestamp, LongevityMonitor.sLastLiveTimeStamp);
-                    } else if (LongevityMonitor.sLastScreenState == 2) {
-                        LongevityMonitor.report("longevity_monitor_event_sleep", "longevity_monitor_event_sleep_type_kill", periodMillis, currentTimestamp, LongevityMonitor.sLastLiveTimeStamp);
+                        LongevityMonitor.report(LongevityConstant.LONGEVITY_MONITOR_EVENT_SYSTEM_KILL,
+                                "", periodMillis, currentTimestamp,
+                                LongevityMonitor.sLastLiveTimeStamp);
+                    } else if (LongevityMonitor.sLastScreenState == LongevityConstant.LONGEVITY_SCREEN_STATE_OFF) {
+                        LongevityMonitor.report(
+                                LongevityConstant.LONGEVITY_MONITOR_EVENT_SLEEP,
+                                LongevityConstant.LONGEVITY_MONITOR_EVENT_SLEEP_TYPE_KILL,
+                                periodMillis, currentTimestamp, LongevityMonitor.sLastLiveTimeStamp);
                     } else {
-                        LongevityMonitor.sLogger.log("longevity_monitor_event_user_kill " + periodMillis);
+                        LongevityMonitor.sLogger.log(
+                                LongevityConstant.LONGEVITY_MONITOR_EVENT_USER_KILL + periodMillis);
                     }
                 }
 
@@ -63,9 +71,9 @@ public class LongevityMonitor {
                 }
 
                 Editor editor = LongevityMonitor.sSP.edit();
-                editor.putLong("ts", currentTimestamp);
-                editor.putInt("pid", currentPid);
-                editor.putInt("screen_state", LongevityMonitor.sCurrentScreenState);
+                editor.putLong(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_TS, currentTimestamp);
+                editor.putInt(LongevityConstant.LONGEVITY_MONITOR_KEY_PID, currentPid);
+                editor.putInt(LongevityConstant.LONGEVITY_MONITOR_KEY_SCREEN_STATE, LongevityMonitor.sCurrentScreenState);
                 editor.apply();
                 LongevityMonitor.sLastLiveTimeStamp = currentTimestamp;
                 LongevityMonitor.sLastPid = currentPid;
@@ -93,10 +101,10 @@ public class LongevityMonitor {
         if (sToggle.isOpen()) {
             sLogger.log("savedInstanceState is null ?\t" + (savedInstanceState == null));
             sSavedInstanceState = savedInstanceState;
-            sSP = sApplication.getSharedPreferences("longevity_monitor", 0);
-            sLastLiveTimeStamp = sSP.getLong("ts", TIMESTAMP_NO_VALUE);
-            sLastPid = sSP.getInt("pid", PID_NO_VALUE);
-            sLastScreenState = sSP.getInt("screen_state", 3);
+            sSP = sApplication.getSharedPreferences(LongevityConstant.LONGEVITY_MONITOR_NAME, 0);
+            sLastLiveTimeStamp = sSP.getLong(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_TS, TIMESTAMP_NO_VALUE);
+            sLastPid = sSP.getInt(LongevityConstant.LONGEVITY_MONITOR_KEY_PID, PID_NO_VALUE);
+            sLastScreenState = sSP.getInt(LongevityConstant.LONGEVITY_MONITOR_KEY_SCREEN_STATE, LongevityConstant.LONGEVITY_SCREEN_STATE_NO_VALUE);
             if (sLastLiveTimeStamp == TIMESTAMP_NO_VALUE || sLastPid == PID_NO_VALUE) {
                 sLastLiveTimeStamp = System.currentTimeMillis();
                 sLastPid = getCurrentPid();
@@ -119,11 +127,11 @@ public class LongevityMonitor {
     private static void report(String eventName, String eventType, long periodMillis
             , long currentTimestamp, long lastTimestamp) {
         HashMap<String, String> params = new HashMap();
-        params.put("event", eventName);
-        params.put("type", TextUtils.isEmpty(eventType) ? "" : eventType);
-        params.put("period", String.valueOf(periodMillis));
-        params.put("ts", String.valueOf(currentTimestamp));
-        params.put("ts_last", String.valueOf(lastTimestamp));
+        params.put(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_EVENT, eventName);
+        params.put(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_TYPE, TextUtils.isEmpty(eventType) ? "" : eventType);
+        params.put(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_PERIOD, String.valueOf(periodMillis));
+        params.put(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_TS, String.valueOf(currentTimestamp));
+        params.put(LongevityConstant.LONGEVITY_MONITOR_PARAM_FIELD_TS_LAST, String.valueOf(lastTimestamp));
         sEventTrack.onEvent(params);
         sLogger.log(params.toString());
     }

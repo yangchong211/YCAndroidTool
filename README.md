@@ -191,9 +191,9 @@
 - 如何引入该库
     ``` java
     //崩溃重启库
-    implementation 'cn.yc:ToolLib:1.2.3'
+    implementation 'cn.com.yc:ToolLib:1.2.3'
     //网络拦截日志库
-    implementation 'cn.yc:NetLib:1.0.1'
+    implementation 'cn.com.yc:NetLib:1.0.1'
     //GitHub代码
     https://github.com/yangchong211/YCAndroidTool
     ```
@@ -427,11 +427,11 @@
 
 ### 09.其他内容说明
 - 崩溃重启和异常库混淆
-    - -keep class com.yc.toollib.** { *; }
-    - -keepnames class com.yc.toollib.** { *; }
+    - -keep class com.com.yc.toollib.** { *; }
+    - -keepnames class com.com.yc.toollib.** { *; }
 - 网络拦截日志库混淆
-    - -keep class com.yc.netlib.** { *; }
-    - -keepnames class com.yc.netlib.** { *; }
+    - -keep class com.com.yc.netlib.** { *; }
+    - -keepnames class com.com.yc.netlib.** { *; }
 - 该库笔记介绍
     - [崩溃原理深度探索](https://github.com/yangchong211/YCAndroidTool/blob/master/read/02.%E5%B4%A9%E6%BA%83%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2.md)
     - [常驻应用崩溃后处理](https://github.com/yangchong211/YCAndroidTool/blob/master/read/03.%E5%B8%B8%E9%A9%BB%E5%BA%94%E7%94%A8%E5%B4%A9%E6%BA%83%E5%90%8E%E5%A4%84%E7%90%86.md)
