@@ -33,6 +33,9 @@ public class LongevityMonitor {
     private static LongevityMonitorConfig.ILongevityMonitorApolloToggle sToggle;
     private static LongevityMonitorConfig.ILongevityMonitorOmegaEventTrack sEventTrack;
     public static LongevityMonitorConfig.ILongevityMonitorLogger sLogger;
+    /**
+     * 获取handler对象，并且指定main主线程
+     */
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
     private static SharedPreferences sSP;
     private static long sLastLiveTimeStamp;

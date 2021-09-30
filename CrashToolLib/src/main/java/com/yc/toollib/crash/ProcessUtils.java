@@ -19,10 +19,12 @@ import android.support.annotation.RequiresPermission;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -296,5 +298,66 @@ public final class ProcessUtils {
     public static boolean isMainProcess(Context context) {
         return context.getPackageName().equals(getCurrentProcessName(context));
     }
+
+    public static boolean isRunningInForeground(Context context) {
+        return Build.VERSION.SDK_INT >= 21 ? ProcessUtils.LollipopRunningProcessCompat.isRunningInForeground(context) : ProcessUtils.RunningProcessCompat.isRunningInForeground(context);
+    }
+
+
+    private static final class LollipopRunningProcessCompat extends ProcessUtils.RunningProcessCompat {
+        private LollipopRunningProcessCompat() {
+
+        }
+
+        public static boolean isRunningInForeground(Context context) {
+            try {
+                Field processStateField = ActivityManager.RunningAppProcessInfo.class.getDeclaredField("processState");
+                ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+                if (null == processInfos || processInfos.isEmpty()) {
+                    return false;
+                }
+
+                String packageName = context.getPackageName();
+                Iterator var5 = processInfos.iterator();
+
+                while(var5.hasNext()) {
+                    ActivityManager.RunningAppProcessInfo rapi = (ActivityManager.RunningAppProcessInfo)var5.next();
+                    if (rapi.importance == 100 && rapi.importanceReasonCode == 0) {
+                        try {
+                            Integer processState = processStateField.getInt(rapi);
+                            if (processState != null && processState == 2 && rapi.pkgList != null && rapi.pkgList.length > 0) {
+                                return rapi.pkgList[0].equals(packageName);
+                            }
+                        } catch (Exception var8) {
+                        }
+                    }
+                }
+            } catch (Exception var9) {
+            }
+
+            return false;
+        }
+    }
+
+
+    private static class RunningProcessCompat {
+
+        private RunningProcessCompat() {
+
+        }
+
+        public static boolean isRunningInForeground(Context context) {
+            try {
+                ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+                return null != tasks && !tasks.isEmpty() ?
+                        ((ActivityManager.RunningTaskInfo)tasks.get(0)).topActivity.getPackageName().equals(context.getPackageName()) : false;
+            } catch (Exception var3) {
+                return false;
+            }
+        }
+    }
+
 
 }

@@ -2,6 +2,8 @@ package com.yc.longevitylib;
 
 
 import android.app.Application;
+import android.util.Log;
+
 import java.util.HashMap;
 
 /**
@@ -46,6 +48,7 @@ public class LongevityMonitorConfig {
         } else {
             this.mLogger = new LongevityMonitorConfig.ILongevityMonitorLogger() {
                 public void log(String log) {
+                    Log.i("LongevityMonitor",log);
                 }
             };
         }
