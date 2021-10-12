@@ -186,9 +186,15 @@ public class ToolAppManager {
             finishAllActivity();
             // 杀死该应用进程
             android.os.Process.killProcess(android.os.Process.myPid());
+            //System.exit(0)是将你的整个虚拟机里的内容都停掉了 ，而dispose()只是关闭这个窗口，但是并没有停止整个application exit() 。
+            //System.exit(0)是正常退出程序，而System.exit(1)或者说非0表示非正常退出程序
             System.exit(0);
+            //System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            //System.exit(1)一般放在catch块中，当捕获到异常，需要停止程序，我们使用System.exit(1)。
+            //这个status=1是用来表示这个程序是非正常退出。
+            System.exit(1);
         }
     }
 
