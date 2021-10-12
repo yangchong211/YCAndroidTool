@@ -1,31 +1,32 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
+apply from: rootProject.projectDir.absolutePath + "/app.gradle"
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
-
+    compileSdkVersion project.ext.androidCompileSdkVersion
+    buildToolsVersion project.ext.androidBuildToolsVersion
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 23
-        versionName "1.2.3"
+        minSdkVersion project.ext.androidMinSdkVersion
+        targetSdkVersion project.ext.androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            buildConfigField "boolean", "IS_IMAGE_DEBUG", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-            minifyEnabled false
-            buildConfigField "boolean", "IS_IMAGE_DEBUG", "true"
-        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project.ext.AppDependencies['appcompat']
+    implementation project.ext.AppDependencies['annotation']
 }
-

@@ -1,0 +1,26 @@
+ext {
+
+    androidBuildToolsVersion = "29.0.0"
+    androidMinSdkVersion = 17
+    androidTargetSdkVersion = 29
+    androidCompileSdkVersion = 29
+
+
+    constraintLayoutVersion = '1.0.0'
+    appcompatVersion = '1.2.0'
+    annotationVersion = '1.1.0'
+    cardviewVersion = '1.0.0'
+    mediaVersion = '1.0.1'
+    swiperefreshlayoutVersion = '1.0.0'
+
+    /**主app-start*/
+    AppDependencies = [
+            coordinatorlayout    : "androidx.coordinatorlayout:coordinatorlayout:${constraintLayoutVersion}",
+            appcompat           : "androidx.appcompat:appcompat:${appcompatVersion}",
+            annotation          : "androidx.annotation:annotation:${annotationVersion}",
+            cardview            : "androidx.cardview:cardview:${cardviewVersion}",
+            media               : "androidx.media:media:${mediaVersion}",
+            swiperefreshlayout  : "androidx.swiperefreshlayout:swiperefreshlayout:${swiperefreshlayoutVersion}",
+    ]
+
+}

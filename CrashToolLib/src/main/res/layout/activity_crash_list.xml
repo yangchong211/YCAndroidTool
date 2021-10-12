@@ -60,7 +60,7 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.core.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -71,7 +71,7 @@
             android:layout_height="match_parent"
             android:background="@color/crash_white" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.core.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.Spannable;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;

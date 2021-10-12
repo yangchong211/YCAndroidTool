@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Picture;
 import android.graphics.Rect;
-import android.support.design.widget.CoordinatorLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 
 /**
  * <pre>

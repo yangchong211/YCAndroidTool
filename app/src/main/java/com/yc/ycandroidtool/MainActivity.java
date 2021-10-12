@@ -10,7 +10,6 @@ import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
 import com.yc.ycandroidtool.fs.StudentActivity;
-import com.yc.ycandroidtool.location.LocationActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -65,9 +64,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tv_8:
                 startActivity(new Intent(this, MemoryActivity.class));
-                break;
-            case R.id.tv_9:
-                startActivity(new Intent(this, LocationActivity.class));
                 break;
         }
     }
