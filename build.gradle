@@ -31,3 +31,16 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+ext {
+    minSdkVersion = 16
+    compileSdkVersion = 30
+    targetSdkVersion = 30
+    buildToolsVersion = '30.0.2'
+    javaVersion = JavaVersion.VERSION_1_8
+    ndkVersion = "21.3.6528147"
+    cmakeVersion = "3.10.2"
+    abiFilters = "armeabi-v7a,arm64-v8a,x86,x86_64"
+    useASAN = false
+}

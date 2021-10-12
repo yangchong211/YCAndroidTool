@@ -17,7 +17,6 @@
             <option value="$PROJECT_DIR$/ImageMonitorLib" />
             <option value="$PROJECT_DIR$/LongevityLib" />
             <option value="$PROJECT_DIR$/MemoryLib" />
-            <option value="$PROJECT_DIR$/MockLocationLib" />
             <option value="$PROJECT_DIR$/MockNetLib" />
             <option value="$PROJECT_DIR$/NetWorkLib" />
             <option value="$PROJECT_DIR$/OkHttpPlugin" />
