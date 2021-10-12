@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/AnrToolLib" />
             <option value="$PROJECT_DIR$/CrashToolLib" />
             <option value="$PROJECT_DIR$/ImageMonitorLib" />
+            <option value="$PROJECT_DIR$/KeepAliveLib" />
             <option value="$PROJECT_DIR$/LongevityLib" />
             <option value="$PROJECT_DIR$/MemoryLib" />
             <option value="$PROJECT_DIR$/MockNetLib" />
