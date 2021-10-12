@@ -121,7 +121,7 @@
                 android:text="HTTP方法"
                 android:textSize="14sp" />
 
-            <com.com.yc.netlib.ui.NetBarChart
+            <com.yc.netlib.ui.NetBarChart
                 android:id="@+id/network_bar_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -142,7 +142,7 @@
                 android:text="数据类型"
                 android:textSize="14sp" />
 
-            <com.com.yc.netlib.ui.NetPieChart
+            <com.yc.netlib.ui.NetPieChart
                 android:id="@+id/network_pier_chart"
                 android:layout_width="150dp"
                 android:layout_height="150dp"

@@ -37,7 +37,7 @@
             android:text="http://www.xxxx.comwww.xxxx.comwww.xxxx.com"
             android:layout_marginBottom="5dp"/>
 
-        <com.com.yc.netlib.ui.NetTraceView
+        <com.yc.netlib.ui.NetTraceView
             android:id="@+id/ntv_trace_detail_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
