@@ -4,9 +4,10 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.memorylib.AppMemoryUtils;
 import com.yc.netlib.utils.NetDeviceUtils;

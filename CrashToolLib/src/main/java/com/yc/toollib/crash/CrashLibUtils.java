@@ -8,7 +8,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
 import androidx.core.content.FileProvider;
 import android.text.Spannable;
 import android.text.style.AbsoluteSizeSpan;

@@ -1,13 +1,14 @@
 package com.yc.netlib.ui;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.yc.netlib.R;
 import com.yc.netlib.utils.NetWorkUtils;

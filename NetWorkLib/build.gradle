@@ -30,6 +30,8 @@ dependencies {
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
     implementation project.ext.AppDependencies['media']
+    implementation project.ext.AppDependencies['recyclerview']
+    implementation project.ext.AppDependencies['material']
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
 
     //implementation 'com.android.support:appcompat-v7:28.0.0'

@@ -2,10 +2,12 @@ package com.yc.netlib.connect;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.yc.netlib.R;
 import java.io.IOException;
 import java.io.InputStream;

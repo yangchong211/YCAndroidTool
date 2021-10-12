@@ -25,10 +25,10 @@ dependencies {
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-    implementation project(path: ':CrashToolLib')
-    implementation project(path: ':NetWorkLib')
 //    implementation 'cn.com.yc:ToolLib:1.2.3'
 //    implementation 'cn.com.yc:NetLib:1.0.1'
+    implementation project(path: ':CrashToolLib')
+    implementation project(path: ':NetWorkLib')
     implementation project(path: ':MemoryLib')
     implementation project(path: ':LongevityLib')
 //    implementation project(path: ':AnotherMonitor')

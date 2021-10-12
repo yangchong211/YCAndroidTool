@@ -1,23 +1,25 @@
 package com.yc.toollib.crash;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.yc.netlib.utils.NetWorkUtils;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.yc.toollib.R;
 import com.yc.toollib.tool.OnItemClickListener;
 import com.yc.toollib.tool.ToolFileUtils;
@@ -218,8 +220,19 @@ public class CrashListActivity extends AppCompatActivity implements View.OnClick
         } else if (i == R.id.ll_back) {
             finish();
         } else if (i == R.id.tv_about){
-            NetWorkUtils.openLink(this, "https://github.com/yangchong211/YCAndroidTool");
+            openLink(this, "https://github.com/yangchong211/YCAndroidTool");
         }
+    }
+
+    /**
+     * 使用外部浏览器打开链接
+     * @param context
+     * @param content
+     */
+    public static void openLink(Context context, String content) {
+        Uri issuesUrl = Uri.parse(content);
+        Intent intent = new Intent(Intent.ACTION_VIEW, issuesUrl);
+        context.startActivity(intent);
     }
 
     private void deleteAll() {

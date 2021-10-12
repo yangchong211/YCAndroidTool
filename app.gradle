@@ -10,7 +10,9 @@ ext {
     appcompatVersion = '1.2.0'
     annotationVersion = '1.1.0'
     cardviewVersion = '1.0.0'
+    recyclerviewVersion = '1.0.0'
     mediaVersion = '1.0.1'
+    materialVersion = '1.0.0'
     swiperefreshlayoutVersion = '1.0.0'
 
     /**主app-start*/
@@ -19,7 +21,9 @@ ext {
             appcompat           : "androidx.appcompat:appcompat:${appcompatVersion}",
             annotation          : "androidx.annotation:annotation:${annotationVersion}",
             cardview            : "androidx.cardview:cardview:${cardviewVersion}",
+            recyclerview        : "androidx.recyclerview:recyclerview:${recyclerviewVersion}",
             media               : "androidx.media:media:${mediaVersion}",
+            material               : "com.google.android.material:material:${materialVersion}",
             swiperefreshlayout  : "androidx.swiperefreshlayout:swiperefreshlayout:${swiperefreshlayoutVersion}",
     ]
 

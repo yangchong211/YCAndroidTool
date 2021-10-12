@@ -33,11 +33,12 @@ dependencies {
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
     implementation project.ext.AppDependencies['media']
+    implementation project.ext.AppDependencies['swiperefreshlayout']
     implementation project.ext.AppDependencies['coordinatorlayout']
+    implementation project.ext.AppDependencies['recyclerview']
     //参考：https://github.com/tiann/FreeReflection
     //是一个允许你在Android P(包括Q和R)之上不受任何限制地使用反射的库。
     implementation 'me.weishu:free_reflection:1.2.0'
-//    implementation project(path: ':NetWorkLib')
 }
 
 

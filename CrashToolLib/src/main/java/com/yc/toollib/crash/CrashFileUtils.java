@@ -9,9 +9,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.yc.netlib.utils.NetDeviceUtils;
 import com.yc.toollib.BuildConfig;
 import com.yc.toollib.R;
+import com.yc.toollib.tool.NetDeviceUtils;
 import com.yc.toollib.tool.ToolAppManager;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;

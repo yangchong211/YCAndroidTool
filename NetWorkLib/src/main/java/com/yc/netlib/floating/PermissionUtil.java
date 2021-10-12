@@ -6,10 +6,11 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.WindowManager;
 
+
+import androidx.annotation.RequiresApi;
 
 import java.lang.reflect.Method;
 
@@ -46,8 +47,14 @@ class PermissionUtil {
      */
     static boolean hasPermissionBelowMarshmallow(Context context) {
         try {
-            AppOpsManager manager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-            Method dispatchMethod = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
+            AppOpsManager manager = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                manager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            }
+            Method dispatchMethod = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                dispatchMethod = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
+            }
             //AppOpsManager.OP_SYSTEM_ALERT_WINDOW = 24
             return AppOpsManager.MODE_ALLOWED == (Integer) dispatchMethod.invoke(
                     manager, 24, Binder.getCallingUid(), context.getApplicationContext().getPackageName());
