@@ -55,6 +55,7 @@ public final class WatchDog {
             }
             //当mTick没有自增时，表示产生了卡顿，这时打印UI线程的堆栈
             if (TICK_INIT_VALUE == mTick) {
+                //mTick是0，这就表示上面的 mTick++ 并没有执行
                 StringBuilder sb = new StringBuilder();
                 Looper mainLooper = Looper.getMainLooper();
                 StackTraceElement[] stackTrace = mainLooper.getThread().getStackTrace();
@@ -63,6 +64,7 @@ public final class WatchDog {
                 }
                 Log.d(TAG, sb.toString());
             } else {
+                //重新赋值为0
                 mTick = TICK_INIT_VALUE;
             }
             mWatchDogHandler.postDelayed(mDogRunnable, DELAY_TIME);
@@ -74,7 +76,8 @@ public final class WatchDog {
      */
     public void startWork(){
         mWatchDogThread.start();
-        mWatchDogHandler = new Handler(mWatchDogThread.getLooper());
+        Looper looper = mWatchDogThread.getLooper();
+        mWatchDogHandler = new Handler(looper);
         mWatchDogHandler.postDelayed(mDogRunnable, DELAY_TIME);
     }
 
