@@ -25,7 +25,6 @@ public final class HandlerBlockTask {
         return INSTANCE;
     }
 
-
     private final Runnable mBlockRunnable = new Runnable() {
         @Override
         public void run() {
@@ -59,10 +58,12 @@ public final class HandlerBlockTask {
     }
 
     private void startMonitor() {
+        //开始监控，发送延迟消息
         mHandler.postDelayed(mBlockRunnable, BLOCK_TIME);
     }
 
     private void removeMonitor() {
+        //移除监控
         mHandler.removeCallbacks(mBlockRunnable);
     }
 
