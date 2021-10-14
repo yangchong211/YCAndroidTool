@@ -1,4 +1,4 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.net;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.netlib.ui.NetRequestActivity;
+import com.yc.ycandroidtool.ping.PingActivity;
+import com.yc.ycandroidtool.R;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -5,8 +5,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.yc.toollib.tool.ToolLogUtils;
-import com.yc.ycandroidtool.BaseActivity;
 import com.yc.ycandroidtool.R;
 
 import java.lang.reflect.Constructor;
@@ -15,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class StudentActivity extends BaseActivity implements View.OnClickListener {
+public class StudentActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTv0;
     private TextView mTv1;

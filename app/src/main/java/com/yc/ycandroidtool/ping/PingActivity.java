@@ -1,4 +1,4 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.ping;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.netlib.ping.PingView;
+import com.yc.ycandroidtool.R;
 
 
 public class PingActivity extends AppCompatActivity implements View.OnClickListener {

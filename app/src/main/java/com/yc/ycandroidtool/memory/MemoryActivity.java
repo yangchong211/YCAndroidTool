@@ -1,4 +1,4 @@
-package com.yc.ycandroidtool;
+package com.yc.ycandroidtool.memory;
 
 import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
@@ -14,6 +14,7 @@ import com.yc.netlib.utils.NetDeviceUtils;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.crash.MemoryUtils;
 import com.yc.toollib.tool.ToolLogUtils;
+import com.yc.ycandroidtool.R;
 
 public class MemoryActivity extends AppCompatActivity implements View.OnClickListener {
 
