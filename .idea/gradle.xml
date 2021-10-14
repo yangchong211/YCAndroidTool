@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/AnotherMonitor" />
             <option value="$PROJECT_DIR$/AnrToolLib" />
+            <option value="$PROJECT_DIR$/AppStatusLib" />
             <option value="$PROJECT_DIR$/CatonHelperLib" />
             <option value="$PROJECT_DIR$/CrashToolLib" />
             <option value="$PROJECT_DIR$/ImageMonitorLib" />

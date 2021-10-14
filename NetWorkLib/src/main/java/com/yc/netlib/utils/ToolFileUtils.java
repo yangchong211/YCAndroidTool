@@ -74,7 +74,7 @@ public class ToolFileUtils {
      * @param context                       上下文
      * @return
      */
-    private static String getCachePath(Context context) {
+    public static String getCachePath(Context context) {
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {

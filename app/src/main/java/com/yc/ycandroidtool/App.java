@@ -2,17 +2,23 @@ package com.yc.ycandroidtool;
 
 import android.app.Application;
 
+import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.listener.AppStatusListener;
+import com.yc.appstatuslib.listener.GpsListener;
+import com.yc.appstatuslib.listener.NetworkListener;
+import com.yc.appstatuslib.listener.ScreenListener;
+import com.yc.appstatuslib.listener.WifiListener;
 import com.yc.catonhelperlib.HandlerBlockTask;
-import com.yc.catonhelperlib.WatchDog;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.longevitylib.LongevityMonitorConfig;
+import com.yc.netlib.utils.ToolFileUtils;
 import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
-import com.yc.toollib.crash.CrashTestDemo;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.netlib.utils.NetworkTool;
 import com.yc.toollib.tool.ToolLogUtils;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class App extends Application {
@@ -27,6 +33,7 @@ public class App extends Application {
         init(this);
         HandlerBlockTask.getInstance().startWork();
         //WatchDog.getInstance().startWork();
+        initAppStatusListener();
     }
 
     private void initCrash() {
@@ -56,11 +63,6 @@ public class App extends Application {
         });
     }
 
-    private void test(){
-        CrashTestDemo.test();
-    }
-
-
     /**
      * 初始化
      */
@@ -89,4 +91,82 @@ public class App extends Application {
             })
             .build());
     }
+
+
+    private void initAppStatusListener() {
+        String cachePath = ToolFileUtils.getCachePath(this);
+        String path = cachePath + File.separator + "status";
+        File file = new File(path);
+        ResourceManager manager = new ResourceManager.Builder()
+                .context(this)
+                .interval(5)
+                .file(file)
+                .builder();
+        manager.registerAppStatusListener(new AppStatusListener() {
+            @Override
+            public void onAppFont() {
+                ToolLogUtils.i("app status AppStatusListener onAppFont");
+            }
+
+            @Override
+            public void onAppBack() {
+                ToolLogUtils.i("app status AppStatusListener onAppBack");
+            }
+
+            @Override
+            public void onActivityStarted() {
+                ToolLogUtils.i("app status AppStatusListener onActivityStarted");
+            }
+        });
+        manager.registerGpsListener(new GpsListener() {
+            @Override
+            public void gpsOn() {
+                ToolLogUtils.i("app status GpsListener gpsOn");
+            }
+
+            @Override
+            public void gpsOff() {
+                ToolLogUtils.i("app status GpsListener gpsOff");
+            }
+        });
+        manager.registerNetworkListener(new NetworkListener() {
+            @Override
+            public void connect() {
+                ToolLogUtils.i("app status NetworkListener connect");
+            }
+
+            @Override
+            public void disconnect() {
+                ToolLogUtils.i("app status NetworkListener disconnect");
+            }
+        });
+        manager.registerScreenListener(new ScreenListener() {
+            @Override
+            public void screenOn() {
+                ToolLogUtils.i("app status ScreenListener screenOn");
+            }
+
+            @Override
+            public void screenOff() {
+                ToolLogUtils.i("app status ScreenListener screenOff");
+            }
+
+            @Override
+            public void userPresent() {
+                ToolLogUtils.i("app status ScreenListener userPresent");
+            }
+        });
+        manager.registerWifiListener(new WifiListener() {
+            @Override
+            public void wifiOn() {
+                ToolLogUtils.i("app status WifiListener wifiOn");
+            }
+
+            @Override
+            public void wifiOff() {
+                ToolLogUtils.i("app status WifiListener wifiOff");
+            }
+        });
+    }
+
 }

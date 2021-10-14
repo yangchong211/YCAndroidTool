@@ -1,15 +1,16 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.library'
+}
 apply from: rootProject.projectDir.absolutePath + "/app.gradle"
 
 android {
     compileSdkVersion project.ext.androidCompileSdkVersion
     buildToolsVersion project.ext.androidBuildToolsVersion
     defaultConfig {
-        applicationId "com.com.yc.ycandroidtool"
         minSdkVersion project.ext.androidMinSdkVersion
         targetSdkVersion project.ext.androidTargetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     buildTypes {
@@ -18,20 +19,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
-    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-//    implementation 'cn.com.yc:ToolLib:1.2.3'
-//    implementation 'cn.com.yc:NetLib:1.0.1'
-    implementation project(path: ':CrashToolLib')
-    implementation project(path: ':NetWorkLib')
-    implementation project(path: ':MemoryLib')
-    implementation project(path: ':LongevityLib')
-    implementation project(path: ':CatonHelperLib')
-    implementation project(path: ':AppStatusLib')
-//    implementation project(path: ':AnotherMonitor')
 }

@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this,FirstActivity.class));
                 break;
             case R.id.tv_2:
-                startActivity(new Intent(this,TestActivity.class));
                 break;
             case R.id.tv_3:
                 CrashToolUtils.startCrashListActivity(this);

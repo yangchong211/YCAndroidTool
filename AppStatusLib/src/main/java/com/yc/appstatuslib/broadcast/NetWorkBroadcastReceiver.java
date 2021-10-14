@@ -1,0 +1,44 @@
+package com.yc.appstatuslib.broadcast;
+
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import com.yc.appstatuslib.ResourceManager;
+
+public class NetWorkBroadcastReceiver extends BroadcastReceiver {
+    private ResourceManager mManager;
+
+    public NetWorkBroadcastReceiver(ResourceManager resourceManager) {
+        this.mManager = resourceManager;
+    }
+
+    public boolean isNetworkEnable(Context context) {
+        if (context == null) {
+            return false;
+        } else {
+            ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService("connectivity");
+            if (connectivityManager == null) {
+                return false;
+            } else {
+                NetworkInfo aActiveInfo = connectivityManager.getActiveNetworkInfo();
+                return aActiveInfo != null && aActiveInfo.isAvailable();
+            }
+        }
+    }
+
+    public void onReceive(Context context, Intent intent) {
+        if (this.mManager != null) {
+            if (!this.isNetworkEnable(context)) {
+                this.mManager.dispatcherNetworkDisConnection();
+            } else {
+                this.mManager.dispatcherNetworkConnection();
+            }
+
+        }
+    }
+}
+
