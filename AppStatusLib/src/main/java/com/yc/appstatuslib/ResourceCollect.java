@@ -13,6 +13,7 @@ import com.yc.appstatuslib.log.FormatStrategy;
 import java.io.File;
 
 class ResourceCollect {
+
     private Handler mHandler;
     private ResourceManager mResourceManager;
     private HandlerThread mHandlerThread;

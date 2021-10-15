@@ -3,11 +3,7 @@ package com.yc.ycandroidtool;
 import android.app.Application;
 
 import com.yc.appstatuslib.ResourceManager;
-import com.yc.appstatuslib.listener.AppStatusListener;
-import com.yc.appstatuslib.listener.GpsListener;
-import com.yc.appstatuslib.listener.NetworkListener;
-import com.yc.appstatuslib.listener.ScreenListener;
-import com.yc.appstatuslib.listener.WifiListener;
+import com.yc.appstatuslib.inter.AppStatusListener;
 import com.yc.catonhelperlib.HandlerBlockTask;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.longevitylib.LongevityMonitorConfig;
@@ -104,67 +100,53 @@ public class App extends Application {
                 .builder();
         manager.registerAppStatusListener(new AppStatusListener() {
             @Override
-            public void onAppFont() {
-                ToolLogUtils.i("app status AppStatusListener onAppFont");
+            public void wifiStatusChange(boolean isWifiOn) {
+                if (isWifiOn){
+                    ToolLogUtils.i("app status Wifi 打开");
+                } else {
+                    ToolLogUtils.i("app status Wifi 关闭");
+                }
             }
 
             @Override
-            public void onAppBack() {
-                ToolLogUtils.i("app status AppStatusListener onAppBack");
+            public void gpsStatusChange(boolean isGpsOn) {
+                if (isGpsOn){
+                    ToolLogUtils.i("app status Gps 打开");
+                } else {
+                    ToolLogUtils.i("app status Gps 关闭");
+                }
             }
 
             @Override
-            public void onActivityStarted() {
-                ToolLogUtils.i("app status AppStatusListener onActivityStarted");
-            }
-        });
-        manager.registerGpsListener(new GpsListener() {
-            @Override
-            public void gpsOn() {
-                ToolLogUtils.i("app status GpsListener gpsOn");
+            public void networkStatusChange(boolean isConnect) {
+                if (isConnect){
+                    ToolLogUtils.i("app status Network 打开");
+                } else {
+                    ToolLogUtils.i("app status Network 关闭");
+                }
             }
 
             @Override
-            public void gpsOff() {
-                ToolLogUtils.i("app status GpsListener gpsOff");
-            }
-        });
-        manager.registerNetworkListener(new NetworkListener() {
-            @Override
-            public void connect() {
-                ToolLogUtils.i("app status NetworkListener connect");
+            public void screenStatusChange(boolean isScreenOn) {
+                if (isScreenOn){
+                    ToolLogUtils.i("app status Screen 打开");
+                } else {
+                    ToolLogUtils.i("app status Screen 关闭");
+                }
             }
 
             @Override
-            public void disconnect() {
-                ToolLogUtils.i("app status NetworkListener disconnect");
-            }
-        });
-        manager.registerScreenListener(new ScreenListener() {
-            @Override
-            public void screenOn() {
-                ToolLogUtils.i("app status ScreenListener screenOn");
+            public void screenUserPresent() {
+                ToolLogUtils.i("app status Screen 使用了");
             }
 
             @Override
-            public void screenOff() {
-                ToolLogUtils.i("app status ScreenListener screenOff");
-            }
-
-            @Override
-            public void userPresent() {
-                ToolLogUtils.i("app status ScreenListener userPresent");
-            }
-        });
-        manager.registerWifiListener(new WifiListener() {
-            @Override
-            public void wifiOn() {
-                ToolLogUtils.i("app status WifiListener wifiOn");
-            }
-
-            @Override
-            public void wifiOff() {
-                ToolLogUtils.i("app status WifiListener wifiOff");
+            public void appOnFrontOrBackChange(boolean isBack) {
+                if (isBack){
+                    ToolLogUtils.i("app status app 推到后台");
+                } else {
+                    ToolLogUtils.i("app status app 回到前台");
+                }
             }
         });
     }

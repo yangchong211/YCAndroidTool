@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import com.yc.appstatuslib.ResourceManager;
 
 public final class GpsBrodacastReceiver extends BroadcastReceiver {
-    private static final String TAG = "GpsBrodacastReceiver";
+
     private ResourceManager mManager;
 
     public GpsBrodacastReceiver(ResourceManager mManager) {
@@ -22,7 +22,6 @@ public final class GpsBrodacastReceiver extends BroadcastReceiver {
         if (intentAction.equals("android.location.PROVIDERS_CHANGED")) {
             this.notifyGpsSwitchState(isGpsEnabled(context));
         }
-
     }
 
     public static boolean isGpsEnabled(Context context) {
@@ -37,7 +36,6 @@ public final class GpsBrodacastReceiver extends BroadcastReceiver {
             } else {
                 this.mManager.dispatcherGpsOff();
             }
-
         }
     }
 }

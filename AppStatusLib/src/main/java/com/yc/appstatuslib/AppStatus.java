@@ -6,12 +6,14 @@ import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Bundle;
 import android.util.SparseArray;
 
-import com.yc.appstatuslib.listener.AppStatusListener;
+
+import com.yc.appstatuslib.inter.AppStatusListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppStatus {
+
     private static final String TAG = "AppStatus";
     private List<AppStatusListener> mAppStatusListener = new ArrayList();
     private AppStatus.AppStatusLifecycleCallbacks mAppCallbacks = new AppStatus.AppStatusLifecycleCallbacks();
@@ -69,7 +71,7 @@ public class AppStatus {
 
                 for(var5 = 0; var5 < var4; ++var5) {
                     listener = var3[var5];
-                    ((AppStatusListener)listener).onAppFont();
+                    ((AppStatusListener)listener).appOnFrontOrBackChange(false);
                 }
             } else {
                 var3 = listeners;
@@ -77,22 +79,8 @@ public class AppStatus {
 
                 for(var5 = 0; var5 < var4; ++var5) {
                     listener = var3[var5];
-                    ((AppStatusListener)listener).onAppBack();
+                    ((AppStatusListener)listener).appOnFrontOrBackChange(true);
                 }
-            }
-
-        }
-    }
-
-    private void dispatchActivityStarted(Activity activity) {
-        if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
-            Object[] listeners = this.mAppStatusListener.toArray();
-            Object[] var3 = listeners;
-            int var4 = listeners.length;
-
-            for(int var5 = 0; var5 < var4; ++var5) {
-                Object listener = var3[var5];
-                ((AppStatusListener)listener).onActivityStarted();
             }
 
         }
@@ -108,7 +96,6 @@ public class AppStatus {
         }
 
         public void onActivityStarted(Activity activity) {
-            AppStatus.this.dispatchActivityStarted(activity);
         }
 
         public void onActivityPaused(Activity activity) {

@@ -1,6 +1,6 @@
 package com.yc.appstatuslib.info;
 
-import com.yc.appstatuslib.cpu.Cpu;
+import com.yc.appstatuslib.utils.CpuUtils;
 
 public class CpuInfo {
     public int cpuCount;
@@ -11,8 +11,8 @@ public class CpuInfo {
 
     static CpuInfo builder() {
         CpuInfo cpuInfo = new CpuInfo();
-        cpuInfo.cpuCount = Cpu.cpuCount();
-        cpuInfo.cpuTemperature = Cpu.cpuTemperature();
+        cpuInfo.cpuCount = CpuUtils.cpuCount();
+        cpuInfo.cpuTemperature = CpuUtils.cpuTemperature();
         return cpuInfo;
     }
 

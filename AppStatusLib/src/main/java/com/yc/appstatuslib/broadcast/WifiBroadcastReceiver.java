@@ -8,14 +8,15 @@ import android.content.Intent;
 import com.yc.appstatuslib.ResourceManager;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
-    private ResourceManager mManager;
+
+    private final ResourceManager mManager;
 
     public WifiBroadcastReceiver(ResourceManager mManager) {
         this.mManager = mManager;
     }
 
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction() == "android.net.wifi.WIFI_STATE_CHANGED") {
+        if (intent.getAction().equals("android.net.wifi.WIFI_STATE_CHANGED")) {
             switch(intent.getIntExtra("wifi_state", 4)) {
                 case 0:
                 case 2:

@@ -1,4 +1,4 @@
-package com.yc.appstatuslib.cpu;
+package com.yc.appstatuslib.utils;
 
 
 import java.io.BufferedReader;
@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 
-public class Cpu {
-    public Cpu() {
+public final class CpuUtils {
+
+    public CpuUtils() {
+
     }
 
     public static int cpuCount() {
@@ -53,7 +55,6 @@ public class Cpu {
             } catch (Throwable var4) {
                 var4.printStackTrace();
             }
-
             return temperature;
         }
     }

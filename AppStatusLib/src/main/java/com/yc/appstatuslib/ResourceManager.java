@@ -11,21 +11,15 @@ import com.yc.appstatuslib.broadcast.ScreenBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.WifiBroadcastReceiver;
 import com.yc.appstatuslib.info.BatteryInfo;
 import com.yc.appstatuslib.info.CollectionInfo;
-import com.yc.appstatuslib.listener.AppStatusListener;
-import com.yc.appstatuslib.listener.GpsListener;
-import com.yc.appstatuslib.listener.NetworkListener;
-import com.yc.appstatuslib.listener.ScreenListener;
-import com.yc.appstatuslib.listener.WifiListener;
+import com.yc.appstatuslib.inter.AppStatusListener;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceManager {
-    private List<GpsListener> mGpsListener;
-    private List<NetworkListener> mNetworkListener;
-    private List<ScreenListener> mScreenListener;
-    private List<WifiListener> mWifiListener;
+
+    private List<AppStatusListener> mAppStatusListener;
     private ResourceCollect mResourceCollect;
     private BatteryBroadcastReceiver mBatteryReceiver;
     private GpsBrodacastReceiver mGpsReceiver;
@@ -36,10 +30,7 @@ public class ResourceManager {
     private Context mContext;
 
     private ResourceManager(ResourceManager.Builder builder) {
-        this.mGpsListener = new ArrayList();
-        this.mNetworkListener = new ArrayList();
-        this.mScreenListener = new ArrayList();
-        this.mWifiListener = new ArrayList();
+        this.mAppStatusListener = new ArrayList<>();
         this.mBatteryReceiver = new BatteryBroadcastReceiver(this);
         this.mGpsReceiver = new GpsBrodacastReceiver(this);
         this.mNetWorkReceiver = new NetWorkBroadcastReceiver(this);
@@ -107,8 +98,7 @@ public class ResourceManager {
         this.mContext.unregisterReceiver(this.mGpsReceiver);
         this.mContext.unregisterReceiver(this.mNetWorkReceiver);
         this.mContext.unregisterReceiver(this.mScreenReceiver);
-        this.mNetworkListener.clear();
-        this.mNetworkListener.clear();
+        this.mAppStatusListener.clear();
         if (this.mResourceCollect != null) {
             this.mResourceCollect.destroy();
         }
@@ -126,168 +116,131 @@ public class ResourceManager {
         return this.mBatteryReceiver.getBatteryInfo();
     }
 
-    public void registerGpsListener(GpsListener listener) {
-        if (this.mGpsListener != null) {
-            this.mGpsListener.add(listener);
-        }
-    }
-
-    public boolean unregisterGpsListener(GpsListener listener) {
-        return listener != null && this.mGpsListener.remove(listener);
-    }
 
     public void dispatcherGpsOff() {
-        Object[] listeners = this.mGpsListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((GpsListener)listener).gpsOff();
+            ((AppStatusListener)listener).gpsStatusChange(false);
         }
 
     }
 
     public void dispatcherGpsOn() {
-        Object[] listeners = this.mGpsListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
-
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((GpsListener)listener).gpsOn();
+            ((AppStatusListener)listener).gpsStatusChange(true);
         }
 
-    }
-
-    public void registerScreenListener(ScreenListener listener) {
-        if (this.mScreenListener != null) {
-            this.mScreenListener.add(listener);
-        }
-    }
-
-    public boolean unregisterScreenListener(ScreenListener listener) {
-        return listener != null && this.mScreenListener.remove(listener);
     }
 
     public void dispatcherScreenOff() {
-        Object[] listeners = this.mScreenListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((ScreenListener)listener).screenOff();
+            ((AppStatusListener)listener).screenStatusChange(false);
         }
 
     }
 
     public void dispatcherScreenOn() {
-        Object[] listeners = this.mScreenListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((ScreenListener)listener).screenOn();
+            ((AppStatusListener)listener).screenStatusChange(true);
         }
 
     }
 
     public void dispatcherUserPresent() {
-        Object[] listeners = this.mScreenListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((ScreenListener)listener).userPresent();
+            ((AppStatusListener)listener).screenUserPresent();
         }
 
     }
 
-    public void registerNetworkListener(NetworkListener networkListener) {
-        if (this.mNetworkListener != null) {
-            this.mNetworkListener.add(networkListener);
+
+    public void registerAppStatusListener(AppStatusListener listener) {
+        if (this.mAppStatusListener != null) {
+            this.mAppStatusListener.add(listener);
+            this.mAppStatus.registerAppStatusListener(listener);
         }
     }
 
-    public boolean unregisterNetworkListener(NetworkListener listener) {
-        return listener != null && this.mNetworkListener.remove(listener);
+    public boolean unregisterAppStatusListener(AppStatusListener listener) {
+        this.mAppStatus.unregisterAppStatusListener(listener);
+        return mAppStatusListener != null && this.mAppStatusListener.remove(listener);
     }
 
     public void dispatcherNetworkConnection() {
-        if (this.mNetworkListener != null && this.mNetworkListener.size() != 0) {
-            Object[] listeners = this.mNetworkListener.toArray();
+        if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
+            Object[] listeners = this.mAppStatusListener.toArray();
             Object[] var2 = listeners;
             int var3 = listeners.length;
 
             for(int var4 = 0; var4 < var3; ++var4) {
                 Object listener = var2[var4];
-                ((NetworkListener)listener).connect();
+                ((AppStatusListener)listener).networkStatusChange(true);
             }
 
         }
     }
 
     public void dispatcherNetworkDisConnection() {
-        if (this.mNetworkListener != null && this.mNetworkListener.size() != 0) {
-            Object[] listeners = this.mNetworkListener.toArray();
+        if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
+            Object[] listeners = this.mAppStatusListener.toArray();
             Object[] var2 = listeners;
             int var3 = listeners.length;
-
             for(int var4 = 0; var4 < var3; ++var4) {
                 Object listener = var2[var4];
-                ((NetworkListener)listener).disconnect();
+                ((AppStatusListener)listener).networkStatusChange(false);
             }
-
         }
-    }
-
-    public void registerWifiListener(WifiListener listener) {
-        if (this.mWifiListener != null) {
-            this.mWifiListener.add(listener);
-        }
-    }
-
-    public boolean unregisterWifiListener(WifiListener listener) {
-        return listener != null && this.mWifiListener.remove(listener);
     }
 
     public void dispatcherWifiOff() {
-        Object[] listeners = this.mWifiListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((WifiListener)listener).wifiOff();
+            ((AppStatusListener)listener).wifiStatusChange(false);
         }
 
     }
 
     public void dispatcherWifiOn() {
-        Object[] listeners = this.mWifiListener.toArray();
+        Object[] listeners = this.mAppStatusListener.toArray();
         Object[] var2 = listeners;
         int var3 = listeners.length;
 
         for(int var4 = 0; var4 < var3; ++var4) {
             Object listener = var2[var4];
-            ((WifiListener)listener).wifiOn();
+            ((AppStatusListener)listener).wifiStatusChange(true);
         }
 
     }
 
     public int getAppStatus() {
         return this.mAppStatus.getAppStatus();
-    }
-
-    public void registerAppStatusListener(AppStatusListener listener) {
-        this.mAppStatus.registerAppStatusListener(listener);
-    }
-
-    public boolean unregisterAppStatusListener(AppStatusListener listener) {
-        return this.mAppStatus.unregisterAppStatusListener(listener);
     }
 
     public interface TraceLog {
