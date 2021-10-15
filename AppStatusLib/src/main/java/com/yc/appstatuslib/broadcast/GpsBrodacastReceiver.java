@@ -31,11 +31,7 @@ public final class GpsBrodacastReceiver extends BroadcastReceiver {
 
     private void notifyGpsSwitchState(boolean state) {
         if (this.mManager != null) {
-            if (state) {
-                this.mManager.dispatcherGpsOn();
-            } else {
-                this.mManager.dispatcherGpsOff();
-            }
+            this.mManager.dispatcherGpsState(state);
         }
     }
 }

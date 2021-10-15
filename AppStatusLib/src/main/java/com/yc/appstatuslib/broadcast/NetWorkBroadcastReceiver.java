@@ -20,7 +20,8 @@ public class NetWorkBroadcastReceiver extends BroadcastReceiver {
         if (context == null) {
             return false;
         } else {
-            ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService("connectivity");
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager == null) {
                 return false;
             } else {
@@ -33,11 +34,10 @@ public class NetWorkBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (this.mManager != null) {
             if (!this.isNetworkEnable(context)) {
-                this.mManager.dispatcherNetworkDisConnection();
+                this.mManager.dispatcherNetworkState(false);
             } else {
-                this.mManager.dispatcherNetworkConnection();
+                this.mManager.dispatcherNetworkState(true);
             }
-
         }
     }
 }

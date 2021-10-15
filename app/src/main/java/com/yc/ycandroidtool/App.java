@@ -3,7 +3,8 @@ package com.yc.ycandroidtool;
 import android.app.Application;
 
 import com.yc.appstatuslib.ResourceManager;
-import com.yc.appstatuslib.inter.AppStatusListener;
+import com.yc.appstatuslib.listener.AppStatusListener;
+import com.yc.appstatuslib.listener.BaseStatusListener;
 import com.yc.catonhelperlib.HandlerBlockTask;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.longevitylib.LongevityMonitorConfig;
@@ -98,9 +99,10 @@ public class App extends Application {
                 .interval(5)
                 .file(file)
                 .builder();
-        manager.registerAppStatusListener(new AppStatusListener() {
+        manager.registerAppStatusListener(new BaseStatusListener() {
             @Override
             public void wifiStatusChange(boolean isWifiOn) {
+                super.wifiStatusChange(isWifiOn);
                 if (isWifiOn){
                     ToolLogUtils.i("app status Wifi 打开");
                 } else {
@@ -110,6 +112,7 @@ public class App extends Application {
 
             @Override
             public void gpsStatusChange(boolean isGpsOn) {
+                super.gpsStatusChange(isGpsOn);
                 if (isGpsOn){
                     ToolLogUtils.i("app status Gps 打开");
                 } else {
@@ -119,6 +122,7 @@ public class App extends Application {
 
             @Override
             public void networkStatusChange(boolean isConnect) {
+                super.networkStatusChange(isConnect);
                 if (isConnect){
                     ToolLogUtils.i("app status Network 打开");
                 } else {
@@ -128,6 +132,7 @@ public class App extends Application {
 
             @Override
             public void screenStatusChange(boolean isScreenOn) {
+                super.screenStatusChange(isScreenOn);
                 if (isScreenOn){
                     ToolLogUtils.i("app status Screen 打开");
                 } else {
@@ -137,11 +142,13 @@ public class App extends Application {
 
             @Override
             public void screenUserPresent() {
+                super.screenUserPresent();
                 ToolLogUtils.i("app status Screen 使用了");
             }
 
             @Override
             public void appOnFrontOrBackChange(boolean isBack) {
+                super.appOnFrontOrBackChange(isBack);
                 if (isBack){
                     ToolLogUtils.i("app status app 推到后台");
                 } else {

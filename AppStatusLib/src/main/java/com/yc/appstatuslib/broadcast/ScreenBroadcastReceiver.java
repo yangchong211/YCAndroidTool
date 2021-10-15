@@ -18,13 +18,18 @@ public class ScreenBroadcastReceiver extends BroadcastReceiver {
         if (this.mManager != null) {
             String action = intent.getAction();
             if ("android.intent.action.SCREEN_ON".equals(action)) {
-                this.mManager.dispatcherScreenOn();
+                this.notifyScreenSwitchState(true);
             } else if ("android.intent.action.SCREEN_OFF".equals(action)) {
-                this.mManager.dispatcherScreenOff();
+                this.notifyScreenSwitchState(false);
             } else if ("android.intent.action.USER_PRESENT".equals(action)) {
                 this.mManager.dispatcherUserPresent();
             }
+        }
+    }
 
+    private void notifyScreenSwitchState(boolean state) {
+        if (this.mManager != null) {
+            this.mManager.dispatcherScreenState(state);
         }
     }
 }

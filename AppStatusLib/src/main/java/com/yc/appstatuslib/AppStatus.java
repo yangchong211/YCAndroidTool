@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.SparseArray;
 
 
-import com.yc.appstatuslib.inter.AppStatusListener;
+import com.yc.appstatuslib.listener.AppStatusListener;
 
 import java.util.ArrayList;
 import java.util.List;

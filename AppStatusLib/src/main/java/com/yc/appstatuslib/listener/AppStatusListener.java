@@ -1,4 +1,4 @@
-package com.yc.appstatuslib.inter;
+package com.yc.appstatuslib.listener;
 
 public interface AppStatusListener {
 
@@ -30,6 +30,13 @@ public interface AppStatusListener {
      * 屏幕状态监听，userPresent表示屏幕打开并且使用呢
      */
     void screenUserPresent();
+
+    /**
+     * 蓝牙状态监听
+     * @param isBluetoothOn         true表示蓝牙打开，false表示蓝牙断开连接
+     */
+    void bluetoothStatusChange(boolean isBluetoothOn);
+
 
     /**
      * app前后台状态监听

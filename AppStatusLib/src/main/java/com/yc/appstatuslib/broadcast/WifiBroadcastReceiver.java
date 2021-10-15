@@ -30,17 +30,11 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                     this.notifyGpsSwitchState(true);
             }
         }
-
     }
 
     private void notifyGpsSwitchState(boolean state) {
         if (this.mManager != null) {
-            if (state) {
-                this.mManager.dispatcherWifiOn();
-            } else {
-                this.mManager.dispatcherWifiOff();
-            }
-
+            this.mManager.dispatcherWifiState(state);
         }
     }
 }
