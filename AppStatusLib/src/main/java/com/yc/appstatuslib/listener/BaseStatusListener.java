@@ -1,6 +1,7 @@
 package com.yc.appstatuslib.listener;
 
 import com.yc.appstatuslib.info.BatteryInfo;
+import com.yc.appstatuslib.info.ThreadInfo;
 
 public class BaseStatusListener implements AppStatusListener{
 
@@ -72,6 +73,15 @@ public class BaseStatusListener implements AppStatusListener{
      */
     @Override
     public void appOnFrontOrBackChange(boolean isBack) {
+
+    }
+
+    /**
+     * 线程类型和数量监听
+     * @param threadInfo            线程属性
+     */
+    @Override
+    public void appThreadStatusChange(ThreadInfo threadInfo) {
 
     }
 }

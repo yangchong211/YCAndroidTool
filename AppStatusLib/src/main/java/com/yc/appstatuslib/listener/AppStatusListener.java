@@ -1,6 +1,7 @@
 package com.yc.appstatuslib.listener;
 
 import com.yc.appstatuslib.info.BatteryInfo;
+import com.yc.appstatuslib.info.ThreadInfo;
 
 public interface AppStatusListener {
 
@@ -51,5 +52,11 @@ public interface AppStatusListener {
      * @param isBack                true表示在推到后台，false表示回到前台
      */
     void appOnFrontOrBackChange(boolean isBack);
+
+    /**
+     * 线程类型和数量监听
+     * @param threadInfo            线程属性
+     */
+    void appThreadStatusChange(ThreadInfo threadInfo);
 
 }

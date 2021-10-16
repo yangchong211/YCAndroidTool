@@ -1,16 +1,33 @@
 package com.yc.appstatuslib.thread;
 
 
+
 import java.lang.Thread.State;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ThreadManager {
-    public ThreadManager() {
+public final class ThreadManager {
+
+    private static ThreadManager INSTANCE;
+
+    public static ThreadManager getInstance() {
+        if (INSTANCE == null) {
+            synchronized (ThreadManager.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new ThreadManager();
+                }
+            }
+        }
+        return INSTANCE;
     }
 
-    public int threadCount() {
+
+    private ThreadManager() {
+
+    }
+
+    public int getThreadCount() {
         return Thread.getAllStackTraces().keySet().size();
     }
 
@@ -20,14 +37,12 @@ public class ThreadManager {
         List<Thread> runnableThread = new ArrayList();
         Thread[] var4 = threads;
         int var5 = threads.length;
-
         for(int var6 = 0; var6 < var5; ++var6) {
             Thread thread = var4[var6];
             if (thread.getState() == State.RUNNABLE) {
                 runnableThread.add(thread);
             }
         }
-
         return runnableThread;
     }
 
@@ -37,14 +52,12 @@ public class ThreadManager {
         List<Thread> runnableThread = new ArrayList();
         Thread[] var4 = threads;
         int var5 = threads.length;
-
         for(int var6 = 0; var6 < var5; ++var6) {
             Thread thread = var4[var6];
             if (thread.getState() == State.BLOCKED) {
                 runnableThread.add(thread);
             }
         }
-
         return runnableThread;
     }
 
@@ -54,14 +67,12 @@ public class ThreadManager {
         List<Thread> runnableThread = new ArrayList();
         Thread[] var4 = threads;
         int var5 = threads.length;
-
         for(int var6 = 0; var6 < var5; ++var6) {
             Thread thread = var4[var6];
             if (thread.getState() == State.TIMED_WAITING) {
                 runnableThread.add(thread);
             }
         }
-
         return runnableThread;
     }
 
@@ -71,14 +82,12 @@ public class ThreadManager {
         List<Thread> runnableThread = new ArrayList();
         Thread[] var4 = threads;
         int var5 = threads.length;
-
         for(int var6 = 0; var6 < var5; ++var6) {
             Thread thread = var4[var6];
             if (thread.getState() == State.WAITING) {
                 runnableThread.add(thread);
             }
         }
-
         return runnableThread;
     }
 }

@@ -13,8 +13,10 @@ import com.yc.appstatuslib.broadcast.NetWorkBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.ScreenBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.WifiBroadcastReceiver;
 import com.yc.appstatuslib.info.BatteryInfo;
+import com.yc.appstatuslib.info.ThreadInfo;
 import com.yc.appstatuslib.listener.AppStatusListener;
 import com.yc.appstatuslib.listener.TraceLogListener;
+import com.yc.appstatuslib.thread.ThreadManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public final class AppStatusManager {
     private final BluetoothBroadcastReceiver mBluetoothReceiver;
     private final AppStatus mAppStatus;
     private final Context mContext;
+    private final boolean threadSwitchOn;
 
     private AppStatusManager(AppStatusManager.Builder builder) {
         this.mAppStatusListener = new ArrayList<>();
@@ -43,6 +46,7 @@ public final class AppStatusManager {
         this.mBluetoothReceiver = new BluetoothBroadcastReceiver(this);
         this.mAppStatus = new AppStatus(this);
         this.mContext = builder.context;
+        this.threadSwitchOn = builder.threadSwitchOn;
         this.mResourceCollect = (new ResourceCollect.Builder())
                 .manager(this)
                 .traceLog(builder.traceLog)
@@ -132,19 +136,6 @@ public final class AppStatusManager {
         return this.mBatteryReceiver.getBatteryInfo();
     }
 
-    public void dispatcherUserPresent() {
-        Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).screenUserPresent();
-        }
-
-    }
-
-
     public void registerAppStatusListener(AppStatusListener listener) {
         if (this.mAppStatusListener != null) {
             this.mAppStatusListener.add(listener);
@@ -163,73 +154,70 @@ public final class AppStatusManager {
 
     public void dispatcherWifiState(boolean state) {
         Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).wifiStatusChange(state);
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).wifiStatusChange(state);
         }
     }
 
     public void dispatcherBluetoothState(boolean state) {
         Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).bluetoothStatusChange(state);
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).bluetoothStatusChange(state);
         }
     }
 
     public void dispatcherScreenState(boolean state) {
         Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).screenStatusChange(state);
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).screenStatusChange(state);
         }
     }
 
     public void dispatcherGpsState(boolean state) {
         Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).gpsStatusChange(state);
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).gpsStatusChange(state);
         }
     }
 
     public void dispatcherNetworkState(boolean state) {
         if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
             Object[] listeners = this.mAppStatusListener.toArray();
-            Object[] var2 = listeners;
-            int var3 = listeners.length;
-            for(int var4 = 0; var4 < var3; ++var4) {
-                Object listener = var2[var4];
-                ((AppStatusListener)listener).networkStatusChange(state);
+            for (Object listener : listeners) {
+                ((AppStatusListener) listener).networkStatusChange(state);
             }
         }
     }
 
     public void dispatcherBatteryState(BatteryInfo batteryInfo) {
         Object[] listeners = this.mAppStatusListener.toArray();
-        Object[] var2 = listeners;
-        int var3 = listeners.length;
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Object listener = var2[var4];
-            ((AppStatusListener)listener).batteryStatusChange(batteryInfo);
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).batteryStatusChange(batteryInfo);
         }
         collection();
     }
 
-    public interface DimScreenSaver {
-        boolean isScreenNeverDim();
+    public void dispatcherUserPresent() {
+        Object[] listeners = this.mAppStatusListener.toArray();
+        for (Object listener : listeners) {
+            ((AppStatusListener) listener).screenUserPresent();
+        }
+    }
 
-        int getScreenMinLightness();
-
-        int getDimDelay();
+    public void dispatcherThreadInfo(){
+        Object[] listeners = this.mAppStatusListener.toArray();
+        if (threadSwitchOn){
+            ThreadManager threadManager = ThreadManager.getInstance();
+            ThreadInfo threadInfo = new ThreadInfo();
+            threadInfo.setThreadCount(threadManager.getThreadCount());
+            threadInfo.setBlockThreadCount(threadManager.getBlockThread());
+            threadInfo.setRunningThreadCount(threadManager.getRunningThread());
+            threadInfo.setTimeWaitingThreadCount(threadManager.getTimeWaitingThread());
+            threadInfo.setWaitingThreadCount(threadManager.getWaitingThread());
+            for (Object listener : listeners) {
+                ((AppStatusListener) listener).appThreadStatusChange(threadInfo);
+            }
+        }
     }
 
     public static class Builder {
@@ -246,6 +234,10 @@ public final class AppStatusManager {
          */
         private File file;
         private TraceLogListener traceLog;
+        /**
+         * 是否开启线程监控，默认false
+         */
+        private boolean threadSwitchOn = false;
 
         public Builder() {
         }
@@ -267,6 +259,11 @@ public final class AppStatusManager {
 
         public AppStatusManager.Builder traceLog(TraceLogListener trace) {
             this.traceLog = trace;
+            return this;
+        }
+
+        public AppStatusManager.Builder threadSwitchOn(boolean threadSwitchOn) {
+            this.threadSwitchOn = threadSwitchOn;
             return this;
         }
 

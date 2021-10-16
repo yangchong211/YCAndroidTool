@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.yc.appstatuslib.AppStatusManager;
 import com.yc.appstatuslib.info.BatteryInfo;
+import com.yc.appstatuslib.info.ThreadInfo;
 import com.yc.appstatuslib.listener.BaseStatusListener;
 import com.yc.catonhelperlib.HandlerBlockTask;
 import com.yc.longevitylib.LongevityMonitor;
@@ -98,6 +99,7 @@ public class App extends Application {
                 .context(this)
                 .interval(5)
                 .file(file)
+                .threadSwitchOn(true)
                 .builder();
         manager.registerAppStatusListener(new BaseStatusListener() {
             @Override
@@ -170,6 +172,17 @@ public class App extends Application {
             public void batteryStatusChange(BatteryInfo batteryInfo) {
                 super.batteryStatusChange(batteryInfo);
                 ToolLogUtils.i("app status 电量 " + batteryInfo.toStringInfo());
+            }
+
+            @Override
+            public void appThreadStatusChange(ThreadInfo threadInfo) {
+                super.appThreadStatusChange(threadInfo);
+                ToolLogUtils.i("app status 所有线程数量 " + threadInfo.getThreadCount());
+                ToolLogUtils.i("app status run线程数量 " + threadInfo.getRunningThreadCount().size());
+                ToolLogUtils.i("app status wait线程数量 " + threadInfo.getWaitingThreadCount().size());
+                ToolLogUtils.i("app status block线程数量 " + threadInfo.getBlockThreadCount().size());
+                ToolLogUtils.i("app status timewait线程数量 " + threadInfo.getTimeWaitingThreadCount().size());
+
             }
         });
     }

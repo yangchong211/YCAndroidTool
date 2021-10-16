@@ -61,33 +61,24 @@ public class AppStatus {
     private void dispatchAppOnFrontOrBack(boolean front) {
         if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
             Object[] listeners = this.mAppStatusListener.toArray();
-            Object[] var3;
-            int var4;
-            int var5;
-            Object listener;
+            int index;
             if (front) {
-                var3 = listeners;
-                var4 = listeners.length;
-
-                for(var5 = 0; var5 < var4; ++var5) {
-                    listener = var3[var5];
-                    ((AppStatusListener)listener).appOnFrontOrBackChange(false);
+                for(index = 0; index < listeners.length; ++index) {
+                    ((AppStatusListener)listeners[index]).appOnFrontOrBackChange(false);
+                    mResourceManager.dispatcherThreadInfo();
                 }
             } else {
-                var3 = listeners;
-                var4 = listeners.length;
-
-                for(var5 = 0; var5 < var4; ++var5) {
-                    listener = var3[var5];
-                    ((AppStatusListener)listener).appOnFrontOrBackChange(true);
+                for(index = 0; index < listeners.length; ++index) {
+                    ((AppStatusListener)listeners[index]).appOnFrontOrBackChange(true);
+                    mResourceManager.dispatcherThreadInfo();
                 }
             }
-
         }
     }
 
     class AppStatusLifecycleCallbacks implements ActivityLifecycleCallbacks {
-        private SparseArray<Integer> mResumedActivities = new SparseArray();
+
+        private final SparseArray<Integer> mResumedActivities = new SparseArray();
 
         AppStatusLifecycleCallbacks() {
         }
