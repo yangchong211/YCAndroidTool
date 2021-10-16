@@ -5,13 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
-    private final ResourceManager mManager;
+    private final AppStatusManager mManager;
 
-    public WifiBroadcastReceiver(ResourceManager mManager) {
+    public WifiBroadcastReceiver(AppStatusManager mManager) {
         this.mManager = mManager;
     }
 

@@ -2,8 +2,8 @@ package com.yc.ycandroidtool;
 
 import android.app.Application;
 
-import com.yc.appstatuslib.ResourceManager;
-import com.yc.appstatuslib.listener.AppStatusListener;
+import com.yc.appstatuslib.AppStatusManager;
+import com.yc.appstatuslib.info.BatteryInfo;
 import com.yc.appstatuslib.listener.BaseStatusListener;
 import com.yc.catonhelperlib.HandlerBlockTask;
 import com.yc.longevitylib.LongevityMonitor;
@@ -94,7 +94,7 @@ public class App extends Application {
         String cachePath = ToolFileUtils.getCachePath(this);
         String path = cachePath + File.separator + "status";
         File file = new File(path);
-        ResourceManager manager = new ResourceManager.Builder()
+        AppStatusManager manager = new AppStatusManager.Builder()
                 .context(this)
                 .interval(5)
                 .file(file)
@@ -154,6 +154,22 @@ public class App extends Application {
                 } else {
                     ToolLogUtils.i("app status app 回到前台");
                 }
+            }
+
+            @Override
+            public void bluetoothStatusChange(boolean isBluetoothOn) {
+                super.bluetoothStatusChange(isBluetoothOn);
+                if (isBluetoothOn){
+                    ToolLogUtils.i("app status 蓝牙 打开");
+                } else {
+                    ToolLogUtils.i("app status 蓝牙 关闭");
+                }
+            }
+
+            @Override
+            public void batteryStatusChange(BatteryInfo batteryInfo) {
+                super.batteryStatusChange(batteryInfo);
+                ToolLogUtils.i("app status 电量 " + batteryInfo.toStringInfo());
             }
         });
     }

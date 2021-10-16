@@ -10,7 +10,8 @@ public class CsvFormatLog extends BaseFormatStrategy {
 
     public CsvFormatLog(File dir) {
         super(dir);
-        this.mFile = new File(dir, "battery-" + this.sDateFormat.format(new Date()) + ".txt");
+        String format = this.sDateFormat.format(new Date());
+        this.mFile = new File(dir, "battery-" + format + ".txt");
     }
 
     private void printCsvHeader() {
@@ -39,10 +40,6 @@ public class CsvFormatLog extends BaseFormatStrategy {
         builder.append(",");
         builder.append("cpuTemperature");
         builder.append(",");
-        builder.append("isOnline");
-        builder.append(",");
-        builder.append("hasOrder");
-        builder.append(",");
         builder.append("appStatus");
         this.write(this.mFile, builder.toString());
     }
@@ -52,7 +49,6 @@ public class CsvFormatLog extends BaseFormatStrategy {
             this.printCsvHeader();
             this.hasPrintHeader = true;
         }
-
         StringBuilder builder = new StringBuilder();
         builder.append(info.currentTime);
         builder.append(",");
@@ -77,10 +73,6 @@ public class CsvFormatLog extends BaseFormatStrategy {
         builder.append(info.cpuInfo.cpuCount);
         builder.append(",");
         builder.append(info.cpuInfo.cpuTemperature);
-        builder.append(",");
-        builder.append(info.isOnline);
-        builder.append(",");
-        builder.append(info.hasOrder);
         builder.append(",");
         builder.append(info.appStatus);
         this.write(this.mFile, builder.toString());

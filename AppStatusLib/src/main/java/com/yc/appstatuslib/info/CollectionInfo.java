@@ -4,7 +4,7 @@ package com.yc.appstatuslib.info;
 import android.content.res.Resources;
 import android.os.Build;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,8 +16,6 @@ public final class CollectionInfo {
     private static final String pattern = "yyyy-MM-dd HH:mm:ss:SSS";
     public BatteryInfo batteryInfo = new BatteryInfo();
     public CpuInfo cpuInfo = new CpuInfo();
-    public boolean isOnline;
-    public boolean hasOrder;
     public String currentTime;
     public int appStatus;
 
@@ -31,23 +29,23 @@ public final class CollectionInfo {
     }
 
     public static CollectionInfo builder(BatteryInfo batteryInfo,
-                                         ResourceManager.OrderStatus status,
                                          int appStatus) {
         CollectionInfo collectionInfo = new CollectionInfo();
         collectionInfo.batteryInfo = batteryInfo;
         collectionInfo.cpuInfo = CpuInfo.builder();
         collectionInfo.appStatus = appStatus;
         collectionInfo.currentTime = sDateFormat.format(new Date());
-        if (status != null) {
-            collectionInfo.isOnline = status.isOnline();
-            collectionInfo.hasOrder = status.hasOrder();
-        }
-
         return collectionInfo;
     }
 
+    @Override
     public String toString() {
-        return "CollectionInfo{batteryInfo=" + this.batteryInfo + ", cpuInfo=" + this.cpuInfo + ", isOnline=" + this.isOnline + ", hasOrder=" + this.hasOrder + ", currentTime='" + this.currentTime + '\'' + ", appStatus=" + this.appStatus + '}';
+        return "CollectionInfo{" +
+                "batteryInfo=" + batteryInfo +
+                ", cpuInfo=" + cpuInfo +
+                ", currentTime='" + currentTime + '\'' +
+                ", appStatus=" + appStatus +
+                '}';
     }
 
     public static Locale getSysLocale() {

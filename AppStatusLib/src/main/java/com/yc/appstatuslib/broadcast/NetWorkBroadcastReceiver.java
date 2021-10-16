@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
 public class NetWorkBroadcastReceiver extends BroadcastReceiver {
-    private ResourceManager mManager;
+    private AppStatusManager mManager;
 
-    public NetWorkBroadcastReceiver(ResourceManager resourceManager) {
+    public NetWorkBroadcastReceiver(AppStatusManager resourceManager) {
         this.mManager = resourceManager;
     }
 

@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class BatteryInfo {
+public final class BatteryInfo {
+
     public String technology = "";
     public int temperature;
     public int voltage;
@@ -18,7 +19,9 @@ public class BatteryInfo {
     public BatteryInfo() {
     }
 
-    public static BatteryInfo buildBattery(int status, int health, int level, int scale, int plugged, int voltage, int temperature, String technology) {
+    public static BatteryInfo buildBattery(int status, int health, int level, int scale,
+                                           int plugged, int voltage, int temperature,
+                                           String technology) {
         BatteryInfo batteryInfo = new BatteryInfo();
         batteryInfo.status = getStatus(status);
         batteryInfo.health = getHealth(health);
@@ -28,7 +31,8 @@ public class BatteryInfo {
         batteryInfo.technology = technology;
         batteryInfo.voltage = voltage;
         batteryInfo.plugged = getPlugged(plugged);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss:SSS", Locale.US);
         batteryInfo.humanTime = dateFormat.format(new Date());
         return batteryInfo;
     }
@@ -86,7 +90,24 @@ public class BatteryInfo {
     }
 
     public String toString() {
-        return "BatteryInfo{technology='" + this.technology + '\'' + ", temperature=" + this.temperature + ", voltage=" + this.voltage + ", level=" + this.level + ", scale=" + this.scale + ", status=" + this.status + ", health=" + this.health + ", plugged=" + this.plugged + '}';
+        return "BatteryInfo{technology='" + this.technology + '\'' + ", temperature=" +
+                this.temperature + ", voltage=" + this.voltage + ", level=" +
+                this.level + ", scale=" + this.scale + ", status=" + this.status + ", health=" +
+                this.health + ", plugged=" + this.plugged + '}';
     }
+
+    public String toStringInfo(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("technology : ").append(this.technology).append("\n");
+        stringBuilder.append("temperature : ").append(this.temperature).append("\n");
+        stringBuilder.append("voltage : ").append(this.voltage).append("\n");
+        stringBuilder.append("level : ").append(this.level).append("\n");
+        stringBuilder.append("scale : ").append(this.scale).append("\n");
+        stringBuilder.append("status : ").append(this.status).append("\n");
+        stringBuilder.append("health : ").append(this.health).append("\n");
+        stringBuilder.append("plugged : ").append(this.plugged);
+        return stringBuilder.toString();
+    }
+
 }
 

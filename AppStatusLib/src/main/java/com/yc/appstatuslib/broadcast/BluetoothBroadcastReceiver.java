@@ -6,13 +6,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
-public class BluetoothStateBroadcastReceiver extends BroadcastReceiver {
+public final class BluetoothBroadcastReceiver extends BroadcastReceiver {
 
-    private ResourceManager mManager;
+    private final AppStatusManager mManager;
 
-    public BluetoothStateBroadcastReceiver(ResourceManager mManager) {
+    public BluetoothBroadcastReceiver(AppStatusManager mManager) {
         this.mManager = mManager;
     }
 

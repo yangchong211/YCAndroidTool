@@ -20,9 +20,9 @@ public class AppStatus {
     private Application mApplication;
     private int mActivityStartedCount;
     private int mActivityResumedCount;
-    private ResourceManager mResourceManager;
+    private AppStatusManager mResourceManager;
 
-    AppStatus(ResourceManager manager) {
+    AppStatus(AppStatusManager manager) {
         this.mResourceManager = manager;
     }
 

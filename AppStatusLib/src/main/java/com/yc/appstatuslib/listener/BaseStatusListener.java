@@ -1,5 +1,7 @@
 package com.yc.appstatuslib.listener;
 
+import com.yc.appstatuslib.info.BatteryInfo;
+
 public class BaseStatusListener implements AppStatusListener{
 
     /**
@@ -52,6 +54,15 @@ public class BaseStatusListener implements AppStatusListener{
      */
     @Override
     public void bluetoothStatusChange(boolean isBluetoothOn) {
+
+    }
+
+    /**
+     * 电量状态监听
+     * @param batteryInfo           电量信息
+     */
+    @Override
+    public void batteryStatusChange(BatteryInfo batteryInfo) {
 
     }
 

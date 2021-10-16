@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.provider.Settings.System;
 import android.text.TextUtils;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
-public final class GpsBrodacastReceiver extends BroadcastReceiver {
+public final class GpsBroadcastReceiver extends BroadcastReceiver {
 
-    private ResourceManager mManager;
+    private AppStatusManager mManager;
 
-    public GpsBrodacastReceiver(ResourceManager mManager) {
+    public GpsBroadcastReceiver(AppStatusManager mManager) {
         this.mManager = mManager;
     }
 
@@ -25,7 +25,8 @@ public final class GpsBrodacastReceiver extends BroadcastReceiver {
     }
 
     public static boolean isGpsEnabled(Context context) {
-        String gps = System.getString(context.getContentResolver(), "location_providers_allowed");
+        String gps = System.getString(context.getContentResolver(),
+                "location_providers_allowed");
         return !TextUtils.isEmpty(gps) && gps.contains("gps");
     }
 

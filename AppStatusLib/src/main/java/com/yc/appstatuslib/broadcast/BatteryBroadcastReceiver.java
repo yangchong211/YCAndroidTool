@@ -5,14 +5,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 import com.yc.appstatuslib.info.BatteryInfo;
 
 public class BatteryBroadcastReceiver extends BroadcastReceiver {
-    private BatteryInfo mBatteryInfo = new BatteryInfo();
-    private ResourceManager mManager;
 
-    public BatteryBroadcastReceiver(ResourceManager manger) {
+    private BatteryInfo mBatteryInfo = new BatteryInfo();
+    private final AppStatusManager mManager;
+
+    public BatteryBroadcastReceiver(AppStatusManager manger) {
         this.mManager = manger;
     }
 
@@ -27,19 +28,23 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver {
             int voltage = intent.getIntExtra("voltage", 0);
             int temperature = intent.getIntExtra("temperature", 0);
             String technology = intent.getStringExtra("technology");
-            BatteryInfo batteryInfo = BatteryInfo.buildBattery(status, health, level, scale, plugged, voltage, temperature, technology);
+            BatteryInfo batteryInfo = BatteryInfo.buildBattery(status, health, level,
+                    scale, plugged, voltage, temperature, technology);
             if (this.notify(batteryInfo) && this.mManager != null) {
                 this.mBatteryInfo = batteryInfo;
-                this.mManager.collection();
+                this.mManager.dispatcherBatteryState(mBatteryInfo);
             }
-
             this.mBatteryInfo = batteryInfo;
         }
-
     }
 
     public boolean notify(BatteryInfo batteryInfo) {
-        return this.mBatteryInfo == null || this.mBatteryInfo.level != batteryInfo.level || !this.mBatteryInfo.status.equals(batteryInfo.status) || !this.mBatteryInfo.health.equals(batteryInfo.health) || !this.mBatteryInfo.plugged.equals(batteryInfo.plugged) || this.mBatteryInfo.temperature != batteryInfo.temperature;
+        return this.mBatteryInfo == null ||
+                this.mBatteryInfo.level != batteryInfo.level ||
+                !this.mBatteryInfo.status.equals(batteryInfo.status) ||
+                !this.mBatteryInfo.health.equals(batteryInfo.health) ||
+                !this.mBatteryInfo.plugged.equals(batteryInfo.plugged) ||
+                this.mBatteryInfo.temperature != batteryInfo.temperature;
     }
 
     public BatteryInfo getBatteryInfo() {

@@ -4,13 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
 public class ScreenBroadcastReceiver extends BroadcastReceiver {
 
-    private ResourceManager mManager;
+    private AppStatusManager mManager;
 
-    public ScreenBroadcastReceiver(ResourceManager resourceManager) {
+    public ScreenBroadcastReceiver(AppStatusManager resourceManager) {
         this.mManager = resourceManager;
     }
 

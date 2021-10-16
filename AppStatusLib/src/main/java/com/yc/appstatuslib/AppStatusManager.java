@@ -1,48 +1,53 @@
 package com.yc.appstatuslib;
 
 import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.IntentFilter;
 
 import com.yc.appstatuslib.broadcast.BatteryBroadcastReceiver;
-import com.yc.appstatuslib.broadcast.GpsBrodacastReceiver;
+import com.yc.appstatuslib.broadcast.BluetoothBroadcastReceiver;
+import com.yc.appstatuslib.broadcast.GpsBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.NetWorkBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.ScreenBroadcastReceiver;
 import com.yc.appstatuslib.broadcast.WifiBroadcastReceiver;
 import com.yc.appstatuslib.info.BatteryInfo;
-import com.yc.appstatuslib.info.CollectionInfo;
 import com.yc.appstatuslib.listener.AppStatusListener;
+import com.yc.appstatuslib.listener.TraceLogListener;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResourceManager {
+public final class AppStatusManager {
 
-    private List<AppStatusListener> mAppStatusListener;
-    private ResourceCollect mResourceCollect;
-    private BatteryBroadcastReceiver mBatteryReceiver;
-    private GpsBrodacastReceiver mGpsReceiver;
-    private NetWorkBroadcastReceiver mNetWorkReceiver;
-    private ScreenBroadcastReceiver mScreenReceiver;
-    private WifiBroadcastReceiver mWifiBroadcastReceiver;
-    private AppStatus mAppStatus;
-    private Context mContext;
+    private final List<AppStatusListener> mAppStatusListener;
+    private final ResourceCollect mResourceCollect;
+    private final BatteryBroadcastReceiver mBatteryReceiver;
+    private final GpsBroadcastReceiver mGpsReceiver;
+    private final NetWorkBroadcastReceiver mNetWorkReceiver;
+    private final ScreenBroadcastReceiver mScreenReceiver;
+    private final WifiBroadcastReceiver mWifiBroadcastReceiver;
+    private final BluetoothBroadcastReceiver mBluetoothReceiver;
+    private final AppStatus mAppStatus;
+    private final Context mContext;
 
-    private ResourceManager(ResourceManager.Builder builder) {
+    private AppStatusManager(AppStatusManager.Builder builder) {
         this.mAppStatusListener = new ArrayList<>();
         this.mBatteryReceiver = new BatteryBroadcastReceiver(this);
-        this.mGpsReceiver = new GpsBrodacastReceiver(this);
+        this.mGpsReceiver = new GpsBroadcastReceiver(this);
         this.mNetWorkReceiver = new NetWorkBroadcastReceiver(this);
         this.mScreenReceiver = new ScreenBroadcastReceiver(this);
         this.mWifiBroadcastReceiver = new WifiBroadcastReceiver(this);
+        this.mBluetoothReceiver = new BluetoothBroadcastReceiver(this);
         this.mAppStatus = new AppStatus(this);
         this.mContext = builder.context;
-        this.mResourceCollect = (new ResourceCollect.Builder()).manager(this)
+        this.mResourceCollect = (new ResourceCollect.Builder())
+                .manager(this)
                 .traceLog(builder.traceLog)
                 .file(builder.file)
                 .interval(builder.interval)
-                .orderStatus(builder.status)
                 .builder();
         this.init();
     }
@@ -51,13 +56,15 @@ public class ResourceManager {
         if (this.mResourceCollect != null) {
             this.mResourceCollect.destroy();
         }
-
         this.initBatteryReceiver(this.mContext);
         this.initGpsReceiver(this.mContext);
         this.initNetworkReceiver(this.mContext);
-        this.iniScreenReceiver(this.mContext);
-        this.iniWifiReceiver(this.mContext);
-        this.mResourceCollect.init();
+        this.initScreenReceiver(this.mContext);
+        this.initWifiReceiver(this.mContext);
+        this.initBluetoothReceiver(this.mContext);
+        if (this.mResourceCollect != null) {
+            this.mResourceCollect.init();
+        }
         this.mAppStatus.init((Application)this.mContext.getApplicationContext());
     }
 
@@ -79,7 +86,7 @@ public class ResourceManager {
         context.registerReceiver(this.mNetWorkReceiver, filter);
     }
 
-    private void iniScreenReceiver(Context context) {
+    private void initScreenReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.SCREEN_ON");
         filter.addAction("android.intent.action.SCREEN_OFF");
@@ -87,17 +94,27 @@ public class ResourceManager {
         context.registerReceiver(this.mScreenReceiver, filter);
     }
 
-    private void iniWifiReceiver(Context context) {
+    private void initWifiReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         context.registerReceiver(this.mWifiBroadcastReceiver, filter);
     }
+
+    private void initBluetoothReceiver(Context context) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        //filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        context.registerReceiver(this.mBluetoothReceiver, filter);
+    }
+
 
     public void destroy() {
         this.mContext.unregisterReceiver(this.mBatteryReceiver);
         this.mContext.unregisterReceiver(this.mGpsReceiver);
         this.mContext.unregisterReceiver(this.mNetWorkReceiver);
         this.mContext.unregisterReceiver(this.mScreenReceiver);
+        this.mContext.unregisterReceiver(this.mBluetoothReceiver);
         this.mAppStatusListener.clear();
         if (this.mResourceCollect != null) {
             this.mResourceCollect.destroy();
@@ -109,7 +126,6 @@ public class ResourceManager {
         if (this.mResourceCollect != null) {
             this.mResourceCollect.sendCollectionMsg();
         }
-
     }
 
     public BatteryInfo getBatteryInfo() {
@@ -197,14 +213,15 @@ public class ResourceManager {
         }
     }
 
-    public interface TraceLog {
-        void log(CollectionInfo var1);
-    }
-
-    public interface OrderStatus {
-        boolean isOnline();
-
-        boolean hasOrder();
+    public void dispatcherBatteryState(BatteryInfo batteryInfo) {
+        Object[] listeners = this.mAppStatusListener.toArray();
+        Object[] var2 = listeners;
+        int var3 = listeners.length;
+        for(int var4 = 0; var4 < var3; ++var4) {
+            Object listener = var2[var4];
+            ((AppStatusListener)listener).batteryStatusChange(batteryInfo);
+        }
+        collection();
     }
 
     public interface DimScreenSaver {
@@ -228,38 +245,32 @@ public class ResourceManager {
          * file文件
          */
         private File file;
-        private ResourceManager.TraceLog traceLog;
-        private ResourceManager.OrderStatus status;
+        private TraceLogListener traceLog;
 
         public Builder() {
         }
 
-        public ResourceManager.Builder interval(int interval) {
+        public AppStatusManager.Builder interval(int interval) {
             this.interval = interval;
             return this;
         }
 
-        public ResourceManager.Builder file(File file) {
+        public AppStatusManager.Builder file(File file) {
             this.file = file;
             return this;
         }
 
-        public ResourceManager.Builder context(Context context) {
+        public AppStatusManager.Builder context(Context context) {
             this.context = context;
             return this;
         }
 
-        public ResourceManager.Builder traceLog(ResourceManager.TraceLog trace) {
+        public AppStatusManager.Builder traceLog(TraceLogListener trace) {
             this.traceLog = trace;
             return this;
         }
 
-        public ResourceManager.Builder orderStatus(ResourceManager.OrderStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public ResourceManager builder() {
+        public AppStatusManager builder() {
             if (this.context == null) {
                 throw new NullPointerException("context is null");
             } else if (this.file == null) {
@@ -268,8 +279,7 @@ public class ResourceManager {
                 if (this.interval == 0) {
                     this.interval = 6000;
                 }
-
-                return new ResourceManager(this);
+                return new AppStatusManager(this);
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.yc.appstatuslib.listener;
 
+import com.yc.appstatuslib.info.BatteryInfo;
+
 public interface AppStatusListener {
 
     /**
@@ -36,6 +38,12 @@ public interface AppStatusListener {
      * @param isBluetoothOn         true表示蓝牙打开，false表示蓝牙断开连接
      */
     void bluetoothStatusChange(boolean isBluetoothOn);
+
+    /**
+     * 电量状态监听
+     * @param batteryInfo           电量信息
+     */
+    void batteryStatusChange(BatteryInfo batteryInfo);
 
 
     /**

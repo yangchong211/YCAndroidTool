@@ -10,13 +10,14 @@ import android.view.MotionEvent;
 import android.view.WindowManager.LayoutParams;
 import androidx.annotation.NonNull;
 
-import com.yc.appstatuslib.ResourceManager;
+import com.yc.appstatuslib.AppStatusManager;
 
 public class ScreenLightnessController {
+
     private static final String TAG = "ScreenLightnessControll";
     private static final int CHANGE_BRIGHTNESS = 1;
     private float mCurrentScreenBrightness = -120.0F;
-    private ResourceManager.DimScreenSaver mDimScreenSaver;
+    private AppStatusManager.DimScreenSaver mDimScreenSaver;
     private Activity mActivity;
     private Handler mScreenLightHandler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
@@ -30,7 +31,7 @@ public class ScreenLightnessController {
     };
     private int mDimDelayMillis;
 
-    public ScreenLightnessController(@NonNull Activity activity, @NonNull ResourceManager.DimScreenSaver dimScreenSaver) {
+    public ScreenLightnessController(@NonNull Activity activity, @NonNull AppStatusManager.DimScreenSaver dimScreenSaver) {
         this.mDimScreenSaver = dimScreenSaver;
         this.mActivity = activity;
     }
