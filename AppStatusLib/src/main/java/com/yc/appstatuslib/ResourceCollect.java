@@ -66,7 +66,6 @@ class ResourceCollect {
         if (this.mHandler != null) {
             this.mHandler.removeCallbacksAndMessages((Object)null);
         }
-
         if (this.mHandlerThread != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.mHandlerThread.quitSafely();
@@ -74,7 +73,6 @@ class ResourceCollect {
                 this.mHandlerThread.quit();
             }
         }
-
     }
 
     static class Builder {

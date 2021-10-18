@@ -1,4 +1,4 @@
-package com.yc.appstatuslib.thread;
+package com.yc.appstatuslib.utils;
 
 
 
@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public final class ThreadManager {
+public final class ThreadManagerUtils {
 
-    private static ThreadManager INSTANCE;
+    private static ThreadManagerUtils INSTANCE;
 
-    public static ThreadManager getInstance() {
+    public static ThreadManagerUtils getInstance() {
         if (INSTANCE == null) {
-            synchronized (ThreadManager.class) {
+            synchronized (ThreadManagerUtils.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new ThreadManager();
+                    INSTANCE = new ThreadManagerUtils();
                 }
             }
         }
@@ -23,7 +23,7 @@ public final class ThreadManager {
     }
 
 
-    private ThreadManager() {
+    private ThreadManagerUtils() {
 
     }
 

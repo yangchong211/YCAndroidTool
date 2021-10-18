@@ -6,9 +6,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 
-public final class CpuUtils {
+public final class CpuInfoUtils {
 
-    public CpuUtils() {
+    public CpuInfoUtils() {
 
     }
 

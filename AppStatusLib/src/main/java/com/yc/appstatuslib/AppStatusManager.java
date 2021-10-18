@@ -1,7 +1,6 @@
 package com.yc.appstatuslib;
 
 import android.app.Application;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -16,7 +15,7 @@ import com.yc.appstatuslib.info.BatteryInfo;
 import com.yc.appstatuslib.info.ThreadInfo;
 import com.yc.appstatuslib.listener.AppStatusListener;
 import com.yc.appstatuslib.listener.TraceLogListener;
-import com.yc.appstatuslib.thread.ThreadManager;
+import com.yc.appstatuslib.utils.ThreadManagerUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -207,7 +206,7 @@ public final class AppStatusManager {
     public void dispatcherThreadInfo(){
         Object[] listeners = this.mAppStatusListener.toArray();
         if (threadSwitchOn){
-            ThreadManager threadManager = ThreadManager.getInstance();
+            ThreadManagerUtils threadManager = ThreadManagerUtils.getInstance();
             ThreadInfo threadInfo = new ThreadInfo();
             threadInfo.setThreadCount(threadManager.getThreadCount());
             threadInfo.setBlockThreadCount(threadManager.getBlockThread());
