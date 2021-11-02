@@ -5,8 +5,6 @@ import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Bundle;
 import android.util.SparseArray;
-
-
 import com.yc.appstatuslib.listener.AppStatusListener;
 
 import java.util.ArrayList;
@@ -15,14 +13,16 @@ import java.util.List;
 public class AppStatus {
 
     private static final String TAG = "AppStatus";
-    private final List<AppStatusListener> mAppStatusListener = new ArrayList();
-    private AppStatus.AppStatusLifecycleCallbacks mAppCallbacks = new AppStatus.AppStatusLifecycleCallbacks();
+    private final List<AppStatusListener> mAppStatusListener = new ArrayList<>();
+    private final AppStatus.AppStatusLifecycleCallbacks mAppCallbacks =
+            new AppStatus.AppStatusLifecycleCallbacks();
     private Application mApplication;
     private int mActivityStartedCount;
     private int mActivityResumedCount;
-    private AppStatusManager mResourceManager;
+    private final AppStatusManager mResourceManager;
 
     AppStatus(AppStatusManager manager) {
+        //直接传入对象
         mResourceManager = manager;
     }
 
@@ -78,7 +78,7 @@ public class AppStatus {
 
     private class AppStatusLifecycleCallbacks implements ActivityLifecycleCallbacks {
 
-        private final SparseArray<Integer> mResumedActivities = new SparseArray();
+        private final SparseArray<Integer> mResumedActivities = new SparseArray<>();
 
         AppStatusLifecycleCallbacks() {
         }
