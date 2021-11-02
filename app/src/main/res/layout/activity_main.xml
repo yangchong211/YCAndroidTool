@@ -89,6 +89,6 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="9.mock定位坐标"/>
+        android:text="9.查看fps流畅度"/>
 
 </LinearLayout>

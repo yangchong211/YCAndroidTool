@@ -6,7 +6,7 @@ import com.yc.appstatuslib.AppStatusManager;
 import com.yc.appstatuslib.info.BatteryInfo;
 import com.yc.appstatuslib.info.ThreadInfo;
 import com.yc.appstatuslib.listener.BaseStatusListener;
-import com.yc.catonhelperlib.HandlerBlockTask;
+import com.yc.catonhelperlib.watch.HandlerBlockTask;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.longevitylib.LongevityMonitorConfig;
 import com.yc.netlib.utils.ToolFileUtils;

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.yc.catonhelperlib.fps.PerformanceActivity;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_8:
                 startActivity(new Intent(this, MemoryActivity.class));
+                break;
+            case R.id.tv_9:
+                startActivity(new Intent(this, PerformanceActivity.class));
                 break;
         }
     }
