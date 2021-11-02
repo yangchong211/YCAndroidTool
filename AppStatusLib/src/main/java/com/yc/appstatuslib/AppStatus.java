@@ -15,7 +15,7 @@ import java.util.List;
 public class AppStatus {
 
     private static final String TAG = "AppStatus";
-    private List<AppStatusListener> mAppStatusListener = new ArrayList();
+    private final List<AppStatusListener> mAppStatusListener = new ArrayList();
     private AppStatus.AppStatusLifecycleCallbacks mAppCallbacks = new AppStatus.AppStatusLifecycleCallbacks();
     private Application mApplication;
     private int mActivityStartedCount;
@@ -23,13 +23,13 @@ public class AppStatus {
     private AppStatusManager mResourceManager;
 
     AppStatus(AppStatusManager manager) {
-        this.mResourceManager = manager;
+        mResourceManager = manager;
     }
 
     void registerAppStatusListener(AppStatusListener listener) {
         if (listener != null) {
-            synchronized(this.mAppStatusListener) {
-                this.mAppStatusListener.add(listener);
+            synchronized(mAppStatusListener) {
+                mAppStatusListener.add(listener);
             }
         }
     }
@@ -38,29 +38,29 @@ public class AppStatus {
         if (listener == null) {
             return false;
         } else {
-            synchronized(this.mAppStatusListener) {
-                return this.mAppStatusListener.remove(listener);
+            synchronized(mAppStatusListener) {
+                return mAppStatusListener.remove(listener);
             }
         }
     }
 
     int getAppStatus() {
-        return this.mActivityResumedCount;
+        return mActivityResumedCount;
     }
 
     public void destory() {
-        this.mAppStatusListener.clear();
-        this.mApplication.unregisterActivityLifecycleCallbacks(this.mAppCallbacks);
+        mAppStatusListener.clear();
+        mApplication.unregisterActivityLifecycleCallbacks(mAppCallbacks);
     }
 
     void init(Application application) {
-        this.mApplication = application;
-        application.registerActivityLifecycleCallbacks(this.mAppCallbacks);
+        mApplication = application;
+        application.registerActivityLifecycleCallbacks(mAppCallbacks);
     }
 
     private void dispatchAppOnFrontOrBack(boolean front) {
-        if (this.mAppStatusListener != null && this.mAppStatusListener.size() != 0) {
-            Object[] listeners = this.mAppStatusListener.toArray();
+        if (mAppStatusListener != null && mAppStatusListener.size() != 0) {
+            Object[] listeners = mAppStatusListener.toArray();
             int index;
             if (front) {
                 for(index = 0; index < listeners.length; ++index) {
@@ -76,7 +76,7 @@ public class AppStatus {
         }
     }
 
-    class AppStatusLifecycleCallbacks implements ActivityLifecycleCallbacks {
+    private class AppStatusLifecycleCallbacks implements ActivityLifecycleCallbacks {
 
         private final SparseArray<Integer> mResumedActivities = new SparseArray();
 
@@ -95,33 +95,31 @@ public class AppStatus {
         public void onActivityResumed(Activity activity) {
             if (activity != null) {
                 int hash = activity.hashCode();
-                if (this.mResumedActivities.indexOfKey(hash) > 0) {
+                if (mResumedActivities.indexOfKey(hash) > 0) {
                     return;
                 }
 
-                this.mResumedActivities.append(hash, 0);
+                mResumedActivities.append(hash, 0);
             }
-
-            AppStatus.this.mActivityResumedCount++;
-            if (AppStatus.this.mActivityResumedCount == 1) {
-                AppStatus.this.dispatchAppOnFrontOrBack(true);
-                AppStatus.this.mResourceManager.collection();
+            mActivityResumedCount++;
+            if (mActivityResumedCount == 1) {
+                dispatchAppOnFrontOrBack(true);
+                mResourceManager.collection();
             }
-
         }
 
         public void onActivityStopped(Activity activity) {
             if (activity != null) {
                 int hash = activity.hashCode();
-                if (this.mResumedActivities.indexOfKey(hash) > 0) {
-                    this.mResumedActivities.remove(hash);
+                if (mResumedActivities.indexOfKey(hash) > 0) {
+                    mResumedActivities.remove(hash);
                 }
             }
 
-            AppStatus.this.mActivityResumedCount--;
-            if (AppStatus.this.mActivityResumedCount == 0) {
-                AppStatus.this.dispatchAppOnFrontOrBack(false);
-                AppStatus.this.mResourceManager.collection();
+            mActivityResumedCount--;
+            if (mActivityResumedCount == 0) {
+                dispatchAppOnFrontOrBack(false);
+                mResourceManager.collection();
             }
 
         }
