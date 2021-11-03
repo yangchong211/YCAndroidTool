@@ -28,6 +28,10 @@ public class PerformanceManager {
 
 
     public void init(Context context) {
+        if (context==null){
+            throw new NullPointerException("context must be not null");
+        }
+        FloatPageManager.getInstance().init(context);
         mContext = context.getApplicationContext();
     }
 
@@ -78,6 +82,16 @@ public class PerformanceManager {
         mMainHandler.removeCallbacks(mRateRunnable);
     }
 
+    public void startMonitor() {
+        PerformanceManager.getInstance().startMonitorFrameInfo();
+        RealTimeChartPage.openChartPage("Fps检测",1000, null);
+    }
+
+    public void stopMonitor() {
+        PerformanceManager.getInstance().stopMonitorFrameInfo();
+        RealTimeChartPage.closeChartPage();
+    }
+
     public void destroy() {
         stopMonitorFrameInfo();
     }
@@ -102,6 +116,9 @@ public class PerformanceManager {
         return getFilePath(mContext) + fpsFileName;
     }
 
+    public long getLastFrameRate() {
+        return (long)this.mLastFrameRate;
+    }
 
     private String getFilePath(Context context) {
         return context.getCacheDir() + File.separator + "yc/";

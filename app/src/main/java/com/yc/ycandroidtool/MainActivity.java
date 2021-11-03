@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.catonhelperlib.fps.PerformanceActivity;
+import com.yc.catonhelperlib.fps.PerformanceManager;
 import com.yc.longevitylib.LongevityMonitor;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
@@ -31,10 +32,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_6).setOnClickListener(this);
         findViewById(R.id.tv_7).setOnClickListener(this);
         findViewById(R.id.tv_8).setOnClickListener(this);
-        findViewById(R.id.tv_9).setOnClickListener(this);
+        findViewById(R.id.tv_9_1).setOnClickListener(this);
+        findViewById(R.id.tv_9_2).setOnClickListener(this);
+        findViewById(R.id.tv_9_3).setOnClickListener(this);
 
         //开启保活sdk
         LongevityMonitor.onActivityCreate(savedInstanceState);
+        PerformanceManager.getInstance().init(this);
     }
 
     @Override
@@ -69,7 +73,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tv_8:
                 startActivity(new Intent(this, MemoryActivity.class));
                 break;
-            case R.id.tv_9:
+            case R.id.tv_9_1:
+                PerformanceManager.getInstance().startMonitor();
+                break;
+            case R.id.tv_9_2:
+                PerformanceManager.getInstance().stopMonitor();
+                break;
+            case R.id.tv_9_3:
                 startActivity(new Intent(this, PerformanceActivity.class));
                 break;
         }

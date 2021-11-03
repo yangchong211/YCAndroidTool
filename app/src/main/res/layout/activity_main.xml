@@ -83,12 +83,30 @@
 
 
     <TextView
-        android:id="@+id/tv_9"
+        android:id="@+id/tv_9_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="9.查看fps流畅度"/>
+        android:text="9.1 打开查看fps流畅度"/>
+
+    <TextView
+        android:id="@+id/tv_9_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="9.2 关闭查看fps流畅度"/>
+
+    <TextView
+        android:id="@+id/tv_9_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="9.3 查看fps流畅度所有数据"/>
 
 </LinearLayout>
