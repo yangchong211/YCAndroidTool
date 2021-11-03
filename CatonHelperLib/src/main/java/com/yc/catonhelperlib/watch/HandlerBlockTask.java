@@ -41,16 +41,21 @@ public final class HandlerBlockTask {
     public void startWork(){
         mBlockThread.start();
         mHandler = new Handler(mBlockThread.getLooper());
-        Looper.getMainLooper().setMessageLogging(new Printer() {
+        //获取主线程looper
+        Looper mainLooper = Looper.getMainLooper();
+        mainLooper.setMessageLogging(new Printer() {
+            //这个是在Looper源码loop方法中找到
             private static final String START = ">>>>> Dispatching";
             private static final String END = "<<<<< Finished";
 
             @Override
             public void println(String x) {
                 if (x.startsWith(START)) {
+                    //开始监控
                     startMonitor();
                 }
                 if (x.startsWith(END)) {
+                    //移除监控
                     removeMonitor();
                 }
             }

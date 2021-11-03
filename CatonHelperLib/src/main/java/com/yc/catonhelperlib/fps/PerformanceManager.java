@@ -1,8 +1,10 @@
 package com.yc.catonhelperlib.fps;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Choreographer;
 
 import java.io.File;
@@ -11,14 +13,14 @@ import java.util.Date;
 
 public class PerformanceManager {
 
-    private Handler mMainHandler;
-    private String fpsFileName;
-    private SimpleDateFormat simpleDateFormat;
+    private final Handler mMainHandler;
+    private final String fpsFileName;
+    private final SimpleDateFormat simpleDateFormat;
     private int mLastFrameRate;
     private int mLastSkippedFrames;
     private Context mContext;
-    private FrameRateRunnable mRateRunnable;
-
+    private final FrameRateRunnable mRateRunnable;
+    private static final String TAG = "PerformanceManager";
 
     public static PerformanceManager getInstance() {
         return PerformanceManager.Holder.INSTANCE;
@@ -26,70 +28,78 @@ public class PerformanceManager {
 
 
     public void init(Context context) {
-        this.mContext = context.getApplicationContext();
+        mContext = context.getApplicationContext();
     }
 
 
     private class FrameRateRunnable implements Runnable, Choreographer.FrameCallback {
+        
         private int totalFramesPerSecond;
 
         private FrameRateRunnable() {
+            
         }
 
         public void run() {
-            PerformanceManager.this.mLastFrameRate = this.totalFramesPerSecond;
-            if (PerformanceManager.this.mLastFrameRate > 60) {
-                PerformanceManager.this.mLastFrameRate = 60;
+            mLastFrameRate = totalFramesPerSecond;
+            if (mLastFrameRate > 60) {
+                mLastFrameRate = 60;
             }
-
-            PerformanceManager.this.mLastSkippedFrames = 60 - PerformanceManager.this.mLastFrameRate;
-            this.totalFramesPerSecond = 0;
-            PerformanceManager.this.mMainHandler.postDelayed(this, 1000L);
+            mLastSkippedFrames = 60 - mLastFrameRate;
+            totalFramesPerSecond = 0;
+            mMainHandler.postDelayed(this, 1000L);
+            Log.i(TAG,"fps runnable run");
         }
 
         public void doFrame(long frameTimeNanos) {
-            ++this.totalFramesPerSecond;
+            ++totalFramesPerSecond;
             Choreographer.getInstance().postFrameCallback(this);
-            PerformanceManager.this.writeFpsDataIntoFile();
+            writeFpsDataIntoFile();
         }
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private PerformanceManager() {
-        this.fpsFileName = "fps.txt";
-        this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.mLastFrameRate = 60;
-        this.mMainHandler = new Handler(Looper.getMainLooper());
-        this.mRateRunnable = new FrameRateRunnable();
+        fpsFileName = "fps.txt";
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mLastFrameRate = 60;
+        mMainHandler = new Handler(Looper.getMainLooper());
+        mRateRunnable = new FrameRateRunnable();
     }
 
     public void startMonitorFrameInfo() {
-        this.mMainHandler.postDelayed(this.mRateRunnable, 1000L);
-        Choreographer.getInstance().postFrameCallback(this.mRateRunnable);
+        mMainHandler.postDelayed(mRateRunnable, 1000L);
+        Choreographer.getInstance().postFrameCallback(mRateRunnable);
     }
 
     public void stopMonitorFrameInfo() {
-        Choreographer.getInstance().removeFrameCallback(this.mRateRunnable);
-        this.mMainHandler.removeCallbacks(this.mRateRunnable);
+        Choreographer.getInstance().removeFrameCallback(mRateRunnable);
+        mMainHandler.removeCallbacks(mRateRunnable);
     }
 
     public void destroy() {
-        this.stopMonitorFrameInfo();
+        stopMonitorFrameInfo();
     }
 
     private void writeFpsDataIntoFile() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.mLastFrameRate);
+        stringBuilder.append(mLastFrameRate);
         stringBuilder.append(" ");
-        stringBuilder.append(this.simpleDateFormat.format(
+        stringBuilder.append(simpleDateFormat.format(
                 new Date(System.currentTimeMillis())));
-        FileManager.writeTxtToFile(stringBuilder.toString(),
-                this.getFilePath(this.mContext), this.fpsFileName);
+        String string = stringBuilder.toString();
+        String filePath = getFilePath(mContext);
+        Log.i(TAG,"fps data is : "+string);
+        //Samsung SM-A5160 Android 11, API 30
+        Log.i(TAG,"fps data file path : "+filePath);
+        ///data/user/0/com.com.yc.ycandroidtool/cache/yc/
+        FileManager.writeTxtToFile(string, getFilePath(mContext), fpsFileName);
     }
 
     public String getFpsFilePath() {
-        //
-        return this.getFilePath(this.mContext) + this.fpsFileName;
+        //获取file
+        return getFilePath(mContext) + fpsFileName;
     }
 
 
@@ -98,11 +108,12 @@ public class PerformanceManager {
     }
 
     public int getLastSkippedFrames() {
-        return this.mLastSkippedFrames;
+        return mLastSkippedFrames;
     }
 
     private static class Holder {
-        private static PerformanceManager INSTANCE = new PerformanceManager();
+        
+        private static final PerformanceManager INSTANCE = new PerformanceManager();
 
         private Holder() {
         }

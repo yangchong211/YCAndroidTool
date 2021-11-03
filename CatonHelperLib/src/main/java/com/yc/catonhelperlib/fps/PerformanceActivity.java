@@ -2,6 +2,7 @@ package com.yc.catonhelperlib.fps;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -58,7 +59,14 @@ public class PerformanceActivity extends AppCompatActivity {
 
 
         performanceDataAdapter = new PerformanceDataAdapter(this);
+        detail.setLayoutManager(new LinearLayoutManager(this));
         detail.setAdapter(performanceDataAdapter);
+        performanceDataAdapter.setOnViewClickListener(new PerformanceDataAdapter.OnViewClickListener() {
+            @Override
+            public void onViewClick(View var1, PerformanceData data) {
+                updateTips(data);
+            }
+        });
         
         PerformanceManager.getInstance().startMonitorFrameInfo();
     }
@@ -77,10 +85,10 @@ public class PerformanceActivity extends AppCompatActivity {
         date.setText(data.date);
     }
 
-
-
     private class LoadDataTask extends AsyncTask<String, Integer, List<PerformanceData>> {
+
         private LoadDataTask() {
+
         }
 
         protected void onPostExecute(List<PerformanceData> result) {
@@ -96,7 +104,6 @@ public class PerformanceActivity extends AppCompatActivity {
             ArrayList<PerformanceData> datas = new ArrayList();
             if (file.exists()) {
                 BufferedReader reader = null;
-
                 try {
                     reader = new BufferedReader(new FileReader(file));
                     String tempString = null;
