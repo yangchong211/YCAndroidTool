@@ -20,6 +20,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 
 public abstract class BaseFloatPage {
+
     private static final String TAG = "BaseFloatPage";
     private View mRootView;
     private LayoutParams mLayoutParams;
@@ -163,6 +164,7 @@ public abstract class BaseFloatPage {
     }
 
     private class InnerReceiver extends BroadcastReceiver {
+
         final String SYSTEM_DIALOG_REASON_KEY;
         final String SYSTEM_DIALOG_REASON_RECENT_APPS;
         final String SYSTEM_DIALOG_REASON_HOME_KEY;
@@ -185,7 +187,6 @@ public abstract class BaseFloatPage {
                     }
                 }
             }
-
         }
     }
 }

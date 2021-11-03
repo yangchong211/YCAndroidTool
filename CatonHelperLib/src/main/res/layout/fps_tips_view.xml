@@ -16,7 +16,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="63.5dp"
-            android:textColor="@color/dk_color_4c00C9F4"
+            android:textColor="@color/fps_color_4c00C9F4"
             android:textSize="8sp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="3dp"
             android:layout_marginRight="25dp"
-            android:textColor="@color/dk_color_999999"
+            android:textColor="@color/fps_color_999999"
             android:textSize="20sp" />
     </RelativeLayout>
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="63.5dp"
-            android:textColor="@color/dk_color_33434352"
+            android:textColor="@color/fps_color_33434352"
             android:textSize="8sp" />
 
         <TextView

@@ -21,7 +21,7 @@ public class RealTimeChartIconPage extends BaseFloatPage implements View.OnClick
     protected View onCreateView(Context context, ViewGroup view) {
         ImageView imageView = new ImageView(this.getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setImageResource(R.drawable.dk_close_white);
+        imageView.setImageResource(R.drawable.icon_close_white);
         imageView.setOnClickListener(this);
         return imageView;
     }

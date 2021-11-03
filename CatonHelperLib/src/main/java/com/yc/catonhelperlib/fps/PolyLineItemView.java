@@ -89,7 +89,7 @@ public class PolyLineItemView extends View {
         this.pointY = (1.0F - this.currentValue / (this.maxValue - this.minValue)) * (pointBottomY - pointTopY) + pointTopY;
         if (mGradientPaint == null) {
             mGradientPaint = new Paint();
-            mGradientPaint.setShader(new LinearGradient(0.0F, 0.0F, this.viewWidth, this.viewHeight, this.getResources().getColor(R.color.dk_color_3300BFFF), this.getResources().getColor(R.color.dk_color_33434352), TileMode.CLAMP));
+            mGradientPaint.setShader(new LinearGradient(0.0F, 0.0F, this.viewWidth, this.viewHeight, this.getResources().getColor(R.color.fps_color_3300BFFF), this.getResources().getColor(R.color.fps_color_33434352), TileMode.CLAMP));
         }
 
     }
@@ -143,7 +143,7 @@ public class PolyLineItemView extends View {
     private void drawGraph(Canvas canvas) {
         this.mPaint.setPathEffect((PathEffect) null);
         this.mPaint.setStyle(Style.FILL);
-        this.mPaint.setColor(this.getResources().getColor(R.color.dk_color_4c00C9F4));
+        this.mPaint.setColor(this.getResources().getColor(R.color.fps_color_4c00C9F4));
         this.mPaint.setStrokeWidth(2.0F);
         this.mPaint.setAntiAlias(true);
         float middleValue;
@@ -184,7 +184,7 @@ public class PolyLineItemView extends View {
     private void drawPoint(Canvas canvas) {
         int color;
         if (this.onTouch) {
-            color = this.getResources().getColor(R.color.dk_color_4c00C9F4);
+            color = this.getResources().getColor(R.color.fps_color_4c00C9F4);
             this.mPaint.setColor(color);
             this.mPaint.setPathEffect((PathEffect) null);
             this.mPaint.setStrokeWidth(2.0F);
@@ -192,7 +192,7 @@ public class PolyLineItemView extends View {
             canvas.drawCircle(this.pointX, this.pointY, 20.0F, this.mPaint);
         }
 
-        color = this.getResources().getColor(R.color.dk_color_ff00C9F4);
+        color = this.getResources().getColor(R.color.fps_color_ff00C9F4);
         this.mPaint.setColor(color);
         this.mPaint.setStrokeWidth(2.0F);
         canvas.drawCircle(this.pointX, this.pointY, this.pointSize, this.mPaint);
@@ -200,7 +200,7 @@ public class PolyLineItemView extends View {
 
     private void drawLine(Canvas canvas) {
         if (this.drawDiver) {
-            this.mPaint.setColor(this.getResources().getColor(R.color.dk_color_999999));
+            this.mPaint.setColor(this.getResources().getColor(R.color.fps_color_999999));
             this.mPaint.setPathEffect((PathEffect) null);
             this.mPaint.setStrokeWidth(2.0F);
             this.mPaint.setStyle(Style.FILL);

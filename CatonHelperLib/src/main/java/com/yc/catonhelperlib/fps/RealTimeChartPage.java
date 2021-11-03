@@ -27,7 +27,6 @@ public class RealTimeChartPage extends BaseFloatPage {
 
     public void init() {
         String title = this.getBundle().getString("title");
-        int type = this.getBundle().getInt("type");
         int interval = this.getBundle().getInt("interval", 1000);
         IDataSource dataSource = new FrameDataSource();
         this.mLineChart.setTitle(title);

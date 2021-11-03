@@ -64,17 +64,17 @@ public class LineRender {
 
     private void initPaint() {
         this.mGradientPaint.setShader(new LinearGradient(0.0F, 0.0F, this.viewWidth,
-                this.viewHeight, this.mContext.getResources().getColor(R.color.dk_color_3300BFFF),
-                this.mContext.getResources().getColor(R.color.dk_color_33434352), TileMode.CLAMP));
+                this.viewHeight, this.mContext.getResources().getColor(R.color.fps_color_3300BFFF),
+                this.mContext.getResources().getColor(R.color.fps_color_33434352), TileMode.CLAMP));
         this.mLabelPaint.setTextSize(24);
         this.mLabelPaint.setColor(-1);
         this.mLabelPaint.setTextAlign(Align.CENTER);
         this.mLinePaint.setPathEffect((PathEffect)null);
         this.mLinePaint.setStyle(Style.FILL);
-        this.mLinePaint.setColor(this.mContext.getResources().getColor(R.color.dk_color_4c00C9F4));
+        this.mLinePaint.setColor(this.mContext.getResources().getColor(R.color.fps_color_4c00C9F4));
         this.mLinePaint.setStrokeWidth(2.0F);
         this.mLinePaint.setAntiAlias(true);
-        int color = this.mContext.getResources().getColor(R.color.dk_color_ff00C9F4);
+        int color = this.mContext.getResources().getColor(R.color.fps_color_ff00C9F4);
         this.mPointPaint.setColor(color);
         this.mPointPaint.setStrokeWidth(2.0F);
     }
