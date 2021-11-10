@@ -11,7 +11,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PerformanceManager {
+public final class PerformanceManager {
 
     private final Handler mMainHandler;
     private final String fpsFileName;
@@ -61,10 +61,15 @@ public class PerformanceManager {
             Log.i(TAG,"fps runnable run");
         }
 
+        /**
+         * 在 doFrame 方法中，我们统计每秒内的执行次数，以及记录当前帧的时间
+         * @param frameTimeNanos                nano帧时间
+         */
         public void doFrame(long frameTimeNanos) {
             ++totalFramesPerSecond;
             //注册下一帧回调
             Choreographer.getInstance().postFrameCallback(this);
+            //写入文件
             writeFpsDataIntoFile();
         }
     }
