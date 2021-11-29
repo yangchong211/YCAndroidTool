@@ -129,7 +129,9 @@ public final class CrashHelper {
                     final int EXECUTE_TRANSACTION = 159;
                     if (msg.what == EXECUTE_TRANSACTION) {
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             sActivityKiller.finishLaunchActivity(msg);
                             notifyException(throwable);
@@ -142,7 +144,9 @@ public final class CrashHelper {
                     // startActivity--> activity.attach  activity.onCreate  r.activity!=null  activity.onStart  activity.onResume
                     case LAUNCH_ACTIVITY:
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             sActivityKiller.finishLaunchActivity(msg);
                             notifyException(throwable);
@@ -151,7 +155,9 @@ public final class CrashHelper {
                     case RESUME_ACTIVITY:
                         //回到activity onRestart onStart onResume
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             sActivityKiller.finishResumeActivity(msg);
                             notifyException(throwable);
@@ -169,7 +175,9 @@ public final class CrashHelper {
                     case PAUSE_ACTIVITY:
                         //开启新页面时，旧页面执行 activity.onPause
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             sActivityKiller.finishPauseActivity(msg);
                             notifyException(throwable);
@@ -178,7 +186,9 @@ public final class CrashHelper {
                     case STOP_ACTIVITY_HIDE:
                         //开启新页面时，旧页面执行 activity.onStop
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             sActivityKiller.finishStopActivity(msg);
                             notifyException(throwable);
@@ -187,7 +197,9 @@ public final class CrashHelper {
                     case DESTROY_ACTIVITY:
                         // 关闭activity onStop  onDestroy
                         try {
-                            mhHandler.handleMessage(msg);
+                            if (mhHandler != null) {
+                                mhHandler.handleMessage(msg);
+                            }
                         } catch (Throwable throwable) {
                             notifyException(throwable);
                         }
