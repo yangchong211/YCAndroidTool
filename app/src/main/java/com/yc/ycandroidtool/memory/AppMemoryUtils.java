@@ -1,4 +1,4 @@
-package com.yc.memorylib;
+package com.yc.ycandroidtool.memory;
 
 import android.app.ActivityManager;
 import android.content.Context;

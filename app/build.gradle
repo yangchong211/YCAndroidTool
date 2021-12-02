@@ -29,8 +29,6 @@ dependencies {
 //    implementation 'cn.com.yc:NetLib:1.0.1'
     implementation project(path: ':CrashToolLib')
     implementation project(path: ':NetWorkLib')
-    implementation project(path: ':MemoryLib')
-    implementation project(path: ':LongevityLib')
     implementation project(path: ':CatonHelperLib')
 //    implementation project(path: ':AnotherMonitor')
 }

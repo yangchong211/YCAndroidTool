@@ -9,9 +9,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.yc.memorylib.AppMemoryUtils;
-import com.yc.netlib.utils.NetDeviceUtils;
-import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.crash.MemoryUtils;
 import com.yc.toollib.tool.ToolLogUtils;
 import com.yc.ycandroidtool.R;
