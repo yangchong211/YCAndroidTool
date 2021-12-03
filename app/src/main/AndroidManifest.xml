@@ -38,6 +38,7 @@
         <activity android:name=".net.NetworkActivity"/>
         <activity android:name=".ping.PingActivity"/>
         <activity android:name=".memory.MemoryActivity"/>
+        <activity android:name=".canary.CanaryActivity"/>
 
     </application>
 

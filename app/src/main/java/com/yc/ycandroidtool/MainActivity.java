@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.catonhelperlib.fps.PerformanceActivity;
 import com.yc.catonhelperlib.fps.PerformanceManager;
-import com.yc.longevitylib.LongevityMonitor;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
+import com.yc.ycandroidtool.canary.CanaryActivity;
 import com.yc.ycandroidtool.fs.StudentActivity;
 import com.yc.ycandroidtool.memory.MemoryActivity;
 import com.yc.ycandroidtool.net.NetworkActivity;
@@ -35,9 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_9_1).setOnClickListener(this);
         findViewById(R.id.tv_9_2).setOnClickListener(this);
         findViewById(R.id.tv_9_3).setOnClickListener(this);
-
-        //开启保活sdk
-        LongevityMonitor.onActivityCreate(savedInstanceState);
+        findViewById(R.id.tv_10).setOnClickListener(this);
         PerformanceManager.getInstance().init(this);
     }
 
@@ -81,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_9_3:
                 startActivity(new Intent(this, PerformanceActivity.class));
+                break;
+            case R.id.tv_10:
+                startActivity(new Intent(this, CanaryActivity.class));
                 break;
         }
     }

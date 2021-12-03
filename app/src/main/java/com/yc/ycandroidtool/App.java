@@ -1,14 +1,19 @@
 package com.yc.ycandroidtool;
 
 import android.app.Application;
+import android.content.Context;
 
+import com.yc.catonhelperlib.canary.BlockCanary;
 import com.yc.catonhelperlib.watch.HandlerBlockTask;
 import com.yc.toollib.crash.CrashHandler;
 import com.yc.toollib.crash.CrashListener;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.netlib.utils.NetworkTool;
+import com.yc.ycandroidtool.canary.AppContext;
 
 public class App extends Application {
+
+    private static Context sContext;
 
     @Override
     public void onCreate() {
@@ -19,6 +24,12 @@ public class App extends Application {
         NetworkTool.getInstance().setFloat(this);
         HandlerBlockTask.getInstance().startWork();
         //WatchDog.getInstance().startWork();
+        sContext = this;
+        BlockCanary.install(this, new AppContext()).start();
+    }
+
+    public static Context getAppContext() {
+        return sContext;
     }
 
     private void initCrash() {

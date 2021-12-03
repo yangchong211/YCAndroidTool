@@ -109,4 +109,13 @@
         android:padding="10dp"
         android:text="9.3 查看fps流畅度所有数据"/>
 
+    <TextView
+        android:id="@+id/tv_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="10.卡顿监控方案"/>
+
 </LinearLayout>
