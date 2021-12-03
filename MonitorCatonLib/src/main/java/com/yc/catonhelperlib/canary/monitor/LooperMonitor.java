@@ -19,10 +19,9 @@ import android.os.Debug;
 import android.os.SystemClock;
 import android.util.Printer;
 
-class LooperMonitor implements Printer {
+public class LooperMonitor implements Printer {
 
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
-
     private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
     private long mStartTimestamp = 0;
     private long mStartThreadTimestamp = 0;

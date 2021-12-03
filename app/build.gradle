@@ -27,8 +27,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
 //    implementation 'cn.com.yc:ToolLib:1.2.3'
 //    implementation 'cn.com.yc:NetLib:1.0.1'
-    implementation project(path: ':CrashToolLib')
-    implementation project(path: ':NetWorkLib')
-    implementation project(path: ':CatonHelperLib')
+    implementation project(path: ':MonitorCrashLib')
+    implementation project(path: ':MonitorNetLib')
+    implementation project(path: ':MonitorCatonLib')
 //    implementation project(path: ':AnotherMonitor')
 }
