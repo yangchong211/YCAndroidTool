@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * 用于计算用户连接的近似带宽
  */
-public class ConnectionClassManager {
+public class ConnectionManager {
 
     private static final double DEFAULT_SAMPLES_TO_QUALITY_CHANGE = 5;
     private static final int BYTES_TO_BITS = 8;
@@ -28,13 +28,13 @@ public class ConnectionClassManager {
     /**
      * 用户连接的当前带宽取决于响应。
      */
-    private ExponentialGeometricAverage mDownloadBandwidth
+    private final ExponentialGeometricAverage mDownloadBandwidth
             = new ExponentialGeometricAverage(DEFAULT_DECAY_CONSTANT);
     private volatile boolean mInitiateStateChange = false;
-    private AtomicReference<ConnectionQuality> mCurrentBandwidthConnectionQuality =
+    private final AtomicReference<ConnectionQuality> mCurrentBandwidthConnectionQuality =
             new AtomicReference<>(ConnectionQuality.UNKNOWN);
     private AtomicReference<ConnectionQuality> mNextBandwidthConnectionQuality;
-    private ArrayList<ConnectionClassStateChangeListener> mListenerList = new ArrayList<>();
+    private final ArrayList<ConnectionStateChangeListener> mListenerList = new ArrayList<>();
     private int mSampleCounter;
 
     /**
@@ -43,25 +43,24 @@ public class ConnectionClassManager {
     static final long BANDWIDTH_LOWER_BOUND = 10;
 
     private static class ConnectionClassManagerHolder {
-        public static final ConnectionClassManager instance = new ConnectionClassManager();
+        public static final ConnectionManager instance = new ConnectionManager();
     }
 
     /**
      * 获取单利对象
      * @return                              单利对象
      */
-    public static ConnectionClassManager getInstance() {
+    public static ConnectionManager getInstance() {
         return ConnectionClassManagerHolder.instance;
     }
 
-    // Force constructor to be private.
-    private ConnectionClassManager() {
+    private ConnectionManager() {
 
     }
 
     /**
      * 增加带宽到当前过滤的延迟计数器。向所有人发送广播
-     * {@link ConnectionClassStateChangeListener} 如果计数器从一个桶移动到另一个桶(即低带宽->中等带宽)。
+     * {@link ConnectionStateChangeListener} 如果计数器从一个桶移动到另一个桶(即低带宽->中等带宽)。
      */
     public synchronized void addBandwidth(long bytes, long timeInMs) {
         //Ignore garbage values.
@@ -182,15 +181,11 @@ public class ConnectionClassManager {
         return mDownloadBandwidth == null ? -1.0 : mDownloadBandwidth.getAverage();
     }
 
-    public interface ConnectionClassStateChangeListener {
-        void onBandwidthStateChange(ConnectionQuality bandwidthState);
-    }
-
     /**
      * 注册监听操作
      * @param listener                              listener
      */
-    public ConnectionQuality register(ConnectionClassStateChangeListener listener) {
+    public ConnectionQuality register(ConnectionStateChangeListener listener) {
         if (listener != null) {
             mListenerList.add(listener);
         }
@@ -201,7 +196,7 @@ public class ConnectionClassManager {
      * 移除监听操作
      * @param listener                              listener
      */
-    public void remove(ConnectionClassStateChangeListener listener) {
+    public void remove(ConnectionStateChangeListener listener) {
         if (listener != null) {
             mListenerList.remove(listener);
         }
@@ -213,7 +208,8 @@ public class ConnectionClassManager {
     private void notifyListeners() {
         int size = mListenerList.size();
         for (int i = 0; i < size; i++) {
-            mListenerList.get(i).onBandwidthStateChange(mCurrentBandwidthConnectionQuality.get());
+            ConnectionQuality connectionQuality = mCurrentBandwidthConnectionQuality.get();
+            mListenerList.get(i).onBandwidthStateChange(connectionQuality);
         }
     }
 }

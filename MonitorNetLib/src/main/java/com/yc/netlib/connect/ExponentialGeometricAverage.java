@@ -1,9 +1,10 @@
 package com.yc.netlib.connect;
 
 /**
- * ConnectionClass移动平均计算
+ * Connection移动平均计算
+ * 主要是获取网络的平均值，里面最重要的就是addMeasurement(double measurement)。
  */
-class ExponentialGeometricAverage {
+public class ExponentialGeometricAverage {
 
     private final double mDecayConstant;
     private final int mCutover;
@@ -17,7 +18,7 @@ class ExponentialGeometricAverage {
     }
 
     /**
-     * 为移动平均线添加了一个新的测量方法
+     * 为移动平均值添加了一个新的测量方法
      * @param measurement                 带宽测量以比特/毫秒增加到移动平均。
      */
     public void addMeasurement(double measurement) {
@@ -39,6 +40,10 @@ class ExponentialGeometricAverage {
         mCount++;
     }
 
+    /**
+     * 获取平均值
+     * @return                      平均值
+     */
     public double getAverage() {
         return mValue;
     }

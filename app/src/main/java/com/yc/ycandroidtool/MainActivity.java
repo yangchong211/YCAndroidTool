@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.catonhelperlib.fps.PerformanceActivity;
 import com.yc.catonhelperlib.fps.PerformanceManager;
+import com.yc.netlib.connect.ConnectionActivity;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_5).setOnClickListener(this);
         findViewById(R.id.tv_6).setOnClickListener(this);
         findViewById(R.id.tv_7).setOnClickListener(this);
+        findViewById(R.id.tv_7_2).setOnClickListener(this);
         findViewById(R.id.tv_8).setOnClickListener(this);
         findViewById(R.id.tv_9_1).setOnClickListener(this);
         findViewById(R.id.tv_9_2).setOnClickListener(this);
@@ -67,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_7:
                 startActivity(new Intent(this, NetworkActivity.class));
+                break;
+            case R.id.tv_7_2:
+                startActivity(new Intent(this, ConnectionActivity.class));
                 break;
             case R.id.tv_8:
                 startActivity(new Intent(this, MemoryActivity.class));

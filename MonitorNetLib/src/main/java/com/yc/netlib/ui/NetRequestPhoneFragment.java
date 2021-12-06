@@ -24,8 +24,9 @@ import android.widget.TextView;
 
 import com.yc.netlib.BuildConfig;
 import com.yc.netlib.R;
-import com.yc.netlib.connect.ConnectionClassManager;
+import com.yc.netlib.connect.ConnectionManager;
 import com.yc.netlib.connect.ConnectionQuality;
+import com.yc.netlib.connect.ConnectionStateChangeListener;
 import com.yc.netlib.connect.DeviceBandwidthSampler;
 import com.yc.netlib.data.IDataPoolHandleImpl;
 import com.yc.netlib.data.NetworkFeedBean;
@@ -61,7 +62,7 @@ public class NetRequestPhoneFragment extends Fragment {
     private PingView tvNetInfo;
     private List<NetworkFeedBean> mNetworkFeedList;
     private static final int MESSAGE = 1;
-    private ConnectionClassManager mConnectionClassManager;
+    private ConnectionManager mConnectionClassManager;
     private DeviceBandwidthSampler mDeviceBandwidthSampler;
     private ConnectionChangedListener mListener;
     private ConnectionQuality mConnectionClass = UNKNOWN;
@@ -119,7 +120,7 @@ public class NetRequestPhoneFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConnectionClassManager = ConnectionClassManager.getInstance();
+        mConnectionClassManager = ConnectionManager.getInstance();
         mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
         mListener = new ConnectionChangedListener();
         mConnectionClassManager.reset();
@@ -328,7 +329,7 @@ public class NetRequestPhoneFragment extends Fragment {
     /**
      * 侦听器在connectionclass更改时更新UI
      */
-    private class ConnectionChangedListener implements ConnectionClassManager.ConnectionClassStateChangeListener {
+    private class ConnectionChangedListener implements ConnectionStateChangeListener {
         @Override
         public void onBandwidthStateChange(ConnectionQuality bandwidthState) {
             mConnectionClass = bandwidthState;
@@ -362,7 +363,7 @@ public class NetRequestPhoneFragment extends Fragment {
                 } else {
                     sb.append("未知带宽");
                 }
-                double downloadKBitsPerSecond = ConnectionClassManager.getInstance().getDownloadKBitsPerSecond();
+                double downloadKBitsPerSecond = ConnectionManager.getInstance().getDownloadKBitsPerSecond();
                 sb.append("\n平均宽带值:").append(downloadKBitsPerSecond);
                 mTvBandWidth.setText(sb.toString());
             }
@@ -411,7 +412,7 @@ public class NetRequestPhoneFragment extends Fragment {
                 new DownloadImage().execute(mURL);
             }
             if (mTries==10){
-                ConnectionQuality quality = ConnectionClassManager.getInstance().getCurrentBandwidthQuality();
+                ConnectionQuality quality = ConnectionManager.getInstance().getCurrentBandwidthQuality();
                 setConnText(quality);
             }
         }

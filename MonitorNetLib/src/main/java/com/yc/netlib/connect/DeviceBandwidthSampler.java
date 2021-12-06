@@ -1,13 +1,3 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- *
- */
-
 package com.yc.netlib.connect;
 
 import android.net.TrafficStats;
@@ -28,29 +18,31 @@ public class DeviceBandwidthSampler {
     /**
      * DownloadBandwidthManager记录移动平均值和ConnectionClass
      */
-    private final ConnectionClassManager mConnectionClassManager;
-    private AtomicInteger mSamplingCounter;
-    private SamplingHandler mHandler;
-    private HandlerThread mThread;
+    private final ConnectionManager mConnectionManager;
+    /**
+     * 由于是多线程下载图片，这里使用 AtomicInteger 可以避免脏数据出现，
+     */
+    private final AtomicInteger mSamplingCounter;
+    private final SamplingHandler mHandler;
     private long mLastTimeReading;
     private static long sPreviousBytes = -1;
 
     // Singleton.
     private static class DeviceBandwidthSamplerHolder {
         public static final DeviceBandwidthSampler instance =
-                new DeviceBandwidthSampler(ConnectionClassManager.getInstance());
+                new DeviceBandwidthSampler(ConnectionManager.getInstance());
     }
 
     public static DeviceBandwidthSampler getInstance() {
         return DeviceBandwidthSamplerHolder.instance;
     }
 
-    private DeviceBandwidthSampler(ConnectionClassManager connectionClassManager) {
-        mConnectionClassManager = connectionClassManager;
+    private DeviceBandwidthSampler(ConnectionManager connectionManager) {
+        mConnectionManager = connectionManager;
         mSamplingCounter = new AtomicInteger();
-        mThread = new HandlerThread("ParseThread");
-        mThread.start();
-        mHandler = new SamplingHandler(mThread.getLooper());
+        HandlerThread thread = new HandlerThread("ParseThread");
+        thread.start();
+        mHandler = new SamplingHandler(thread.getLooper());
     }
 
     /**
@@ -88,7 +80,7 @@ public class DeviceBandwidthSampler {
                 //得到当前的时间
                 long curTimeReading = SystemClock.elapsedRealtime();
                 //传入流量变化的差值和时间差值
-                mConnectionClassManager.addBandwidth(byteDiff, curTimeReading - mLastTimeReading);
+                mConnectionManager.addBandwidth(byteDiff, curTimeReading - mLastTimeReading);
                 //更新相对的时间戳
                 mLastTimeReading = curTimeReading;
             }
@@ -116,9 +108,8 @@ public class DeviceBandwidthSampler {
         /**
          * 间隔时间
          */
-        static final long SAMPLE_TIME = 1000;
-
-        static private final int MSG_START = 1;
+        private static final long SAMPLE_TIME = 1000;
+        private static final int MSG_START = 1;
 
         public SamplingHandler(Looper looper) {
             super(looper);
@@ -126,14 +117,12 @@ public class DeviceBandwidthSampler {
 
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_START:
-                    addSample();
-                    //循环获取样本计算网速
-                    sendEmptyMessageDelayed(MSG_START, SAMPLE_TIME);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown what=" + msg.what);
+            if (msg.what == MSG_START) {
+                addSample();
+                //循环获取样本计算网速
+                sendEmptyMessageDelayed(MSG_START, SAMPLE_TIME);
+            } else {
+                throw new IllegalArgumentException("Unknown what=" + msg.what);
             }
         }
 

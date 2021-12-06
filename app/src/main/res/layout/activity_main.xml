@@ -69,8 +69,16 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="7.网络库"/>
+        android:text="7.1 网络拦截数据分析"/>
 
+    <TextView
+        android:id="@+id/tv_7_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="7.2 网络质量测试案例"/>
 
     <TextView
         android:id="@+id/tv_8"
