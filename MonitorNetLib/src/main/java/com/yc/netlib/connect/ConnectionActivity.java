@@ -37,7 +37,11 @@ public class ConnectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_con);
+        initConnection();
         initFindViewById();
+    }
+
+    private void initConnection() {
         mConnectionClassManager = ConnectionManager.getInstance();
         mDeviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
         mListener = new ConnectionChangedListener();
