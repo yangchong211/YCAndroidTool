@@ -5,7 +5,7 @@ android {
     compileSdkVersion project.ext.androidCompileSdkVersion
     buildToolsVersion project.ext.androidBuildToolsVersion
     defaultConfig {
-        applicationId "com.com.yc.ycandroidtool"
+        applicationId "com.yc.ycandroidtool"
         minSdkVersion project.ext.androidMinSdkVersion
         targetSdkVersion project.ext.androidTargetSdkVersion
         versionCode 1
