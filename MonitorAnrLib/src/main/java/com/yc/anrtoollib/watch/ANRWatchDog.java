@@ -10,22 +10,30 @@ import androidx.annotation.Nullable;
 
 public class ANRWatchDog extends Thread {
 
+    /**
+     * 默认ANR超时时间
+     */
     private static final int DEFAULT_ANR_TIMEOUT = 5000;
 
     private static final ANRListener DEFAULT_ANR_LISTENER = new ANRListener() {
-        @Override public void onAppNotResponding(@NonNull ANRError error) {
+        @Override
+        public void onAppNotResponding(@NonNull ANRError error) {
+            //处理方式简单粗暴哈，直接把ANRError丢出去，
+            //这样APP就直接崩溃了
             throw error;
         }
     };
 
     private static final ANRInterceptor DEFAULT_ANR_INTERCEPTOR = new ANRInterceptor() {
-        @Override public long intercept(long duration) {
+        @Override
+        public long intercept(long duration) {
             return 0;
         }
     };
 
     private static final InterruptionListener DEFAULT_INTERRUPTION_LISTENER = new InterruptionListener() {
-        @Override public void onInterrupted(@NonNull InterruptedException exception) {
+        @Override
+        public void onInterrupted(@NonNull InterruptedException exception) {
             Log.w("ANRWatchdog", "Interrupted: " + exception.getMessage());
         }
     };
@@ -34,6 +42,9 @@ public class ANRWatchDog extends Thread {
     private ANRInterceptor _anrInterceptor = DEFAULT_ANR_INTERCEPTOR;
     private InterruptionListener _interruptionListener = DEFAULT_INTERRUPTION_LISTENER;
 
+    /**
+     * 绑定了主线程Looper的Handler
+     */
     private final Handler _uiHandler = new Handler(Looper.getMainLooper());
     private final int _timeoutInterval;
 
@@ -46,6 +57,8 @@ public class ANRWatchDog extends Thread {
 
     private final Runnable _ticker = new Runnable() {
         @Override public void run() {
+            //_ticker中的run()，再一次将_tick置零；
+            //只要_ticker不被处理，其run()便不会执行，_tick就不会被置零，
             _tick = 0;
             _reported = false;
         }
@@ -86,6 +99,9 @@ public class ANRWatchDog extends Thread {
     @NonNull
     public ANRWatchDog setANRListener(@Nullable ANRListener listener) {
         if (listener == null) {
+            //开发者不定制，则使用框架自带的默认处理方式
+            //处理方式简单粗暴哈，直接把ANRError丢出去，
+            //这样APP就直接崩溃了
             _anrListener = DEFAULT_ANR_LISTENER;
         } else {
             _anrListener = listener;
@@ -202,7 +218,9 @@ public class ANRWatchDog extends Thread {
 
         long interval = _timeoutInterval;
         while (!isInterrupted()) {
+            //一开始就_tick为0的话说明_tick还没被post
             boolean needPost = _tick == 0;
+            //没有便将_tick=加上卡顿周期，之后post了_ticker
             _tick += interval;
             if (needPost) {
                 _uiHandler.post(_ticker);
@@ -215,11 +233,16 @@ public class ANRWatchDog extends Thread {
                 return ;
             }
 
-            // If the main thread has not handled _ticker, it is blocked. ANR.
+            //根据_tick的值可以判断_ticker是否被处理了；
+            //_tick重新归零则主线程处理了_ticker，
+            //_tick不为零则判定主线程卡顿，它没处理_tick
             if (_tick != 0 && !_reported) {
                 //noinspection ConstantConditions
-                if (!_ignoreDebugger && (Debug.isDebuggerConnected() || Debug.waitingForDebugger())) {
-                    Log.w("ANRWatchdog", "An ANR was detected but ignored because the debugger is connected (you can prevent this with setIgnoreDebugger(true))");
+                if (!_ignoreDebugger && (Debug.isDebuggerConnected()
+                        || Debug.waitingForDebugger())) {
+                    Log.w("ANRWatchdog", "An ANR was detected but ignored " +
+                            "because the debugger is connected " +
+                            "(you can prevent this with setIgnoreDebugger(true))");
                     _reported = true;
                     continue ;
                 }
@@ -235,6 +258,7 @@ public class ANRWatchDog extends Thread {
                 } else {
                     error = ANRError.NewMainOnly(_tick);
                 }
+                //通过_anrListener.onAppNotResponding(error);回调机制处理ANRError实例
                 _anrListener.onAppNotResponding(error);
                 interval = _timeoutInterval;
                 _reported = true;

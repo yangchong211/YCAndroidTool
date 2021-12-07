@@ -13,29 +13,6 @@ import androidx.annotation.Nullable;
 
 public class ANRError extends Error {
 
-    private static class $ implements Serializable {
-        private final String _name;
-        private final StackTraceElement[] _stackTrace;
-
-        private class _Thread extends Throwable {
-            private _Thread(_Thread other) {
-                super(_name, other);
-            }
-
-            @Override
-            @NonNull
-            public Throwable fillInStackTrace() {
-                setStackTrace(_stackTrace);
-                return this;
-            }
-        }
-
-        private $(String name, StackTraceElement[] stackTrace) {
-            _name = name;
-            _stackTrace = stackTrace;
-        }
-    }
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -44,7 +21,7 @@ public class ANRError extends Error {
     @SuppressWarnings("WeakerAccess")
     public final long duration;
 
-    private ANRError($._Thread st, long duration) {
+    private ANRError(ANRStackTrace.MyThread st, long duration) {
         super("Application Not Responding for at least " + duration + " ms.", st);
         this.duration = duration;
     }
@@ -73,38 +50,46 @@ public class ANRError extends Error {
             }
         });
 
-        for (Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet())
-            if (
-                    entry.getKey() == mainThread
-                ||  (
-                        entry.getKey().getName().startsWith(prefix)
-                    &&  (
-                            logThreadsWithoutStackTrace
-                        ||
-                            entry.getValue().length > 0
-                        )
-                    )
-                )
-                stackTraces.put(entry.getKey(), entry.getValue());
+        for (Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()){
+            Thread key = entry.getKey();
+            StackTraceElement[] value = entry.getValue();
+            if (key == mainThread ||  (key.getName().startsWith(prefix)
+                    &&  (logThreadsWithoutStackTrace || value.length > 0))){
+                stackTraces.put(key, value);
+            }
+        }
 
         // Sometimes main is not returned in getAllStackTraces() - ensure that we list it
         if (!stackTraces.containsKey(mainThread)) {
             stackTraces.put(mainThread, mainThread.getStackTrace());
         }
 
-        $._Thread tst = null;
-        for (Map.Entry<Thread, StackTraceElement[]> entry : stackTraces.entrySet())
-            tst = new $(getThreadTitle(entry.getKey()), entry.getValue()).new _Thread(tst);
-
+        ANRStackTrace.MyThread tst = null;
+        for (Map.Entry<Thread, StackTraceElement[]> entry : stackTraces.entrySet()){
+            Thread key = entry.getKey();
+            StackTraceElement[] value = entry.getValue();
+            //获取线程名称
+            String threadTitle = getThreadTitle(key);
+            //创建包装类
+            ANRStackTrace anrStackTrace = new ANRStackTrace(threadTitle, value);
+            tst = anrStackTrace.new MyThread(tst);
+        }
         return new ANRError(tst, duration);
     }
 
     @NonNull
     static ANRError NewMainOnly(long duration) {
+        //通过mainLooper拿到主线程
         final Thread mainThread = Looper.getMainLooper().getThread();
+        //通过主线程拿到现场的堆栈信息
         final StackTraceElement[] mainStackTrace = mainThread.getStackTrace();
-
-        return new ANRError(new $(getThreadTitle(mainThread), mainStackTrace).new _Thread(null), duration);
+        //获取线程名称
+        String threadTitle = getThreadTitle(mainThread);
+        //创建包装类
+        ANRStackTrace threadStackTrace = new ANRStackTrace(threadTitle, mainStackTrace);
+        ANRStackTrace.MyThread thread = threadStackTrace.new MyThread(null);
+        //最后返回构造好的ANRError实例
+        return new ANRError(thread, duration);
     }
 
     private static String getThreadTitle(Thread thread) {

@@ -39,6 +39,7 @@
         <activity android:name=".ping.PingActivity"/>
         <activity android:name=".memory.MemoryActivity"/>
         <activity android:name=".canary.CanaryActivity"/>
+        <activity android:name=".anr.AnrActivity"/>
 
     </application>
 

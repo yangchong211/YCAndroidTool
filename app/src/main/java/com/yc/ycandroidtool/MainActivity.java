@@ -13,6 +13,7 @@ import com.yc.netlib.connect.ConnectionActivity;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
 import com.yc.toollib.tool.ToolLogUtils;
+import com.yc.ycandroidtool.anr.AnrActivity;
 import com.yc.ycandroidtool.canary.CanaryActivity;
 import com.yc.ycandroidtool.fs.StudentActivity;
 import com.yc.ycandroidtool.memory.MemoryActivity;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_1:
-                startActivity(new Intent(this,FirstActivity.class));
+                startActivity(new Intent(this, AnrActivity.class));
                 break;
             case R.id.tv_2:
                 break;

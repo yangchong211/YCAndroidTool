@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="1.重启app的普通方式"/>
+        android:text="1.测试项目ANR日志捕获和收集"/>
 
     <TextView
         android:id="@+id/tv_2"
