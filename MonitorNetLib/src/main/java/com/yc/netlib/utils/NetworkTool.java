@@ -3,18 +3,21 @@ package com.yc.netlib.utils;
 import android.app.Application;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.yc.netlib.R;
-import com.yc.netlib.floating.FloatWindow;
-import com.yc.netlib.floating.PermissionListener;
-import com.yc.netlib.floating.Screen;
-import com.yc.netlib.floating.ViewStateListener;
 import com.yc.netlib.stetho.NetworkInterceptor;
 import com.yc.netlib.stetho.NetworkListener;
 import com.yc.netlib.ui.NetRequestActivity;
 import com.yc.netlib.ui.NetworkDetailActivity;
 import com.yc.netlib.ui.NetworkManager;
+import com.yc.videoview.FloatWindow;
+import com.yc.videoview.MoveType;
+import com.yc.videoview.PermissionActivity;
+import com.yc.videoview.WindowScreen;
 
 import java.net.Proxy;
 
@@ -98,70 +101,26 @@ public class NetworkTool {
      * @param context                           上下文
      */
     public void setFloat(final Context context){
+        FrameLayout frameLayout = new FrameLayout(context);
         ImageView imageView = new ImageView(context.getApplicationContext());
         imageView.setImageResource(R.drawable.ic_show_error);
+        frameLayout.addView(imageView);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) imageView.getLayoutParams();
+        layoutParams.width = 100;
+        layoutParams.height = 100;
+        imageView.setLayoutParams(layoutParams);
         FloatWindow
                 .with(context)
-                .setView(imageView)
-                //设置悬浮控件宽高
-                .setWidth(Screen.width, 0.2f)
-                .setHeight(Screen.width, 0.2f)
+                .setView(frameLayout)
                 //设置控件初始位置
-                .setX(Screen.width, 0.8f)
-                .setY(Screen.height, 0.3f)
-                //桌面显示
-                .setDesktopShow(false)
+                .setX(WindowScreen.WIDTH, 0.8f)
+                .setY(WindowScreen.HEIGHT, 0.3f)
+                .setMoveType(MoveType.slide)
+                .setMoveStyle(500, new BounceInterpolator())
                 //设置这两个页面隐藏
                 .setFilter(false, NetRequestActivity.class , NetworkDetailActivity.class)
-                .setViewStateListener(new ViewStateListener() {
-                    @Override
-                    public void onPositionUpdate(int x, int y) {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onPositionUpdate");
-                    }
-
-                    @Override
-                    public void onShow() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onShow");
-                    }
-
-                    @Override
-                    public void onHide() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onHide");
-                    }
-
-                    @Override
-                    public void onDismiss() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onDismiss");
-                    }
-
-                    @Override
-                    public void onMoveAnimStart() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onMoveAnimStart");
-                    }
-
-                    @Override
-                    public void onMoveAnimEnd() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onMoveAnimEnd");
-                    }
-
-                    @Override
-                    public void onBackToDesktop() {
-                        NetLogUtils.i("NetworkTool-------ViewStateListener------onBackToDesktop");
-                    }
-                })    //监听悬浮控件状态改变
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onSuccess() {
-                        NetLogUtils.i("NetworkTool-------PermissionListener------onSuccess");
-                    }
-
-                    @Override
-                    public void onFail() {
-                        NetLogUtils.i("NetworkTool-------PermissionListener------onFail");
-                    }
-                })  //监听权限申请结果
                 .build();
-        imageView.setOnClickListener(new View.OnClickListener() {
+        frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NetRequestActivity.start(context.getApplicationContext());

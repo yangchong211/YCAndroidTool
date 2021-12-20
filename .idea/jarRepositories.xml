@@ -56,5 +56,10 @@
       <option name="name" value="maven3" />
       <option name="url" value="http://maven.aliyun.com/nexus/content/repositories/jcente" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository" />
+      <option name="name" value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository" />
+      <option name="url" value="file:$USER_HOME$/Library/Android/sdk/extras/android/m2repository/" />
+    </remote-repository>
   </component>
 </project>
