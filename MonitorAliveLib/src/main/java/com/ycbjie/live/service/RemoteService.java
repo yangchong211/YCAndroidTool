@@ -9,7 +9,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ycbjie.live.constant.YcConstant;
 import com.ycbjie.live.receiver.NotificationClickReceiver;
@@ -66,7 +67,7 @@ public final class RemoteService extends Service {
         }
     }
 
-    private final class GuardBinder extends GuardAidl.Stub {
+    private final class GuardBinder extends com.ycbjie.live.service.GuardAidl.Stub {
 
         @Override
         public void wakeUp(String title, String description, int iconRes) throws RemoteException {

@@ -29,4 +29,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }

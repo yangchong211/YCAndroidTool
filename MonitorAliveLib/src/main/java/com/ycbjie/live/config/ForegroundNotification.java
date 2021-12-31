@@ -1,6 +1,7 @@
 package com.ycbjie.live.config;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 

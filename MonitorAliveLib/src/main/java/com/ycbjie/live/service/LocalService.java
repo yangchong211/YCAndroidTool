@@ -13,7 +13,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ycbjie.alivelib.R;
 import com.ycbjie.live.alive.YcKeepAlive;
@@ -186,7 +187,7 @@ public final class LocalService extends Service {
         }
     }
 
-    private final class GuardBinder extends GuardAidl.Stub {
+    private final class GuardBinder extends com.ycbjie.live.service.GuardAidl.Stub {
 
         @Override
         public void wakeUp(String title, String description, int iconRes) throws RemoteException {
@@ -220,7 +221,7 @@ public final class LocalService extends Service {
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
                 if (mBinder != null && YcKeepAlive.sForegroundNotification != null) {
-                    GuardAidl guardAidl = GuardAidl.Stub.asInterface(service);
+                    com.ycbjie.live.service.GuardAidl guardAidl = com.ycbjie.live.service.GuardAidl.Stub.asInterface(service);
                     guardAidl.wakeUp(YcKeepAlive.sForegroundNotification.getTitle(), YcKeepAlive.sForegroundNotification.getDescription(), YcKeepAlive.sForegroundNotification.getIconRes());
                 }
             } catch (RemoteException e) {
