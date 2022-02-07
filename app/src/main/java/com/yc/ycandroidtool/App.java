@@ -38,14 +38,14 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         initCrash();
-        NetworkTool.getInstance().init(this);
+//        NetworkTool.getInstance().init(this);
         //建议只在debug环境下显示，点击去网络拦截列表页面查看网络请求数据
-        NetworkTool.getInstance().setFloat(this);
-        HandlerBlockTask.getInstance().startWork();
+//        NetworkTool.getInstance().setFloat(this);
+        //HandlerBloc·kTask.getInstance().startWork();
         //WatchDog.getInstance().startWork();
         sContext = this;
-        BlockCanary.install(this, new AppContext()).start();
-        initAnrTool();
+        //BlockCanary.install(this, new AppContext()).start();
+        //initAnrTool();
     }
 
     public static Context getAppContext() {

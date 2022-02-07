@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/MonitorAnrLib" />
             <option value="$PROJECT_DIR$/MonitorCatonLib" />
             <option value="$PROJECT_DIR$/MonitorCrashLib" />
+            <option value="$PROJECT_DIR$/MonitorFileLib" />
             <option value="$PROJECT_DIR$/MonitorNetLib" />
             <option value="$PROJECT_DIR$/OkHttpPlugin" />
             <option value="$PROJECT_DIR$/app" />

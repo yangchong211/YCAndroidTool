@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.yc.catonhelperlib.fps.PerformanceActivity;
 import com.yc.catonhelperlib.fps.PerformanceManager;
+import com.yc.monitorfilelib.FileExplorerActivity;
 import com.yc.netlib.connect.ConnectionActivity;
 import com.yc.toollib.crash.CrashToolUtils;
 import com.yc.toollib.tool.ToolFileUtils;
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_9_2).setOnClickListener(this);
         findViewById(R.id.tv_9_3).setOnClickListener(this);
         findViewById(R.id.tv_10).setOnClickListener(this);
-        PerformanceManager.getInstance().init(this);
+        findViewById(R.id.tv_11).setOnClickListener(this);
+        //PerformanceManager.getInstance().init(this);
     }
 
     @Override
@@ -88,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_10:
                 startActivity(new Intent(this, CanaryActivity.class));
+                break;
+            case R.id.tv_11:
+                startActivity(new Intent(this, FileExplorerActivity.class));
                 break;
         }
     }
