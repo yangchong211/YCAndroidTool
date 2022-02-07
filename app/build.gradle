@@ -32,5 +32,4 @@ dependencies {
     implementation project(path: ':MonitorCatonLib')
     implementation project(path: ':MonitorAnrLib')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-//    implementation project(path: ':AnotherMonitor')
 }

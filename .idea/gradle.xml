@@ -11,7 +11,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/AnotherMonitor" />
             <option value="$PROJECT_DIR$/MonitorAliveLib" />
             <option value="$PROJECT_DIR$/MonitorAnrLib" />
             <option value="$PROJECT_DIR$/MonitorCatonLib" />
