@@ -27,7 +27,7 @@
             android:ellipsize="end"
             android:gravity="left"
             android:singleLine="true"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="文件"/>
 
         <TextView

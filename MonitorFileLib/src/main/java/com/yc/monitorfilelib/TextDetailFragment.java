@@ -113,6 +113,7 @@ public class TextDetailFragment extends Fragment {
                 File srcFile = new File(mFile.getPath());
                 String newFilePath = FileExplorerUtils.getFileSharePath() + "/fileShare.txt";
                 File destFile = new File(newFilePath);
+                //拷贝文件，将data/data源文件拷贝到新的目标文件路径下
                 boolean copy = FileExplorerUtils.copyFile(srcFile, destFile);
                 if (copy) {
                     //分享
@@ -160,18 +161,34 @@ public class TextDetailFragment extends Fragment {
         }
 
         protected Void doInBackground(File... files) {
+            FileReader fileReader = null;
+            BufferedReader br = null;
             try {
-                FileReader fileReader = new FileReader(files[0]);
-                BufferedReader br = new BufferedReader(fileReader);
+                //大概思路是，一次读取一行，然后
+                fileReader = new FileReader(files[0]);
+                br = new BufferedReader(fileReader);
                 String textLine;
                 while((textLine = br.readLine()) != null) {
                     //一次读取一行
                     publishProgress(new String[]{textLine});
                 }
-                br.close();
-                fileReader.close();
             } catch (IOException exception) {
                 FileExplorerUtils.logError(TAG+exception.toString());
+            } finally {
+                if (fileReader != null) {
+                    try {
+                        fileReader.close();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
             }
             return null;
         }

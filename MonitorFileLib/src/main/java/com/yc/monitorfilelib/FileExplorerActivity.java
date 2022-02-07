@@ -28,6 +28,11 @@ public class FileExplorerActivity extends AppCompatActivity {
         showContent(target, null);
     }
 
+    /**
+     * 添加fragment
+     * @param target                        target对象
+     * @param bundle                        bundle数据
+     */
     public void showContent(Class<? extends Fragment> target, Bundle bundle) {
         try {
             Fragment fragment = target.newInstance();

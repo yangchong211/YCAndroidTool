@@ -39,7 +39,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnViewLongClickListener {
-        boolean onViewLongClick(View var1, File var2);
+        boolean onViewLongClick(View var1, File var2 ,int pos);
     }
 
     public interface OnViewClickListener {
@@ -92,7 +92,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public boolean onLongClick(View view) {
                         return mOnViewLongClickListener != null &&
-                                mOnViewLongClickListener.onViewLongClick(view, fileInfo);
+                                mOnViewLongClickListener.onViewLongClick(view, fileInfo,position);
                     }
                 });
             }

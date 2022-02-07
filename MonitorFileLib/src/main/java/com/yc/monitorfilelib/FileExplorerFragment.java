@@ -1,6 +1,8 @@
 package com.yc.monitorfilelib;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -97,9 +100,57 @@ public class FileExplorerFragment extends Fragment {
                 }
             }
         });
+        mFileInfoAdapter.setOnViewLongClickListener(new FileListAdapter.OnViewLongClickListener() {
+            @Override
+            public boolean onViewLongClick(View v, File fileInfo,int position) {
+                delFile(position);
+                return false;
+            }
+        });
         List<File> files = initRootFileInfo(getContext());
         setAdapterData(files);
         mRecyclerView.setAdapter(mFileInfoAdapter);
+    }
+
+    private void delFile(int position) {
+        if (mFileList.size()>position && position>=0){
+            //弹出Dialog是否删除当前
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("提示");
+            builder.setMessage("是否删除当前文件?");
+            builder.setNegativeButton("取消", null);
+            builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //删除文件
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            File file = mFileList.get(position);
+                            boolean isDel = FileExplorerUtils.deleteDirectory(file);
+                            if (isDel){
+                                mRecyclerView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                        mFileList.remove(position);
+                                        mFileInfoAdapter.notifyItemRemoved(position);
+                                    }
+                                });
+                            } else {
+                                mRecyclerView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
+            });
+            builder.show();
+        }
     }
 
     private void setAdapterData(List<File> fileInfos) {
@@ -179,7 +230,7 @@ public class FileExplorerFragment extends Fragment {
      */
     private List<File> initRootFileInfo(Context context) {
         List<File> rootFiles = getRootFiles();
-        if (rootFiles == null) {
+        if (rootFiles == null || rootFiles.isEmpty()) {
             return initDefaultRootFileInfos(context);
         } else {
             List<File> files = new ArrayList<>();

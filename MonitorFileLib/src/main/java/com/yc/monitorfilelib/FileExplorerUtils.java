@@ -24,15 +24,12 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Locale;
 
-import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
-
 public final class FileExplorerUtils {
 
-    public static final String TXT = "txt";
-    public static final String JPG = "jpg";
     public static final String DB = "db";
     public static final String SHARED_PREFS = "shared_prefs";
     public static final String XML = ".xml";
+    public static final String JSON = ".json";
     public static final boolean IS_DEBUG = true;
 
     private FileExplorerUtils() {
@@ -153,7 +150,7 @@ public final class FileExplorerUtils {
             return false;
         } else {
             String suffix = getSuffix(file);
-            return "db".equals(suffix);
+            return DB.equals(suffix);
         }
     }
 
@@ -164,8 +161,8 @@ public final class FileExplorerUtils {
      */
     public static boolean isSp(File file) {
         File parentFile = file.getParentFile();
-        return parentFile != null && parentFile.getName().equals("shared_prefs")
-                && file.getName().contains(".xml");
+        return parentFile != null && parentFile.getName().equals(SHARED_PREFS)
+                && file.getName().contains(XML);
     }
 
     /**
@@ -211,7 +208,7 @@ public final class FileExplorerUtils {
      * 删除文件
      * @param file                      文件
      */
-    public static void deleteDirectory(File file) {
+    public static boolean deleteDirectory(File file) {
         if (file!=null){
             if (file.isDirectory()) {
                 File[] listFiles = file.listFiles();
@@ -222,6 +219,13 @@ public final class FileExplorerUtils {
                 }
             }
             file.delete();
+        }
+        // 如果删除的文件路径所对应的文件存在，并且是一个文件，则表示删除失败
+        if (file!=null && file.exists() && file.isFile()) {
+            return false;
+        } else {
+            //删除成功
+            return true;
         }
     }
 
