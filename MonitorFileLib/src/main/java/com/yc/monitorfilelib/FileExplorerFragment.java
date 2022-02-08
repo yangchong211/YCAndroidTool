@@ -67,6 +67,7 @@ public class FileExplorerFragment extends Fragment {
         mLlBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //返回上一层
                 onBackPressed();
             }
         });
@@ -89,6 +90,7 @@ public class FileExplorerFragment extends Fragment {
         mFileInfoAdapter.setOnViewClickListener(new FileListAdapter.OnViewClickListener() {
             public void onViewClick(View v, File fileInfo) {
                 if (fileInfo.isFile()) {
+                    //如果是文件夹，则继续打开
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("file_key", fileInfo);
                     showContent(TextDetailFragment.class, bundle);
@@ -102,6 +104,7 @@ public class FileExplorerFragment extends Fragment {
         mFileInfoAdapter.setOnViewLongClickListener(new FileListAdapter.OnViewLongClickListener() {
             @Override
             public boolean onViewLongClick(View v, File fileInfo,int position) {
+                //长按弹窗，让测试可以选择是否删除文件
                 delFile(position);
                 return false;
             }
@@ -171,15 +174,13 @@ public class FileExplorerFragment extends Fragment {
         }
     }
 
-    protected boolean onBackPressed() {
+    protected void onBackPressed() {
         if (mCurDir == null) {
             finish();
-            return true;
         } else if (isRootFile(getContext(), mCurDir)) {
             mTvTitle.setText("沙盒游览");
             setAdapterData(initRootFileInfo(getContext()));
             mCurDir = null;
-            return true;
         } else {
             mCurDir = mCurDir.getParentFile();
             if (mCurDir != null) {
@@ -187,7 +188,6 @@ public class FileExplorerFragment extends Fragment {
                 List<File> fileInfos = getFileInfos(mCurDir);
                 setAdapterData(fileInfos);
             }
-            return true;
         }
     }
 

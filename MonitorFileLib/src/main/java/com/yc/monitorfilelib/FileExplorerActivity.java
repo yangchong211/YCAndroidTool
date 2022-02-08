@@ -15,6 +15,10 @@ import java.util.ArrayDeque;
  */
 public class FileExplorerActivity extends AppCompatActivity {
 
+    /**
+     * 存储fragment的队列。
+     * 一个双端队列实现，不过它内部使用的是数组来对元素进行操作，不允许存储null值，同时可以当做队列，双端队列，栈来进行使用。
+     */
     private final ArrayDeque<Fragment> mFragments = new ArrayDeque<>();
     private static final String TAG = "FileExplorerActivity";
 
@@ -42,8 +46,12 @@ public class FileExplorerActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.add(android.R.id.content, fragment);
+            //push等同于addFirst，添加到第一个
             mFragments.push(fragment);
+            //add等同于addLast，添加到最后
+            //mFragments.add(fragment);
             fragmentTransaction.addToBackStack("");
+            //将fragment提交到任务栈中
             fragmentTransaction.commit();
         } catch (InstantiationException exception) {
             FileExplorerUtils.logError(TAG + exception.toString());
@@ -59,9 +67,11 @@ public class FileExplorerActivity extends AppCompatActivity {
         if (!mFragments.isEmpty()) {
             Fragment fragment = mFragments.getFirst();
             if (fragment!=null){
+                //移除最上面的一个
                 mFragments.removeFirst();
             }
             super.onBackPressed();
+            //如果fragment栈为空，则直接关闭activity
             if (mFragments.isEmpty()) {
                 finish();
             }
