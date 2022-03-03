@@ -3,7 +3,7 @@ apply from: rootProject.projectDir.absolutePath + "/app.gradle"
 
 android {
     compileSdkVersion project.ext.androidCompileSdkVersion
-    buildToolsVersion project.ext.androidBuildToolsVersion
+    //buildToolsVersion project.ext.androidBuildToolsVersion
     defaultConfig {
         applicationId "com.yc.ycandroidtool"
         minSdkVersion project.ext.androidMinSdkVersion
