@@ -164,12 +164,16 @@
 #### 7.1 崩溃库
 - 如何引入该库
     ``` java
-    //崩溃重启库
-    implementation 'cn.yc:ToolLib:1.2.3'
-    //网络拦截日志库
-    implementation 'cn.yc:NetLib:1.0.1'
-    //GitHub代码
-    https://github.com/yangchong211/YCAndroidTool
+    //磁盘文件查看工具
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorFileLib:1.2.8'
+    //卡顿工具
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorCatonLib:1.2.8'
+    //网络工具
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorNetLib:1.2.8'
+    //崩溃工具
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorCrashLib:1.2.8'
+    //anr工具
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorAnrLib:1.2.8'
     ```
 - 初始化代码如下所示。建议在Application中初始化……
     ``` java

@@ -25,12 +25,18 @@ dependencies {
     implementation project.ext.AppDependencies['appcompat']
     implementation project.ext.AppDependencies['annotation']
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-//    implementation 'cn.com.yc:ToolLib:1.2.3'
-//    implementation 'cn.com.yc:NetLib:1.0.1'
-    implementation project(path: ':MonitorCrashLib')
-    implementation project(path: ':MonitorNetLib')
-    implementation project(path: ':MonitorCatonLib')
-    implementation project(path: ':MonitorAnrLib')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation project(path: ':MonitorFileLib')
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorAliveLib:1.2.8'
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorFileLib:1.2.8'
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorCatonLib:1.2.8'
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorNetLib:1.2.8'
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorCrashLib:1.2.8'
+    implementation 'com.github.yangchong211.YCAndroidTool:MonitorAnrLib:1.2.8'
+
+
+//    implementation project(path: ':MonitorCrashLib')
+//    implementation project(path: ':MonitorNetLib')
+//    implementation project(path: ':MonitorCatonLib')
+//    implementation project(path: ':MonitorAnrLib')
+//    implementation project(path: ':MonitorFileLib')
 }
