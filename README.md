@@ -150,7 +150,10 @@
 
 #### 5.3 设计目标
 - 可视化界面展示
-    - 
+    - ![在这里插入图片描述](https://img-blog.csdnimg.cn/cccea61a47ed43ef88ec3f335f84ab0b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5p2o5YWF,size_14,color_FFFFFF,t_70,g_se,x_16)
+    - ![在这里插入图片描述](https://img-blog.csdnimg.cn/81e1797d2220499cae25b90c932d1092.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5p2o5YWF,size_15,color_FFFFFF,t_70,g_se,x_16)
+    - ![在这里插入图片描述](https://img-blog.csdnimg.cn/2752b6b0e866402f8e76c8c544028de0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5p2o5YWF,size_15,color_FFFFFF,t_70,g_se,x_16)
+    - ![在这里插入图片描述](https://img-blog.csdnimg.cn/221754c0dd7b4c028d5f0a122bdecd18.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5p2o5YWF,size_15,color_FFFFFF,t_70,g_se,x_16)
 - 多种处理文件操作
     - 针对file文件夹，或者file文件，长按可以出现弹窗，让测试选择是否删除文件。
     - 点击file文件夹，则拿到对应的文件列表，然后展示。点击file直到是具体文件(文本，图片，db，json等非file文件夹)跳转详情。
