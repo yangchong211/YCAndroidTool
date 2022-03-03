@@ -17,16 +17,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.yc.eastadapterlib.OnItemClickListener;
+import com.yc.eastadapterlib.OnItemLongClickListener;
+
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+
 /**
- * description: 文件管理页面fragment
- * @author  杨充
- * @since   2021/8/11
+ * <pre>
+ *     author : yangchong
+ *     email  : yangchong211@163.com
+ *     time   : 2021/8/11
+ *     desc   : 文件管理页面fragment
+ *     revise :
+ * </pre>
  */
 public class FileExplorerFragment extends Fragment {
 
@@ -45,7 +54,6 @@ public class FileExplorerFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_file_list, container, false);
         return view;
-
     }
 
     @Override
@@ -76,7 +84,10 @@ public class FileExplorerFragment extends Fragment {
             public void onClick(View v) {
                 if (mCurDir != null) {
                     String path = mCurDir.getPath();
-                    FileExplorerUtils.copyToClipBoard(getContext(), path);
+                    boolean copyToClipBoard = FileExplorerUtils.copyToClipBoard(getContext(), path);
+                    if (copyToClipBoard) {
+                        Toast.makeText(getContext(), "拷贝成功", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getContext(), "当前为空", Toast.LENGTH_SHORT).show();
                 }
@@ -86,24 +97,40 @@ public class FileExplorerFragment extends Fragment {
 
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mFileInfoAdapter = new FileListAdapter(getContext(), mFileList);
-        mFileInfoAdapter.setOnViewClickListener(new FileListAdapter.OnViewClickListener() {
-            public void onViewClick(View v, File fileInfo) {
-                if (fileInfo.isFile()) {
-                    //如果是文件夹，则继续打开
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("file_key", fileInfo);
-                    showContent(TextDetailFragment.class, bundle);
-                } else {
-                    mCurDir = fileInfo;
-                    mTvTitle.setText(mCurDir.getName());
-                    setAdapterData(getFileInfos(mCurDir));
+        mFileInfoAdapter = new FileListAdapter(getContext());
+        mFileInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                if (mFileList.size() > i && i >= 0) {
+                    File fileInfo = mFileList.get(i);
+                    if (fileInfo.exists() && fileInfo.isFile()) {
+                        //如果是文件，则直接打开文件
+                        if (FileExplorerUtils.isImage(fileInfo)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("file_key", fileInfo);
+                            showContent(ImageDetailFragment.class, bundle);
+                        } else if (FileExplorerUtils.isSp(fileInfo)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("file_key", fileInfo);
+                            showContent(SpDetailFragment.class, bundle);
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("file_key", fileInfo);
+                            showContent(TextDetailFragment.class, bundle);
+                        }
+                    } else {
+                        //否则是文件夹，则继续打开对应的list列表
+                        mCurDir = fileInfo;
+                        mTvTitle.setText(mCurDir.getName());
+                        //拿到当前目录的列表数据
+                        setAdapterData(getFileInfos(mCurDir));
+                    }
                 }
             }
         });
-        mFileInfoAdapter.setOnViewLongClickListener(new FileListAdapter.OnViewLongClickListener() {
+        mFileInfoAdapter.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
-            public boolean onViewLongClick(View v, File fileInfo,int position) {
+            public boolean onItemLongClick(View view, int position) {
                 //长按弹窗，让测试可以选择是否删除文件
                 delFile(position);
                 return false;
@@ -115,7 +142,7 @@ public class FileExplorerFragment extends Fragment {
     }
 
     private void delFile(int position) {
-        if (mFileList.size()>position && position>=0){
+        if (mFileList.size() > position && position >= 0) {
             //弹出Dialog是否删除当前
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("提示");
@@ -130,7 +157,7 @@ public class FileExplorerFragment extends Fragment {
                         public void run() {
                             File file = mFileList.get(position);
                             boolean isDel = FileExplorerUtils.deleteDirectory(file);
-                            if (isDel){
+                            if (isDel) {
                                 mRecyclerView.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -164,7 +191,8 @@ public class FileExplorerFragment extends Fragment {
             }
             mFileList.addAll(fileInfos);
         }
-        mFileInfoAdapter.notifyDataSetChanged();
+        mFileInfoAdapter.clearAll();
+        mFileInfoAdapter.setData(mFileList);
     }
 
     public void showContent(Class<? extends Fragment> fragmentClass, Bundle bundle) {
@@ -202,8 +230,9 @@ public class FileExplorerFragment extends Fragment {
     }
 
     /**
-     * 获取某个file
-     * @param dir                       file文件
+     * 获取某个file对应的子file列表
+     *
+     * @param dir file文件
      * @return
      */
     private List<File> getFileInfos(File dir) {
@@ -243,35 +272,39 @@ public class FileExplorerFragment extends Fragment {
     }
 
     /**
-     * 初始化默认文件。注意：加External和不加的比较
+     * 初始化默认文件。注意：加External和不加(默认)的比较
      * 相同点:1.都可以做app缓存目录。2.app卸载后，两个目录下的数据都会被清空。
      * 不同点:1.目录的路径不同。前者的目录存在外部SD卡上的。后者的目录存在app的内部存储上。
      *       2.前者的路径在手机里可以直接看到。后者的路径需要root以后，用Root Explorer 文件管理器才能看到。
+     *
      * @param context 上下文
-     * @return
+     * @return 列表
      */
     private List<File> initDefaultRootFileInfos(Context context) {
         List<File> fileInfos = new ArrayList<>();
         //第一个是文件父路径
         File parentFile = context.getFilesDir().getParentFile();
-        if (parentFile!=null){
+        if (parentFile != null) {
             fileInfos.add(parentFile);
-            FileExplorerUtils.logInfo(TAG+parentFile.getPath());
+            FileExplorerUtils.logInfo(TAG + parentFile.getPath());
         }
+        //路径：/data/user/0/com.yc.lifehelper
 
         //第二个是缓存文件路径
         File externalCacheDir = context.getExternalCacheDir();
-        if (externalCacheDir!=null){
+        if (externalCacheDir != null) {
             fileInfos.add(externalCacheDir);
-            FileExplorerUtils.logInfo(TAG+externalCacheDir.getPath());
+            FileExplorerUtils.logInfo(TAG + externalCacheDir.getPath());
         }
+        //路径：/storage/emulated/0/Android/data/com.yc.lifehelper/cache
 
         //第三个是外部file路径
         File externalFilesDir = context.getExternalFilesDir((String) null);
-        if (externalFilesDir!=null){
+        if (externalFilesDir != null) {
             fileInfos.add(externalFilesDir);
-            FileExplorerUtils.logInfo(TAG+externalFilesDir.getPath());
+            FileExplorerUtils.logInfo(TAG + externalFilesDir.getPath());
         }
+        //路径：/storage/emulated/0/Android/data/com.yc.lifehelper/files
         return fileInfos;
     }
 

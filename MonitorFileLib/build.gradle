@@ -31,5 +31,5 @@ dependencies {
     implementation project.ext.AppDependencies['annotation']
     implementation project.ext.AppDependencies['media']
     implementation project.ext.AppDependencies['recyclerview']
-    implementation project.ext.AppDependencies['material']
+    implementation 'com.github.yangchong211.YCRefreshView:EastAdapterLib:3.0.2'
 }

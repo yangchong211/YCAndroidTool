@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="1.测试项目ANR日志捕获和收集"/>
+        android:text="1.点击去测试崩溃页面"/>
 
     <TextView
         android:id="@+id/tv_2"
@@ -23,7 +23,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="2.测试项目崩溃重启"/>
+        android:text="2.点击去崩溃监控页面"/>
 
     <TextView
         android:id="@+id/tv_3"
@@ -32,7 +32,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="3.点击去崩溃页面"/>
+        android:text="3.网络拦截数据分析"/>
 
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="4.点击去测试崩溃页面"/>
+        android:text="4.磁盘file查看工具"/>
 
     <TextView
         android:id="@+id/tv_5"
@@ -51,7 +51,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="5.获取崩溃日志记录的目录"/>
+        android:text="5.网络质量测试案例"/>
 
     <TextView
         android:id="@+id/tv_6"
@@ -60,79 +60,6 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="6.测试反射，以及hook是否起作用"/>
-
-    <TextView
-        android:id="@+id/tv_7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="7.1 网络拦截数据分析"/>
-
-    <TextView
-        android:id="@+id/tv_7_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="7.2 网络质量测试案例"/>
-
-    <TextView
-        android:id="@+id/tv_8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="8.内存测试"/>
-
-
-    <TextView
-        android:id="@+id/tv_9_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="9.1 打开查看fps流畅度"/>
-
-    <TextView
-        android:id="@+id/tv_9_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="9.2 关闭查看fps流畅度"/>
-
-    <TextView
-        android:id="@+id/tv_9_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="9.3 查看fps流畅度所有数据"/>
-
-    <TextView
-        android:id="@+id/tv_10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="10.卡顿监控方案"/>
-
-    <TextView
-        android:id="@+id/tv_11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:padding="10dp"
-        android:text="11.沙河file文件"/>
+        android:text="6.卡顿监控方案"/>
 
 </LinearLayout>

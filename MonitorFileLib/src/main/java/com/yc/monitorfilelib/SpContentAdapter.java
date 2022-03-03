@@ -17,32 +17,24 @@ import java.util.List;
  *     author : 杨充
  *     email  : yangchong211@163.com
  *     time   : 2021/8/11
- *     desc   : 文本适配器
+ *     desc   : sp适配器
  *     revise :
  * </pre>
  */
-public class TextContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SpContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
-    private final List<String> mContentList;
+    private final List<SpDataBean> mContentList;
 
-    public TextContentAdapter(Context context, List<String> contentList) {
+    public SpContentAdapter(Context context, List<SpDataBean> contentList) {
         mContext = context;
         mContentList = contentList;
-    }
-
-    public void append(String item) {
-        if (item != null) {
-            int start = mContentList.size();
-            mContentList.add(item);
-            notifyItemRangeInserted(start, 1);
-        }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View inflate = LayoutInflater.from(mContext).inflate(R.layout.item_text_content_view,
+        View inflate = LayoutInflater.from(mContext).inflate(R.layout.item_sp_content_view,
                 parent, false);
         return new MyViewHolder(inflate);
     }
@@ -51,8 +43,10 @@ public class TextContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof MyViewHolder) {
             MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
-            String s = mContentList.get(position);
-            myViewHolder.mTextView.setText(s);
+            SpDataBean spBean = mContentList.get(position);
+            myViewHolder.tv_sp_key.setText(spBean.key);
+            myViewHolder.tv_sp_type.setText(spBean.value.getClass().getSimpleName());
+            myViewHolder.tv_sp_value.setText(spBean.value.toString());
         }
     }
 
@@ -63,11 +57,15 @@ public class TextContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView mTextView;
+        private final TextView tv_sp_key;
+        private final TextView tv_sp_type;
+        private final TextView tv_sp_value;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_name);
+            tv_sp_key = itemView.findViewById(R.id.tv_sp_key);
+            tv_sp_type = itemView.findViewById(R.id.tv_sp_type);
+            tv_sp_value = itemView.findViewById(R.id.tv_sp_value);
         }
     }
 }

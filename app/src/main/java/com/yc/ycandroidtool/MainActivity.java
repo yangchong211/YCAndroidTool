@@ -33,66 +33,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_4).setOnClickListener(this);
         findViewById(R.id.tv_5).setOnClickListener(this);
         findViewById(R.id.tv_6).setOnClickListener(this);
-        findViewById(R.id.tv_7).setOnClickListener(this);
-        findViewById(R.id.tv_7_2).setOnClickListener(this);
-        findViewById(R.id.tv_8).setOnClickListener(this);
-        findViewById(R.id.tv_9_1).setOnClickListener(this);
-        findViewById(R.id.tv_9_2).setOnClickListener(this);
-        findViewById(R.id.tv_9_3).setOnClickListener(this);
-        findViewById(R.id.tv_10).setOnClickListener(this);
-        findViewById(R.id.tv_11).setOnClickListener(this);
-        //PerformanceManager.getInstance().init(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_1:
-                startActivity(new Intent(this, AnrActivity.class));
-                break;
-            case R.id.tv_2:
-                break;
-            case R.id.tv_3:
-                CrashToolUtils.startCrashListActivity(this);
-                break;
-            case R.id.tv_4:
                 CrashToolUtils.startCrashTestActivity(this);
                 break;
-            case R.id.tv_5:
-                //崩溃文件存储路径：/storage/emulated/0/Android/data/你的包名/cache/crashLogs
-                //崩溃页面截图存储路径：/storage/emulated/0/Android/data/你的包名/cache/crashPics
-                String crashLogPath = ToolFileUtils.getCrashLogPath(this);
-                String crashPicPath = ToolFileUtils.getCrashPicPath(this);
-                Toast.makeText(this,crashLogPath,Toast.LENGTH_SHORT).show();
-                ToolLogUtils.i("目录---crashLogPath-"+crashLogPath);
-                ToolLogUtils.i("目录---crashPicPath-"+crashPicPath);
+            case R.id.tv_2:
+                CrashToolUtils.startCrashListActivity(this);
                 break;
-            case R.id.tv_6:
-                startActivity(new Intent(this, StudentActivity.class));
-                break;
-            case R.id.tv_7:
+            case R.id.tv_3:
                 startActivity(new Intent(this, NetworkActivity.class));
                 break;
-            case R.id.tv_7_2:
+            case R.id.tv_4:
+                startActivity(new Intent(this, FileExplorerActivity.class));
+                break;
+            case R.id.tv_5:
                 startActivity(new Intent(this, ConnectionActivity.class));
                 break;
-            case R.id.tv_8:
-                startActivity(new Intent(this, MemoryActivity.class));
-                break;
-            case R.id.tv_9_1:
-                PerformanceManager.getInstance().startMonitor();
-                break;
-            case R.id.tv_9_2:
-                PerformanceManager.getInstance().stopMonitor();
-                break;
-            case R.id.tv_9_3:
-                startActivity(new Intent(this, PerformanceActivity.class));
-                break;
-            case R.id.tv_10:
+            case R.id.tv_6:
                 startActivity(new Intent(this, CanaryActivity.class));
-                break;
-            case R.id.tv_11:
-                startActivity(new Intent(this, FileExplorerActivity.class));
                 break;
         }
     }

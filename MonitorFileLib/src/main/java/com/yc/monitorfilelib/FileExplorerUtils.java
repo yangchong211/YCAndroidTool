@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public final class FileExplorerUtils {
@@ -68,12 +70,28 @@ public final class FileExplorerUtils {
     }
 
     /**
+     * 文件创建时间，方便测试查看缓存文件的最后修改时间
+     *
+     * @param file    文件
+     */
+    public static String getFileTime(File file) {
+        if (file != null && file.exists()) {
+            long lastModified = file.lastModified();
+            String time = new SimpleDateFormat("yyyy-MM-dd")
+                    .format(new Date(lastModified));
+            return time;
+        }
+        return "";
+    }
+
+
+    /**
      * 系统分享文件
      * 需要使用Provider
      * @param context               上下文
      * @param file                  文件
      */
-    public static void shareFile(Context context, File file) {
+    public static boolean shareFile(Context context, File file) {
         try {
             if (null != file && file.exists()) {
                 Intent share = new Intent(Intent.ACTION_SEND);
@@ -90,12 +108,13 @@ public final class FileExplorerUtils {
                 share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 context.startActivity(Intent.createChooser(share, "分享文件"));
+                return true;
             } else {
-                Toast.makeText(context, "分享文件不存在", Toast.LENGTH_SHORT).show();
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "分享失败：" + e.toString(), Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -124,7 +143,7 @@ public final class FileExplorerUtils {
      * @param context                   上下文
      * @param content                   内容
      */
-    public static void copyToClipBoard(Context context , String content){
+    public static boolean copyToClipBoard(Context context , String content){
         if (!TextUtils.isEmpty(content)){
             //获取剪贴版
             ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -135,9 +154,10 @@ public final class FileExplorerUtils {
             //传入clipdata对象.
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(context, "复制成功：" + content , Toast.LENGTH_SHORT).show();
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -164,6 +184,22 @@ public final class FileExplorerUtils {
         return parentFile != null && parentFile.getName().equals(SHARED_PREFS)
                 && file.getName().contains(XML);
     }
+
+    /**
+     * 是否是图片文件
+     *
+     * @param file 文件
+     * @return
+     */
+    public static boolean isImage(File file) {
+        if (file == null) {
+            return false;
+        }
+        String suffix = getSuffix(file);
+        return "jpg".equals(suffix) || "jpeg".equals(suffix)
+                || "png".equals(suffix) || "bmp".equals(suffix);
+    }
+
 
     /**
      * 将文件大小转化为具体的kb单位

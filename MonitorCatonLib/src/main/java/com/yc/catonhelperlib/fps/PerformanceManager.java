@@ -128,7 +128,7 @@ public final class PerformanceManager {
         Log.i(TAG,"fps data is : "+string);
         //Samsung SM-A5160 Android 11, API 30
         Log.i(TAG,"fps data file path : "+filePath);
-        ///data/user/0/com.com.yc.ycandroidtool/cache/yc/
+        ///data/user/0/com.com.yc.ycandroidtool/cache/fps/
         FileManager.writeTxtToFile(string, getFilePath(mContext), fpsFileName);
     }
 
@@ -142,7 +142,7 @@ public final class PerformanceManager {
     }
 
     private String getFilePath(Context context) {
-        return context.getCacheDir() + File.separator + "yc/";
+        return context.getCacheDir() + File.separator + "fps/";
     }
 
     public int getLastSkippedFrames() {
